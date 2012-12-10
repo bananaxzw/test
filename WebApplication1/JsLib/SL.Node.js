@@ -385,7 +385,13 @@
     });
     sl.each(["width", "height", "innerWidth", "innerHeight", "outerWidth", "outerHeight"], function (index, name) {
         chain.prototype[name] = function (value) {
-            return sl.css(this.elements, name, value);
+            var val = sl.css(this.elements, name, value);
+            if (value) {
+                return this;
+            }
+            return val;
+
+
         };
     });
     sl.each(("blur,focus,load,resize,scroll,unload,click,dblclick," +

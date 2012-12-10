@@ -7,16 +7,18 @@
     <script src="SL.TAB.js" type="text/javascript"></script>
     <link href="default/tabs.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
+        var tt;
         sl.ready(function () {
 
-            var tt = new tab(document.getElementById("tt"));
+             tt = new tab(document.getElementById("tt"));
            // $("#tt").CalvinTabs();
+         
         })
         var index = 0;
         function addTab() {
-        
+    
             index++;
-            $('#tt').CalvinTabs('add', {
+            tt.add({
                 title: 'New Tab ' + index,
                 content: 'Tab Body ' + index,
                 iconCls: 'icon-save',
@@ -24,7 +26,7 @@
             });
         }
         function getSelected() {
-            var tab = $('#tt').CalvinTabs('getSelected');
+            var tab = tt.getSelected();
             alert('Selected: ' + tab.title);
             alert('Selected: ' + tab.index);
         }

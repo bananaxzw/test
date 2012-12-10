@@ -165,9 +165,9 @@ var tabsHeaderHelper =
                 * @description 1、获取选中的tab头部信息
                 */
                 getSelectedTab: function (container) {
-                    var tabs = sl.data(container.elements[0], "tabs").tabs;
+                    var tabs = sl.data(container, "tabs").tabs;
                     for (var i = 0, m = tabs.length; i < m; i++) {
-                        var tabHeader = tabs[i][0];
+                        var tabHeader = tabs[i].elements[0];
                         var cacheOpt = sl.data(tabHeader, "tabs.tab");
                         if (cacheOpt.isSelect == true) {
                             return cacheOpt;
@@ -205,7 +205,7 @@ var tabsStyleHelper = {
             opts.width = p.width();
             opts.height = p.height();
         }
-        cc.width(opts.width);cc.height(opts.height);
+        cc.width(opts.width); cc.height(opts.height);
 
         var header = $('>div.tabs-header', target);
         //如果是盒子模型的话 要减去边框和padding
@@ -226,7 +226,7 @@ var tabsStyleHelper = {
     //设置panel样式
     setPanelSize: function (target) {
         var panels = $('>div.tabs-panels', target), header = sl.data(target, "tabs").header,
-        opts = getOption(target),height = opts.height;
+        opts = getOption(target), height = opts.height;
         //如果是盒子模型的话 要减去边框和padding
         if (!isNaN(height)) {
             //                    if (sl.boxModel == true) {
@@ -261,7 +261,7 @@ var tabsStyleHelper = {
         var header = $('>div.tabs-header', container);
         var tabsWidth = 0;
         $('ul.tabs li', header).each(function () {
-            tabsWidth += $(this).outerWidth(true);
+            tabsWidth += $(this).outerWidth();
         });
 
         if (tabsWidth > header.width()) {
@@ -269,11 +269,11 @@ var tabsStyleHelper = {
             $('.tabs-scroller-right', header).css('display', 'block');
             $('.tabs-wrap', header).addClass('tabs-scrolling');
 
-            if (sl.boxModel == true) {
+           // if (sl.boxModel == true) {
                 $('.tabs-wrap', header).css('left', 2);
-            } else {
-                $('.tabs-wrap', header).css('left', 0);
-            }
+//            } else {
+//                $('.tabs-wrap', header).css('left', 0);
+//            }
             var width = header.width()
 				- $('.tabs-scroller-left', header).outerWidth()
 				- $('.tabs-scroller-right', header).outerWidth();
@@ -299,7 +299,7 @@ var tabsStyleHelper = {
             if (this == tab) {
                 return false;
             }
-            w += $(this).outerWidth(true);
+            w += $(this).outerWidth();
 
         });
         return w;
@@ -310,9 +310,9 @@ var tabsStyleHelper = {
     */
     getMaxScrollWidth: function (target) {
         var header = $('>div.tabs-header', target);
-        var tabsWidth = 0; // all tabs width
+        var tabsWidth = 16; // all tabs width 右间距margin-right先加一个
         $('ul.tabs li', header).each(function () {
-            tabsWidth += $(this).outerWidth();
+            tabsWidth += ($(this).outerWidth()+4);//右间距margin-right
         });
         var wrapWidth = $('div.tabs-wrap', header).width();
         var padding = parseInt($('ul.tabs', header).css('padding-left'));
@@ -329,7 +329,7 @@ var tabsStyleHelper = {
             var panelId = sl.data(tab.elements[0], 'tabs.tab').id;
             var panel = $('#' + panelId);
             var panels = $('>div.tabs-panels', target);
-            if (panels.css('height')!= 'auto') {
+            if (panels.css('height') != 'auto') {
                 //                        if (sl.boxModel == true) {
                 panel.height(panels.height() - (panel.outerHeight() - panel.height()));
                 panel.width(panels.width() - (panel.outerWidth() - panel.width()));
@@ -365,7 +365,7 @@ var eventHelper = {
 
         var wrap = $('.tabs-wrap', header);
         //获取所选的tab离左端的距离（包括滚动条左滚的）
-        var leftPos = tabsStyleHelper.getTabLeftPosition(target, $this[0]);
+        var leftPos = tabsStyleHelper.getTabLeftPosition(target, $this.elements[0]);
         //获取所选的tab的左端离div.tabs-wrap左端的距离
         var left = leftPos - wrap.scrollLeft();
         //获取所选的tab的右端离div.tabs-wrap左端的距离
@@ -374,7 +374,7 @@ var eventHelper = {
         if (left < 0 || right > wrap.innerWidth()) {
             var pos = Math.min(leftPos - (wrap.width() - $this.width()) / 2, tabsStyleHelper.getMaxScrollWidth(target));
             //wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
-            wrap.css("scrollLeft", pos);
+            wrap.scrollLeft(pos);
         }
 
         var tabAttr = sl.data($this.elements[0], 'tabs.tab'), panel = $('#' + tabAttr.id);
@@ -443,7 +443,7 @@ var eventHelper = {
 					tabsStyleHelper.getMaxScrollWidth(target)
 			);
             //wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
-            wrap.css("scrollLeft", pos);
+            wrap.scrollLeft(pos);
         }
     },
 
@@ -457,16 +457,14 @@ var eventHelper = {
     *@description 向左滚动
     */
     scrollLeft: function (target) {
-        var data = sl.data(target, "tabs");
-        var header = data.header;
-        var wrap = $('.tabs-wrap', header);
+        var data = sl.data(target, "tabs"), header = data.header, wrap = $('.tabs-wrap', header), opts = getOption(target);
         if (opts == undefined) {
             opts = data.options;
         }
         var pos = Math.max(0, wrap.scrollLeft() - opts.scrollIncrement);
 
-       // wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
-        wrap.css("scrollLeft", pos);
+        // wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
+        wrap.scrollLeft(pos);
     },
     onScrollRight: function (event) {
         var target = event.extendData.target;
@@ -477,10 +475,8 @@ var eventHelper = {
     * @description 向左滚动
     */
     scrollRight: function (target) {
-        var data = sl.data(target, "tabs");
-        var header = data.header;
-        var container = data.container;
-        var wrap = $('.tabs-wrap', header);
+        var data = sl.data(target, "tabs"), header = data.header, container = data.container;
+        var wrap = $('.tabs-wrap', header), opts = getOption(target);
         if (opts == undefined) {
             opts = data.options;
         }
@@ -489,7 +485,7 @@ var eventHelper = {
 					tabsStyleHelper.getMaxScrollWidth(container)
 			);
         //wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
-        wrap.css("scrollLeft", pos);
+        wrap.scrollLeft(pos);
     }
 };
 
@@ -536,13 +532,14 @@ var dataCacheHelper = {
 
 };
 function tab(elem, options, param) {
-    var $this = $(elem),opts, state = sl.data(elem, 'tabs');
+    this.elem = elem;
+    var $this = $(elem), opts, state = sl.data(elem, 'tabs');
     if (state) {
         opts = sl.extend(true, state.options, options);
     }
     else {
         var htmlAttr = {
-            width: (parseInt(sl.css(elem,"width")) || undefined),
+            width: (parseInt(sl.css(elem, "width")) || undefined),
             height: (parseInt(sl.css(elem, "height")) || undefined),
             fit: ($this.attr('fit') ? $this.attr('fit') == 'true' : undefined),
             border: ($this.attr('border') ? $this.attr('border') == 'true' : undefined),
@@ -558,7 +555,18 @@ function tab(elem, options, param) {
     eventHelper.DefalutSelectTab(elem);
 
 }
+tab.prototype = {
+    selectAt: function (Index) {
+        tabsHeaderHelper.selectTabByIndex(this.elem, Index);
+    },
+    add: function (param) {
+        tabsHeaderHelper.addOneTab(this.elem, param);
+    },
+    getSelected: function () {
+        return tabsHeaderHelper.getSelectedTab(this.elem);
+    }
 
+}
 function getOption(elem) {
     return sl.data(elem, "tabs").options;
 }

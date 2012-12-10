@@ -561,9 +561,14 @@ SL().create(function (SL) {
                     for (name in object)
                         if (callback.call(object[name], name, object[name]) === false)
                             break;
-                } else
-                    for (var value = object[0];
-					i < length && callback.call(value, i, value) !== false; value = object[++i]) { }
+                } else {
+                    for (; i < length; ) {
+                        if (callback.call(object[i], i, object[i++]) === false) {
+                            break;
+                        }
+                    }
+
+                }
             }
         };
         /**
@@ -613,7 +618,7 @@ SL().create(function (SL) {
             return s.join("&").replace(/%20/g, "+");
         };
         //统一get set属性访问器
-        this.access = function (elems, key, value, getter, setter, bind,setReturn) {
+        this.access = function (elems, key, value, getter, setter, bind, setReturn) {
             var length = elems.length;
             setter = typeof setter === "function" ? setter : getter;
             bind = arguments[arguments.length - 1];
@@ -623,13 +628,13 @@ SL().create(function (SL) {
                         setter.call(bind || elems[i], elems[i], k, key[k]);
                     }
                 }
-                return setReturn||elems;
+                return setReturn || elems;
             }
             if (value !== void 0) {
                 for (i = 0; i < length; i++) {
-                    setter.call(bind||elems[i], elems[i], key, value);
+                    setter.call(bind || elems[i], elems[i], key, value);
                 }
-                return setReturn||elems;
+                return setReturn || elems;
             } //取得第一个元素的属性, getter的参数总是很小的
             return length ? getter.call(bind || elems[0], elems[0], key) : void 0;
         };

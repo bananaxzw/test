@@ -2606,7 +2606,7 @@ sl.create(function () {
                 return null;
             }
 
-            if (value) {
+            if (value !== undefined) {
                 if (win) {
                     win.scrollTo(
 						!index ? value : sl.scrollLef(win),
