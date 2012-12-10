@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="jquery-1.4.1-vsdoc.js" type="text/javascript"></script>
+    <script src="JScript1.js" type="text/javascript"></script>
+    <link href="ddd.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        /*
+*@description 返回用户浏览器类型 版本 操作系统
+*/
+        function checkedBrowser() {
+            checkedBrowserType();
+        }
+        /*
+*@description 返回用户浏览器类型 
+*/
+        function checkedBrowserType() {
+            var ua = navigator.userAgent.toLowerCase(); //获取用户信息
+            var info = {
+                ie: /msie/.test(ua) && !/opera/.test(ua), //匹配IE浏览器
+                op: /opera/.test(ua), //匹配OPERA浏览器
+                sa: /version.*safari/.test(ua), //匹配SAFARI浏览器
+                ch: /chrome/.test(ua), //匹配CHROME浏览器
+                ff: /gecko/.test(ua) && !/webkit/.test(ua)//匹配FIREFOX浏览器
+            };
+            (info.ie) && alert("IE浏览器");
+            (info.op) && alert("Opera浏览器");
+            (info.sa) && alert("Safari浏览器");
+            (info.ch) && alert("Chrome浏览器");
+            (info.ff) && alert("Firefox浏览器");
+        }
+        window.onload = checkedBrowser;
+
+
+    </script>
+</head>
+<body>
+    <a href="#tt">sffaf</a>
+    <div style="height: 1000px;">
+        sfsafsafsa</div>
+    <a name='tt'>sfas</a>
+</body>
+</html>

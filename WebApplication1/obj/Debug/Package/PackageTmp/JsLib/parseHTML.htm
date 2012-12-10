@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../jquery-1.4.1-vsdoc.js" type="text/javascript"></script>
+    <script src="SL.Core.js" type="text/javascript"></script>
+    <script src="SL.Dom.js" type="text/javascript"></script>
+    <script src="SL.support.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        wrapMap = {
+            option: [1, "<select multiple='multiple'>", "</select>"],
+            legend: [1, "<fieldset>", "</fieldset>"],
+            thead: [1, "<table>", "</table>"],
+            tr: [2, "<table><tbody>", "</tbody></table>"],
+            td: [3, "<table><tbody><tr>", "</tr></tbody></table>"],
+            col: [2, "<table><tbody></tbody><colgroup>", "</colgroup></table>"],
+            area: [1, "<map>", "</map>"],
+            _default: [0, "", ""]
+        };
+
+        wrapMap.optgroup = wrapMap.option;
+        wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead;
+        wrapMap.th = wrapMap.td;
+        rtagName = /<([\w:]+)/;
+        rtbody = /<tbody/i;
+        rhtml = /<|&\w+;/;
+        rleadingWhitespace = /^\s+/;
+        function parseHTML(htmlStr) {
+            var div = document.createElement("div");
+            div.innerHTML = "<table><tbody>" + htmlStr + "</tbody></table>";
+            var f = document.createDocumentFragment();
+            f.appendChild(div.firstChild.firstChild.firstChild);
+            return f;
+        }
+        var uu = new SL();
+        function parseHTMLNew(elem) {
+
+            var tag = (rtagName.exec(elem) || ["", ""])[1].toLowerCase(),
+					wrap = wrapMap[tag] || wrapMap._default,
+					depth = wrap[0],
+					div = document.createElement("div");
+
+            // Go to html and back, then peel off extra wrappers
+            div.innerHTML = wrap[1] + elem + wrap[2];
+
+            // Move to the right depth
+            while (depth--) {
+                div = div.lastChild;
+            }
+            // Remove IE's autoinserted <tbody> from table fragments
+            if (!uu.support.tbody) {
+
+                // String was a <table>, *may* have spurious <tbody>
+                var hasBody = rtbody.test(elem),
+						tbody = tag === "table" && !hasBody ?
+							div.firstChild && div.firstChild.childNodes :
+
+                // String was a bare <thead> or <tfoot>
+							wrap[1] === "<table>" && !hasBody ?
+								div.childNodes :
+								[];
+
+                for (var j = tbody.length - 1; j >= 0; --j) {
+                    if (tbody[j].nodeName.toLowerCase() === "tbody" && !tbody[j].childNodes.length) {
+                        tbody[j].parentNode.removeChild(tbody[j]);
+                    }
+                }
+
+            }
+        }
+        function parseHTMLNew1(elems, context, fragment, scripts) {
+            context = context || document;
+
+            // !context.createElement fails in IE with an error but returns typeof 'object'
+            if (typeof context.createElement === "undefined") {
+                context = context.ownerDocument || context[0] && context[0].ownerDocument || document;
+            }
+
+            var ret = [];
+
+            uu.each(elems, function (i, elem) {
+                if (typeof elem === "number") {
+                    elem += "";
+                }
+
+                if (!elem) {
+                    return;
+                }
+
+                //直接文本
+                if (typeof elem === "string" && !rhtml.test(elem)) {
+                    elem = context.createTextNode(elem);
+
+                } else if (typeof elem === "string") {
+                    // Fix "XHTML"-style tags in all browsers
+                    elem = elem.replace(/(<([\w:]+)[^>]*?)\/>/g, fcloseTag = function (all, front, tag) {
+                        return /^(?:area|br|col|embed|hr|img|input|link|meta|param)$/i.test(tag) ? all : front + "></" + tag + ">";
+                    });
+
+                    // Trim whitespace, otherwise indexOf won't work as expected
+                    var tag = (rtagName.exec(elem) || ["", ""])[1].toLowerCase(),
+                    //处理tr opotion table这种直接div下设置innerhtml无效
+					wrap = wrapMap[tag] || wrapMap._default,
+					depth = wrap[0],
+					div = context.createElement("div");
+
+                    // 处理tr opotion table这种直接div下设置innerhtml无效 包裹
+                    div.innerHTML = wrap[1] + elem + wrap[2];
+
+                    // Move to the right depth
+                    while (depth--) {
+                        div = div.lastChild;
+                    }
+
+                    // ie6 ie7会在table下自动添加  <tbody>  需要移除不然<thead></thead>会返回<thead></thead><tbody></tbody>
+                    if (!uu.support.tbody) {
+
+                        // String was a <table>, *may* have spurious <tbody>
+                        var hasBody = rtbody.test(elem),
+						tbody = tag === "table" && !hasBody ?
+							div.firstChild && div.firstChild.childNodes :
+
+                        // String was a bare <thead> or <tfoot>
+							wrap[1] === "<table>" && !hasBody ?
+								div.childNodes :
+								[];
+
+                        for (var j = tbody.length - 1; j >= 0; --j) {
+                            if (/tbody/i.test(tbody[j].nodeName) && !tbody[j].childNodes.length) {
+                                tbody[j].parentNode.removeChild(tbody[j]);
+                            }
+                        }
+
+                    }
+
+                    //  IE6-ie8 innerHTML会自动删除开头空格 补充上
+                    if (!uu.support.leadingWhitespace && rleadingWhitespace.test(elem)) {
+                        div.insertBefore(context.createTextNode(rleadingWhitespace.exec(elem)[0]), div.firstChild);
+                    }
+
+                    elem = uu.Convert.convertToArray(div.childNodes);
+                }
+
+                if (elem.nodeType) {
+                    ret.push(elem);
+                } else {
+                    ret = uu.merge(ret, elem);
+                }
+
+            });
+
+            if (fragment) {
+                for (var i = 0; ret[i]; i++) {
+                    if (scripts && /script/i.test(ret[i].nodeName) && (!ret[i].type || ret[i].type.toLowerCase() === "text/javascript")) {
+                        scripts.push(ret[i].parentNode ? ret[i].parentNode.removeChild(ret[i]) : ret[i]);
+                    } else {
+                        if (ret[i].nodeType === 1) {
+                            ret.splice.apply(ret, [i + 1, 0].concat(uu.Convert.convertToArray(ret[i].getElementsByTagName("script"))));
+                        }
+                        fragment.appendChild(ret[i]);
+                    }
+                }
+            }
+
+            return ret;
+        }
+
+        function parseHTML1(htmlStr) {
+            var div = document.createElement("div");
+            div.innerHTML = htmlStr;
+            var f = document.createDocumentFragment();
+            f.appendChild(div.firstChild.firstChild.firstChild);
+            return f;
+        }
+        function yyyy(data) {
+
+            if (data) {
+                // Inspired by code by Andrea Giammarchi
+                // http://webreflection.blogspot.com/2007/08/global-scope-evaluation-and-dom.html
+                var head = document.getElementsByTagName("head")[0] || document.documentElement,
+				script = document.createElement("script");
+
+                script.type = "text/javascript";
+                script.text = data;
+
+                // Use insertBefore instead of appendChild  to circumvent an IE6 bug.
+                // This arises when a base node is used (#2709).
+                head.insertBefore(script, head.firstChild);
+                head.removeChild(script);
+            }
+        }
+
+        function insertAdjacentHTML(node, sWhere, sHtml) {
+            if (node.nodeType != 1) throw new Error(ns + ':insertAdjacentHTML方法 参数有错误.');
+            if ((sWhere = sWhere.toString().toLowerCase()) == 'afterbegin' || sWhere == 'beforeend') {
+                if (/hr|br|img|input|link|col|meta|base|area/i.test(node.tagName))
+                    return false;
+            }
+            if (node.insertAdjacentHTML) node.insertAdjacentHTML(sWhere, sHtml);
+            else {
+                var df, r = node.ownerDocument.createRange();
+                switch (new String(sWhere).toLowerCase()) {
+                    case "beforebegin":
+                        r.setStartBefore(node);
+                        df = r.createContextualFragment(sHtml);
+                        node.parentNode.insertBefore(df, node);
+                        break;
+                    case "afterbegin":
+                        r.selectNodeContents(node);
+                        r.collapse(true);
+                        df = r.createContextualFragment(sHtml);
+                        node.insertBefore(df, node.firstChild);
+                        break;
+                    case "beforeend":
+                        r.selectNodeContents(node);
+                        r.collapse(false);
+                        df = r.createContextualFragment(sHtml);
+                        node.appendChild(df);
+                        break;
+                    case "afterend":
+                        r.setStartAfter(node);
+                        df = r.createContextualFragment(sHtml);
+                        node.parentNode.insertBefore(df, node.nextSibling);
+                        break;
+                }
+
+            }
+        }
+    </script>
+</head>
+<body>
+    <table id="sfsa">
+    </table>
+    <div id="fgh">
+    </div>
+    <div></div>
+        <select id="ty">
+        </select>
+        <script type="text/javascript">
+        var f=    document.createDocumentFragment();
+        parseHTMLNew1(["<tr><td>ss<td></tr>"], "", f, []);
+        document.getElementById("sfsa").appendChild(f);
+          //  document.getElementById("sfsa").appendChild(parseHTMLNew1("<tr><td>ss<td></tr>"));
+           // document.getElementById("ty").appendChild(f);
+            //insertAdjacentHTML(document.getElementById("ty"), "beforeend", "<option value='1'>s</option>");
+            // insertAdjacentHTML(document.getElementById("sfsa"), "afterbegin", "<tr><td>ss<td></tr>");
+            // insertAdjacentHTML(document.getElementById("fgh"), "afterbegin", "<p>ss</p><p>ss</p>");
+          //  parseHTMLNew("<tr><td>ss<td></tr>");
+        </script>
+</body>
+</html>

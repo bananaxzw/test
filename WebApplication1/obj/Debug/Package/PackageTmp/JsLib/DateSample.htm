@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="$SL.js" type="text/javascript"></script>
+    <script src="Date.js" type="text/javascript"></script>
+    <script>
+        var d = new Date();
+        document.write($sl.Date.format(d, 'yyyy-MMM-dd h:mm:ss'));
+        document.write($sl.Date.format(d, 'yyyy-MM-dd h:mm:ss'));
+        var ddd = $sl.Date.parseString("2001-1-11", "yyyy-M-dd");
+        var mmm = $sl.Date.parseString("2001-1-12", "yyyy-M-dd");
+
+        document.write(mmm - ddd);
+    </script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>code.js.cn</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/*一个tag单元容器*/
+.paipai_tag{width:500px;color:#333;font: 12px/1.5 verdana;position:relative;overflow:hidden;border-bottom:1px solid #ddd;}
+/*所有内容的容器*/
+.paipai_body{height:120px;padding:10px;border-left:1px solid #ddd;border-right:1px solid #ddd;padding-top:60px;}
+/*导航容器绝对定位*/
+.paipai_nav{position:absolute; width:100%;height:31px;background: url(taobao_tab_files/taobao_nav.gif) repeat-x 0 -33px;}
+/*为UL与LI重设样式*/
+.paipai_nav ul,.paipai_nav li{margin:0;padding:0;list-style:none;font-size:12px;}
+/*UL浮动以包裹浮动的LI*/
+.paipai_nav ul{float:left;display:inline;width:100%;height:32px;}
+/*LI按钮的样式*/
+.paipai_nav li{float:left;width:110px;margin-right:3px;height:3px;line-height :23px;display:inline;position:relative;text-align:center;cursor:pointer;font-weight:bold;font-size:14px;padding-top:2px;}
+/*焦点样式*/
+.paipai_nav li.hot{background:url(taobao_tab_files/taobao_nav_bg.gif) no-repeat;height:31px;cursor:default;color:#fff;}
+.paipai_nav li a{color:#595959;text-decoration:none;}
+.paipai_nav li a:hover{color:red;text-decoration:underline;}
+.paipai_nav li.hot a:hover{color:#fff;text-decoration:none;}
+.paipai_nav li.hot a{color:#fff;cursor:text;}
+.paipai_nav li a{ blr:expression(this.onFocus=this.blur()) }
+.paipai_nav li :focus { outline-style: none; }
+/*
+内容样式(演示)
+*/
+.paipai_body h4{font-size:13px;margin:0;padding:0;color:#333;}
+.paipai_body p{padding:0 0 0 2em;text-indent:-2em;margin:5px 0 0 0;color:#666;}
+h4{color:#FF0080;}
+</style>
+</head>
+<body>
+<h4>鼠标滑过立即切换</h4>
+<div class="paipai_tag">
+    <div class="paipai_nav">
+        <ul id="paipaiTag__li__hot">
+            <li class="hot"><a href="###" >我要买</a></li>
+            <li><a href="###" >店铺大堂</a></li>
+            <li><a href="###" >热门收藏</a></li>
+        </ul>
+    </div>
+    <div class="paipai_body">
+        <div id="paipaiTag__0" >
+            <h4>我要买</h4>
+            <p>1. 存在,有<br/>Such people do not exist.<br/>这样的人是不存在的。</p>
+        </div>
+        <div id="paipaiTag__1" style="display:none">
+            <h4>店铺大堂</h4>
+            <div>1. 不存在,没有</div>
+        </div>
+        <div id="paipaiTag__2" style="display:none">
+            <h4>热门收藏.</h4>
+            <div>1. 计算机,电脑</div>
+        </div>
+    </div>
+</div>
+<h4>鼠标滑过延时切换</h4>
+<div class="paipai_tag">
+    <div class="paipai_nav">
+        <ul id="paipaiTag2__li__hot">
+            <li class="hot"><a href="###" >我要买</a></li>
+            <li><a href="###" >店铺大堂</a></li>
+            <li><a href="###" >热门收藏</a></li>
+        </ul>
+    </div>
+    <div class="paipai_body">
+        <div id="paipaiTag2__0" >
+            <h4>我要买</h4>
+            <p>1. 存在,有<br/>Such people do not exist.<br/>这样的人是不存在的。</p>
+        </div>
+        <div id="paipaiTag2__1" style="display:none">
+            <h4>店铺大堂</h4>
+            <div>1. 不存在,没有</div>
+        </div>
+        <div id="paipaiTag2__2" style="display:none">
+            <h4>热门收藏.</h4>
+            <div>1. 计算机,电脑</div>
+        </div>
+    </div>
+</div>
+<h4>鼠标点击切换</h4>
+<div class="paipai_tag">
+    <div class="paipai_nav">
+        <ul id="paipaiTag3__li__hot">
+            <li class="hot"><a href="###" >我要买</a></li>
+            <li><a href="###" >店铺大堂</a></li>
+            <li><a href="###" >热门收藏</a></li>
+        </ul>
+    </div>
+    <div class="paipai_body">
+        <div id="paipaiTag3__0" >
+            <h4>我要买</h4>
+            <p>1. 存在,有<br/>Such people do not exist.<br/>这样的人是不存在的。</p>
+        </div>
+        <div id="paipaiTag3__1" style="display:none">
+            <h4>店铺大堂</h4>
+            <div>1. 不存在,没有</div>
+        </div>
+        <div id="paipaiTag3__2" style="display:none">
+            <h4>热门收藏.</h4>
+            <div>1. 计算机,电脑</div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="tag.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+var paipai=new Tag('paipaiTag__li__hot',1);
+var paipai2=new Tag('paipaiTag2__li__hot',1,500);
+var paipai3=new Tag('paipaiTag3__li__hot');
+//paipai.focus(4)
+ //]]>
+</script>
+</html>

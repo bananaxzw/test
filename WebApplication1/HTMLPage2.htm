@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript">
+    </script>
+    <style>
+        .main-2
+        {
+            float: left;
+            width: 100%;
+            background: #F90;
+        }
+     
+        .sub-2
+        {
+            float: left;
+        
+            width: 150px;
+            background: #6C0;
+        }
+        .extra-2
+        {
+            float: left;
+            margin-left: -200px;
+            width: 200px;
+            background: #F9F;
+            margin-bottom: -3000px;
+            padding-bottom: 3000px;
+        }
+    </style>
+    <script type="text/javascript">
+       function (a) {
+            alert(a);
+        })(2);
+        function mm() {
+            console.log(arguments[0]);
+        }
+        function tt() {
+
+            arguments[0] = 2;
+            mm.apply(window, arguments);
+ 
+        }
+
+        tt();
+        tt(1);
+    </script>
+</head>
+<body>
+
+ "<div style=\"width: 700px; height: 250px;\" id=\"tt\" class=\"tabs-container\"><div style=\"width: 698px;\" class=\"tabs-header\">
+ <div style=\"display: none;\" class=\"tabs-scroller-right\"></div>
+ <div style=\"display: none;\" class=\"tabs-scroller-left\"></div>
+ <div style=\"left: 0px; width: 698px;\" class=\"tabs-wrap\">
+ <ul class=\"tabs\"><li>
+ <a class=\"tabs-inner\" href=\"javascript:void(0)\"><span>Tab1</span></a></li><li>
+ <a class=\"tabs-inner\" href=\"javascript:void(0)\"><span class=\"tabs-closable\">Tab2</span></a>
+ <a class=\"tabs-close\" href=\"javascript:void(0)\"></a></li><li><a class=\"tabs-inner\" href=\"javascript:void(0)\">
+ <span class=\"tabs-closable\">Tab3</span></a><a class=\"tabs-close\" href=\"javascript:void(0)\"></a>
+ </li><li><a class=\"tabs-inner\" href=\"javascript:void(0)\">
+ <span class=\"tabs-closable\">Tab5 with sub tabs</span></a><a class=\"tabs-close\" href=\"javascript:void(0)\"></a></li></ul></div></div><div class=\"tabs-panels\">\n        <div style=\"padding: 20px; overflow: auto;\" id=\"gen-tabs-panel0\">\n            <p>\n                fsf</p>\n            <p>\n                fsf</p>\n            <p>\n                fsf</p>\n            <p>\n                fsf</p>\n            <p>\n                fsf</p>\n            <p>\n                fsf</p>\n            <p>\n                fsf</p>\n            <p>\n                fsf</p>\n            <p>\n                fsf</p>\n            <p>\n                fsf</p>\n            <p>\n                fsf</p>\n        </div>\n        <div style=\"padding: 20px;\" id=\"gen-tabs-panel1\" href=\"tabs_href_test.html\" cache=\"false\" closable=\"true\">\n            This is Tab2 with close button.\n        </div>\n        <div style=\"padding: 20px;\" id=\"gen-tabs-panel2\" closable=\"true\" iconcls=\"icon-reload\">\n     asfasfsaf\n        </div>\n        <div style=\"padding: 10px;\" id=\"gen-tabs-panel3\" closable=\"true\" iconcls=\"icon-cut\">\n           asfsafsa\n        </div>\n    </div></div>"
+</body>
+</html>

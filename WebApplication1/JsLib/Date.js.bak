@@ -1,0 +1,91 @@
+﻿$SL.Date = function () {
+    this.LeftPaddingZero = function (x) {
+    	/// <summary>
+    	/// 不足9时候左边补0
+    	/// </summary>
+    	/// <param name="x"></param>
+    	/// <returns type=""></returns>
+        return (x < 0 || x > 9 ? "" : "0") + x
+    }
+
+    this.monthNames = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+    this.monthAbbreviations = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+    this.dayNames = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+    this.dayAbbreviations = new Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
+}
+$sl.merge($SL.Date.prototype, {
+    formate: function (date, format) {
+        format = format + "";
+        var result = "";
+        var i_format = 0;
+        var c = "";
+        var token = "";
+        var y = date.getYear() + "";
+        var M = date.getMonth() + 1;
+        var d = date.getDate();
+        var E = date.getDay();
+        var H = date.getHours();
+        var m = date.getMinutes();
+        var s = date.getSeconds();
+        var yyyy, yy, MMM, MM, dd, hh, h, mm, ss, ampm, HH, H, KK, K, kk, k;
+        // Convert real date parts into formatted versions
+        var value = new Object();
+        if (y.length < 4) {
+            y = "" + (+y + 1900);
+        }
+        value["y"] = "" + y;
+        value["yyyy"] = y;
+        value["yy"] = y.substring(2, 4);
+        value["M"] = M;
+        value["MM"] = this.LeftPaddingZero(M);
+        value["MMM"] = this.monthNames[M - 1];
+        value["NNN"] = this.monthAbbreviations[M - 1];
+        value["d"] = d;
+        value["dd"] = this.LeftPaddingZero(d);
+        value["E"] = this.dayAbbreviations[E];
+        value["EE"] = this.dayNames[E];
+        value["H"] = H;
+        value["HH"] = this.LeftPaddingZero(H);
+        if (H == 0) {
+            value["h"] = 12;
+        }
+        else if (H > 12) {
+            value["h"] = H - 12;
+        }
+        else {
+            value["h"] = H;
+        }
+        value["hh"] = this.LeftPaddingZero(value["h"]);
+        value["K"] = value["h"] - 1;
+        value["k"] = value["H"] + 1;
+        value["KK"] = this.LeftPaddingZero(value["K"]);
+        value["kk"] = this.LeftPaddingZero(value["k"]);
+        if (H > 11) {
+            value["a"] = "PM";
+        }
+        else {
+            value["a"] = "AM";
+        }
+        value["m"] = m;
+        value["mm"] = this.LeftPaddingZero(m);
+        value["s"] = s;
+        value["ss"] = this.LeftPaddingZero(s);
+        while (i_format < format.length) {
+            c = format.charAt(i_format);
+            token = "";
+            while ((format.charAt(i_format) == c) && (i_format < format.length)) {
+                token += format.charAt(i_format++);
+            }
+            if (typeof (value[token]) != "undefined") {
+                result = result + value[token];
+            }
+            else {
+                result = result + token;
+            }
+        }
+        return result;
+    }
+
+
+});
+$sl.Date = new $SL.Date();

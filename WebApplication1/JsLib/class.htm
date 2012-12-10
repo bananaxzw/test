@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="SL.Core.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+
+
+        window.onload = function () {
+          //  var mm = new SL();
+            var Person = SL().Class({
+                init: function (name, sex, age) {
+                    this.name = name;
+                    this.age = age;
+                    this.sex = sex;
+                },
+                getAge: function () {
+                    alert(this.age);
+                }
+
+            });
+
+
+            var Employee = SL().Class({ base: Person }, {
+                init: function (name, sex, age, id) {
+                    this.base.init(name, sex, age);
+                    this.EmployeeId = id;
+                },
+                getEmployeeID: function () {
+                    alert(this.EmployeeId);
+                },
+                getName: function () {
+                    alert(this.name);
+                }
+            });
+
+
+            var p = new Person('xuzhiwei',"男",18);
+            p.getAge();
+            var employee = new Employee("xuzhiwei-older", "nan", 18, 1);
+            employee.getAge();
+
+
+
+
+        }
+    
+    </script>
+</head>
+<body>
+</body>
+</html>

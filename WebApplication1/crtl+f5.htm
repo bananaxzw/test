@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script language="JavaScript"> 
+<!--
+        var NS4 = (document.layers);
+        var IE4 = (document.all);
+
+        var win = window;
+        var n = 0;
+
+        function findIt() {
+            if (searchstr.value != "")
+                findInPage(searchstr.value);
+        }
+
+
+        function findInPage(str) {
+            var txt, i, found;
+
+            if (str == "")
+                return false;
+
+            if (NS4) {
+                if (!win.find(str))
+                    while (win.find(str, false, true))
+                        n++;
+                else
+                    n++;
+
+                if (n == 0)
+                    alert("友情提示：\n\n对不起，没有找到您所指定搜索的内容，\n请尝试其他关键词搜索。");
+            }
+
+            if (IE4) {
+                txt = win.document.body.createTextRange();
+
+                for (i = 0; i <= n && (found = txt.findText(str)) != false; i++) {
+                    txt.moveStart("character", 1);
+                    txt.moveEnd("textedit");
+                }
+
+                if (found) {
+                    txt.moveStart("character", -1);
+                    txt.findText(str);
+                    txt.select();
+                    txt.scrollIntoView();
+                    n++;
+                }
+                else {
+                    if (n > 0) {
+                        n = 0;
+                        findInPage(str);
+                    }
+                    else
+                        alert("友情提示：\n\n对不起，没有找到您所指定搜索的内容，\n请尝试其他关键词搜索。");
+                }
+            }
+
+            return false;
+        } 
+// --> 
+    </script>
+</head>
+<body>
+<input name="searchstr" type="text" id="searchstr" size="20"><a href="javascript:void(0);" onClick="javascript:findIt();">搜索</a><br> 
+如何用js实现，在一个页面有个输入文档框，然后点击查询按扭后，调用IE的查询功能在当前页面进行查询<br />
+如何用js实现，在一个页面有个输入文档框，然后点击查询按扭后，调用IE的查询功能在当前页面进行查询<br />
+如何用js实现，在一个页面有个输入文档框，然后点击查询按扭后，调用IE的查询功能在当前页面进行查询<br />
+</body>
+</html>

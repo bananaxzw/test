@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="SL.Core.js" type="text/javascript"></script>
+    <script src="SL.Date.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+
+             
+
+
+            var sldate = SL().Date;
+            console.log(sldate.format(new Date(), "yyyy"));
+            console.log(sldate.format(new Date(), "yyyy年MM月dd日"));
+            var d = sldate.parseString("2012-07-19 12:02:22");
+            console.log(d);
+            console.log(sldate.format(sldate.add(new Date(), "y", 1), "yyyy"));
+        }
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

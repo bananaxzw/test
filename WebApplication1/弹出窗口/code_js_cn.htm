@@ -1,0 +1,103 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0035)http://code.js.cn/demo/smallpopwin/ -->
+<HTML xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>code.js.cn</TITLE>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<STYLE type=text/css>.leyou_popwin_panel {
+	Z-INDEX: 999; BORDER-BOTTOM: #f38900 2px solid; POSITION: absolute; FILTER: progid:DXImageTransform.Microsoft.dropShadow(color='#11000000', OffX=5,OffY=5); BORDER-LEFT: #f38900 2px solid; MARGIN-TOP: -200px; WIDTH: 500px; ZOOM: 1; BACKGROUND: #eee; MARGIN-LEFT: -250px; BORDER-TOP: #f38900 2px solid; TOP: 50%; BORDER-RIGHT: #f38900 2px solid; LEFT: -9999px; -webkit-box-shadow: 4px 4px 4px #666; -moz-box-shadow: 4px 4px 4px #666
+}
+.leyou_popwin_head {
+	BORDER-BOTTOM: #f38900 1px solid; BACKGROUND: url(popwin_bar_bg.png) repeat-x 0px -1px; HEIGHT: 32px
+}
+.leyou_popwin_content {
+	PADDING-BOTTOM: 10px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; FONT: 12px/1.5 verdana; BACKGROUND: #fff; OVERFLOW: auto; PADDING-TOP: 10px
+}
+.leyou_popwin_title {
+	POSITION: absolute; COLOR: #f18800; TOP: 6px; LEFT: 10px
+}
+.leyou_popwin_close {
+	POSITION: absolute; WIDTH: 19px; BACKGROUND: url(popwin_sys_close.png) no-repeat; HEIGHT: 19px; TOP: 6px; CURSOR: pointer; RIGHT: 10px
+}
+</STYLE>
+
+<META name=GENERATOR content="MSHTML 8.00.7600.16821"></HEAD>
+<BODY><BUTTON id=show type=submit>出来</BUTTON><BUTTON id=hide 
+type=submit>出去</BUTTON> <PRE>var win=createPopWin({
+    title:'ooxx',
+    height:300,
+    width:500,
+    html:'ooxx'
+});
+</PRE>
+<DIV id=ooxx>
+<H4>This is gril on world</H4>
+<HR>
+<IMG src="code_js_cn_files/200912040930033245800.jpg"> </DIV>
+<SCRIPT type=text/javascript>
+//<![CDATA[
+function createPopWin(opts){
+    var obj={
+        index:function (opts){
+            this.panel=this.addChild('DIV','panel',null,document.body);
+            this.head=this.addChild('DIV','head',null,this.panel);
+            this.title=this.addChild('STRONG','title',opts.title,this.panel);
+            this.closeBtn=this.addChild('DIV','close',null,this.panel);
+            this.closeBtn.title='关闭';
+            this.content=this.addChild('DIV','content',opts.html||'',this.panel);
+            if(opts.childNode){this.addChildNode(opts.childNode)}
+            this.content.style.height=(opts.height||400)+'px';
+            if(opts.width){this.panel.style.width=opts.width+'px'}
+            this.autoSize();
+            var me=this;
+            this.closeBtn.onclick=function (){me.hide()}
+        },
+        addChild:function (tag,className,innerHTML,panel){
+            var node=panel.appendChild(document.createElement(tag));
+            node.className='leyou_popwin_'+className;
+            if(innerHTML){node.innerHTML=innerHTML}
+            return node
+        },
+        show:function (){this.panel.style.left='50%'},
+        hide:function (){this.panel.style.left='-9999px'},
+        addChildNode:function (child){
+            if (typeof child=='string') {child=document.getElementById(child)}
+            this.content.appendChild(child)
+        },
+        autoSize:function (){
+            this.panel.style.marginLeft=-this.panel.offsetWidth/2+'px';
+            this.panel.style.marginTop=-this.panel.offsetHeight/2+'px';            
+        }
+    }
+    if (createPopWin.instance) {
+        return createPopWin.instance
+    }else{
+        obj.index(opts)
+        return createPopWin.instance=obj
+    }
+}
+var win=createPopWin({
+    title:'系统提示',
+    height:300,
+    width:500,
+    childNode:'ooxx'
+});
+var show=document.getElementById('show');
+var hide=document.getElementById('hide');
+show.onclick=function (){
+    win.show()
+}
+hide.onclick=function (){
+    win.hide()
+}
+ //]]>
+</SCRIPT>
+
+<SCRIPT src=""></SCRIPT>
+
+<SCRIPT src=""></SCRIPT>
+
+<SCRIPT src=""></SCRIPT>
+
+<SCRIPT src=""></SCRIPT>
+
+<SCRIPT src=""></SCRIPT>
+</BODY></HTML>

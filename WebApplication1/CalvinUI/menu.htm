@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="JS/jquery-1.4.1-vsdoc.js" type="text/javascript"></script>
+    <script src="JS/CalvinMenu.js" type="text/javascript"></script>
+    <link href="CSS/default/menu.css" rel="stylesheet" type="text/css" />
+    <link href="CSS/icon.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        var deskTop = [
+	{ text: 'asff', ico: 'icon-add', sub: [
+				{ text: 'asf', click: function () { alert('一个图标怎么排?') } },
+				{ text: 'asf',value:"sfsf" ,selected: true, click: function (x,value) { alert('您选中' + x + '这个组！'+"值为"+value) } },
+				{ text: 'asf' },
+				{ text: 'asf'},
+				{ line: true },
+				{ text: 'saf', click: function (x, ui) { alert(ui.innerHTML) } },
+				{ text: '自动排列' },
+				{ text: '对齐到网格'},
+				{ line: true },
+				{ text: 'asfas', selected: true },
+				{ text: 'asfas', disabled: true },
+				{ text: '运行桌面清理任务', ico: 'clear.gif' }
+			]
+	},
+	{ text: '刷新', click: function () { alert('干嘛不按F5!') } },
+	{ line: true },
+	{ text: '粘贴', ico: 'paste.gif', click: function () { alert('粘不了!') } },
+	{ text: 'asfsa', disabled: true },
+	{ text: '重命名', disabled: true },
+	{ line: true },
+	{ text: '新建', ico: 'add.gif', sub: [
+				{ text: '文件夹', ico: 'folder.gif', click: function () { alert('过几天吧!') } },
+				{ text: '快捷方式', disabled: true },
+				{ line: true },
+				{ text: '公文包' },
+				{ text: 'safsaf', ico: 'word.gif' },
+				{ text: '文本文档' },
+				{ text: 'safsaf' },
+				{ text: 'asfsa' },
+				{ text: '更多格式', ico: 'more.gif', sub: [
+							{ text: '许志伟', click: function () { alert('许志伟!') } },
+							{ text: '许志伟' },
+							{ text: 'asfsa', sub: [
+								{ text: 'asf', sub: [{ text: '许志伟' }, { text: '待续...'}] },
+								{ text: 'asf' },
+								{ text: 'asf' },
+								{ text: 'asfsaf' }
+							]
+							}
+						]
+				}
+			]
+	},
+	{ text: 'asfsaf', click: function () { alert('怎么这么多要求!') } }
+];
+
+	$(document).ready(function () {
+	    $("#safsa").menu({ menuData: deskTop,autoOpen:true });
+	});
+
+	$(document).bind('contextmenu', function (e) {
+	    $('#safsa').menu("show",{
+	        left: e.pageX,
+	        top: e.pageY
+	    });
+	    return false;
+	});
+    
+    </script>
+</head>
+<body>
+<div id="safsa"></div>
+</body>
+</html>

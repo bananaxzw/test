@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="jq1.72.js" type="text/javascript"></script>
+    <script src="SL.Core.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function contentLoaded(win, fn) {
+
+            var done = false, top = true,
+
+	doc = win.document, root = doc.documentElement,
+
+	add = doc.addEventListener ? 'addEventListener' : 'attachEvent',
+	rem = doc.addEventListener ? 'removeEventListener' : 'detachEvent',
+	pre = doc.addEventListener ? '' : 'on',
+
+	init = function (e) {
+	    if (e.type == 'readystatechange' && doc.readyState != 'complete') return;
+	    (e.type == 'load' ? win : doc)[rem](pre + e.type, init, false);
+	    if (!done && (done = true)) fn.call(win, e.type || e);
+	},
+
+	poll = function () {
+	    try { root.doScroll('left'); } catch (e) { setTimeout(poll, 50); return; }
+	    init('poll');
+	};
+
+            if (doc.readyState == 'complete') fn.call(win, 'lazy');
+            else {
+                if (doc.createEventObject && root.doScroll) {
+                    try { top = !win.frameElement; } catch (e) { }
+                    if (top) poll();
+                }
+                doc[add](pre + 'DOMContentLoaded', init, false);
+                doc[add](pre + 'readystatechange', init, false);
+                win[add](pre + 'load', init, false);
+            }
+
+        }
+
+        var isReady = false,readyList = [];
+        // Handle when the DOM is ready
+        function ready() {
+            // Make sure that the DOM is not already loaded
+            if (!isReady) {
+                // Remember that the DOM is ready
+                isReady = true;
+
+                // If there are functions bound, to execute
+                if (readyList) {
+                    // Execute all of them
+                    SL().each(readyList, function () {
+                        this.call(document, SL());
+                    });
+
+                    // Reset the list of functions
+                    readyList = null;
+                }
+
+                // Trigger any bound ready events
+                //jQuery(document).triggerHandler("ready");
+            }
+        }
+
+
+        var readyBound = false;
+
+        function bindReady() {
+            if (readyBound) return;
+            readyBound = true;
+
+            // Mozilla, Opera and webkit nightlies currently support this event
+            if (document.addEventListener) {
+                // Use the handy event callback
+                document.addEventListener("DOMContentLoaded", function () {
+                    document.removeEventListener("DOMContentLoaded", arguments.callee, false);
+                    ready();
+                }, false);
+
+                // If IE event model is used
+            } else if (document.attachEvent) {
+                // ensure firing before onload,
+                // maybe late but safe also for iframes
+                document.attachEvent("onreadystatechange", function () {
+                    if (document.readyState === "complete") {
+                        document.detachEvent("onreadystatechange", arguments.callee);
+                        ready();
+                    }
+                });
+
+                // If IE and not an iframe
+                // continually check to see if the document is ready
+                if (document.documentElement.doScroll && !window.frameElement) {
+                    (function () {
+                        if (isReady) return;
+
+                        try {
+                            // If IE is used, use the trick by Diego Perini
+                            // http://javascript.nwbox.com/IEContentLoaded/
+                            document.documentElement.doScroll("left");
+                        } catch (error) {
+                            setTimeout(arguments.callee, 0);
+                            return;
+                        }
+
+                        // and execute any waiting functions
+                        ready();
+                    })();
+                }
+            }
+
+            // A fallback to window.onload, that will always work
+            jQuery.event.add(window, "load", jQuery.ready);
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

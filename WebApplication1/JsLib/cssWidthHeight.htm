@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+     <script src="SL.Core.js" type="text/javascript"></script>
+    <script src="SL.CSS.js" type="text/javascript"></script>
+    <script src="SL.offset.js" type="text/javascript"></script>
+    <script src="jq1.72.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="saf"  style=" height:100px; width:100px; background-color:Red; margin-left:20px; left:20px; position:relative;"></div>
+<div id="Div1"  style="background-color:Red; margin-left:20px;">sfasfsaf</div>
+<script type="text/javascript">
+    var node = document.getElementById("Div1");
+    console.log(sl.css(node, "height"));
+    console.log($("#Div1").css("height"));
+
+    sl.css(node, "height", "70px");
+    console.log(sl.css(node, "height"));
+    </script>
+</body>
+</html>

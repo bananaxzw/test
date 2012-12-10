@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+     <script src="JS/jquery.min.js" type="text/javascript"></script>
+    <script src="JS/CalvinBase.js" type="text/javascript"></script>
+    <script src="JS/CalvinTab.js" type="text/javascript"></script>
+        <script src="JS/CalvinPanel.js" type="text/javascript"></script>
+    <script src="JS/CalvinUIBlock.js" type="text/javascript"></script>
+    <link href="CSS/default/tabs.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tt").CalvinTabs();
+        })
+        var index = 0;
+        function addTab() {
+        
+            index++;
+            $('#tt').CalvinTabs('add', {
+                title: 'New Tab ' + index,
+                content: 'Tab Body ' + index,
+                iconCls: 'icon-save',
+                closable: true
+            });
+        }
+        function getSelected() {
+            var tab = $('#tt').CalvinTabs('getSelected');
+            alert('Selected: ' + tab.title);
+            alert('Selected: ' + tab.index);
+        }
+        function SelectedByIndex3() {
+            var tab = $('#tt').CalvinTabs("select",2);
+
+        }
+        function SelectedByIndex4() {
+            var tab = $('#tt').CalvinTabs("select", 3);
+
+        }
+    
+    </script>
+</head>
+<body>
+    <input id="Button1" type="button" value="button"   onclick="addTab();" />
+    <input id="Button2"
+        type="button" value="获取选中信息" onclick='getSelected();' />
+    <input id="Button3" type="button" value="选中第三个"  onclick="SelectedByIndex3();"/>
+    <input id="Button4" type="button" value="选中第④个"  onclick="SelectedByIndex4();"/>
+   <div id="tt" style="width: 700px; height: 250px;">
+        <div title="Tab1" style="padding: 20px; overflow:auto">
+            <p>
+                fsf</p>
+            <p>
+                fsf</p>
+            <p>
+                fsf</p>
+            <p>
+                fsf</p>
+            <p>
+                fsf</p>
+            <p>
+                fsf</p>
+            <p>
+                fsf</p>
+            <p>
+                fsf</p>
+            <p>
+                fsf</p>
+            <p>
+                fsf</p>
+            <p>
+                fsf</p>
+        </div>
+        <div title="Tab2" closable="true" style="padding: 20px;" cache="false" href="tabs_href_test.html">
+            This is Tab2 with close button.
+        </div>
+        <div title="Tab3" iconcls="icon-reload" closable="true" style="padding: 20px;">
+     asfasfsaf
+        </div>
+        <div title="Tab5 with sub tabs" closable="true" iconcls="icon-cut" style="padding: 10px;">
+           asfsafsa
+        </div>
+    </div>
+</body>
+</html>

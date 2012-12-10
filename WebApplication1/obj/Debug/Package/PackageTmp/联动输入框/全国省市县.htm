@@ -1,0 +1,21 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0049)http://code.js.cn/demo/selectLink/areaSelect.html -->
+<HTML xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>code.js.cn</TITLE>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<META name=GENERATOR content="MSHTML 8.00.7600.16821"></HEAD>
+<BODY>
+<DIV id=show></DIV>
+<DIV id=info></DIV>
+<SCRIPT type=text/javascript src="全国省市县_files/areaJson.js"></SCRIPT>
+
+<SCRIPT type=text/javascript src="全国省市县_files/selectGroup.js"></SCRIPT>
+
+<SCRIPT type=text/javascript>
+//<![CDATA[
+var x=new SelectGroup('show',areaJson);
+x.onchange=function (x){
+    info.innerHTML=(x);
+}
+ //]]>
+</SCRIPT>
+</BODY></HTML>

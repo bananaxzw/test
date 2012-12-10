@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="CalvinUI/JS/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("table").delegate("td", "click", function (e) {
+                alert($(this).html());
+                e.preventDefault();
+            });
+            $("table").click(function () {
+                alert("fsa");
+            });
+        })
+    </script>
+</head>
+<body style="padding: 0px; margin: 0px; height: 100%">
+    <ul>
+        <li>06:00 <b>NBA季前赛</b> 魔术 - 马刺 <a href="/pindao/flv/live1.htm" target="_blank">Live1(无插件)</a>
+            <a href="/wenzi/nba1.htm" target="_blank">文字直播</a> <a href="http://www.188bifen.com/lanqiubifen.htm"
+                target="_blank">比分直播</a></li>
+        <li>07:30 <b>NBA季前赛</b> 凯尔特人 - 76人 <a href="/pindao/flv/live2.htm" target="_blank">Live2(无插件)</a>
+            <a href="/wenzi/nba2.htm" target="_blank">文字直播</a> <a href="http://www.188bifen.com/lanqiubifen.htm"
+                target="_blank">比分直播</a></li>
+        <li>08:00 <b>NBA季前赛</b> 雷霆 - 掘金 <a href="/pindao/flv/live3.htm" target="_blank">Live3(无插件)</a>
+            <a href="/wenzi/nba3.htm" target="_blank">文字直播</a> <a href="http://www.188bifen.com/lanqiubifen.htm"
+                target="_blank">比分直播</a></li>
+        <li>09:30 <b>NBA季前赛 湖人 - 国王</b> <a href="/pindao/flv/live4.htm" target="_blank">Live4(无插件)</a>
+            <a href="/wenzi/nba4.htm" target="_blank">文字直播</a> <a href="http://www.188bifen.com/lanqiubifen.htm"
+                target="_blank">比分直播</a> <a href="htt </li>
+    </ul>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <script src="JS/jquery.min.js" type="text/javascript"></script>
+    <script src="JS/CalvinLazyLoad.js" type="text/javascript"></script>
+    <script src="JS/CalvinBase.js" type="text/javascript"></script>
+    <title>延迟加载效果</title>
+</head>
+<body>
+    <style>
+
+.lazy{ width:600px;overflow:scroll;border:1px solid #ccc;}
+.lazy table{border-collapse:collapse;}
+.lazy td{border:1px solid #ccc;text-align:center;padding:20px;background:#FFF;}
+
+#idLazyContainer{height:250px;*position:relative;}
+#idLazyContainer table{position:relative;}
+#idLazyContainer div{width:140px;height:100px;line-height:100px;position:relative;}
+
+</style>
+    模式：
+    <select id="idMode">
+        <option value="cross-vertical">垂直正交方向</option>
+        <option value="cross-horizontal">水平正交方向</option>
+        <option value="vertical">垂直方向</option>
+        <option value="horizontal">水平方向</option>
+        <option value="dynamic">动态加载</option>
+    </select>
+    阈值：
+    <input id="idRange" type="text" size="5" maxlength="3">
+    <input id="idReset" type="button" value="重新开始">
+    <input id="idRandom" type="button" value="随机位置">
+    <input id="idWindow" type="button" value="窗口模式">
+    <div class="lazy" id="idLazyContainer">
+        <table cellspacing="0" cellpadding="0">
+            <tbody id="idLazy">
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function Lazy(lazycontainer, random) {
+            var table = $("#idLazy")[0], totalX = 10, totalY = 100, i = 0,
+		container = $("#idLazyContainer")[0], color = [1, 1, 1];
+            lazycontainer = lazycontainer || container;
+            while (table.firstChild) { table.removeChild(table.firstChild); }
+            var t=0;
+            for (var n = 0; n < totalY; n++) {
+                var row = table.appendChild(document.createElement("tr"));
+                for (var m = 0; m < totalX; m++) {
+                t++;
+                    if (random) {
+                        var css = "style='" + $.map(["left", "top"], function (style) {
+                            return style + ":" + (Math.floor(Math.random() * 100) - 50) + "px;";
+                        }).join("") + "'";
+                    }
+                    row.appendChild(document.createElement("td")).innerHTML = "<div id='"+t+"' " + css + "></div>";
+                }
+            };
+          // setTimeout(function () {//ie6渲染bug
+                var lazy = new CalvinLazyLoad($.makeArray(container.getElementsByTagName("div")), {
+                    container: lazycontainer || container,
+                    mode: $("#idMode").val(),
+                    threshold: $("#idRange").val() | 0,
+                    beforeLoad: function () {
+                        color = $.map(color, function () { return Math.floor((Math.random() * 255)); });
+                    },
+                    onLoadData: function (elem) {
+                        elem.innerHTML = "第 " + ++i + " 个加载";
+                        elem.style.backgroundColor = "rgb(" + color.join(",") + ")";
+                        elem.style.color = "rgb(" + $.map(color, function (x) { return 255 - x; }).join(",") + ")";
+                    }
+                });
+                $("#idReset").click(function () {
+                    lazy.dispose(); Lazy(lazycontainer, random);
+                });
+                var style = container.style;
+                $("#idWindow").click(function () {
+                    if (this.value == "窗口模式") {
+                        lazy.dispose();
+                        if (CalvinBase.BrowserHelper.isIE6() ) {
+                            container.scrollTop = container.scrollLeft = 0;
+                            style.overflow = "hidden"; style.position = "static";
+                        } else {
+                            style.overflow = "visible";
+                        }
+                        Lazy(window, random);
+                        this.value = "容器模式"
+                    } else {
+                        lazy.dispose();
+                        if (CalvinBase.BrowserHelper.isIE6()) {
+                            style.position = "relative";
+                        }
+                        style.overflow = "scroll";
+                        Lazy(container, random);
+                        this.value = "窗口模式";
+                    }
+                });
+                $("#idRandom").click(function () {
+                    if (this.value == "随机位置") {
+                        lazy.dispose(); Lazy(lazycontainer, true);
+                        this.value = "固定位置"
+                    } else {
+                        lazy.dispose(); Lazy(lazycontainer, false);
+                        this.value = "随机位置";
+                    }
+                }); 
+          //  }, 0);
+        }
+
+       Lazy();
+
+
+    </script>
+    <br>
+    <style>
+        #idLazyContainer2
+        {
+            height: 200px;
+        }
+        #idLazyContainer2 div
+        {
+            width: 140px;
+            height: 100px;
+            line-height: 25px;
+        }
+        #idLazyContainer2 textarea
+        {
+            display: none;
+        }
+    </style>
+    利用textarea加载数据：
+    <input id="idReset2" type="button" value="重新开始">
+    <div class="lazy" id="idLazyContainer2">
+        <table cellspacing="0" cellpadding="0">
+            <tr>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/07/06/SlideTrans.html">图片滑动切换效果</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/07/21/ImgCropper.html">图片切割效果</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/05/23/1205642.html">图片变换效果(ie only)</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/09/15/1290954.html">仿LightBox内容显示效果</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/05/13/1194272.html">图片滑动展示效果</a></b></textarea>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/10/20/1314766.html">仿163网盘无刷新多文件上传系统</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/11/17/Drag.html">拖放效果</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/12/24/Slider.html">滑动条效果</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/10/06/TableOrder.html">Table排序</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/10/05/ImgCropper_sys.html">图片切割系统</a></b></textarea>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/12/03/Resize.html">拖拉缩放效果</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2009/01/06/Tween.html">Tween算法及缓动效果</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2009/03/11/color.html">颜色梯度和渐变效果</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/08/23/1274459.html">blog式日历控件</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/08/27/1277131.html">渐变效果</a></b></textarea>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2009/05/18/TableFixed.html">Table行定位效果</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2009/08/10/FixedMenu.html">多级联动浮动菜单</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2009/07/07/FixedTips.html">浮动定位提示效果</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2009/12/01/Quick_Upload.html">简便无刷新文件上传系统</a></b></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2009/12/22/ImagePreview.html">图片上传预览效果</a></b></textarea>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="loadInfo">
+    </div>
+    <script>
+  
+        var container = $("#idLazyContainer2"), lazyTable = container.html();
+        lazyTable = lazyTable.replace(/<div>/ig, '<div><img src="http://www.cnblogs.com/images/cnblogs_com/cloudgamer/169629/o_loading.gif" />');
+        function Lazy2() {
+            container.html(lazyTable)
+            var elems = $.map($("textarea",container), function (area) { return area.parentNode; }),
+		lazy = new CalvinLazyLoad(elems, {
+		    container: container[0], mode: "cross",
+		    onLoadData: function (elem) {
+		        elem.innerHTML = elem.getElementsByTagName("textarea")[0].value;
+		    }
+		});
+            $("#idReset2").click(function () {
+                lazy.dispose(); Lazy2();
+            });
+        }
+
+        Lazy2()
+
+    </script>
+</body>
+</html>

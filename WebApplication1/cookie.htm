@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript">
+        window.onload = function () {
+            setCookie("loginName", "sunjp", 2);
+            var cookie = document.cookie;
+            alert(cookie);
+            delCookie("loginName1")
+            alert(getCookie("loginName"));
+            setCookie("loginName1", "sunjpcookie", 2);
+            //delCookie("loginName1")
+            alert(getCookie("loginName"));
+            alert(getCookie("loginName1"));
+        }
+        //添加cookie
+        function setCookie(c_name, value, expiredays) {
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + expiredays);
+            document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+        }
+        //获得cookie 从cookie中截取对应名称的值
+        function getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=")
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1
+                    c_end = document.cookie.indexOf(";", c_start)
+                    if (c_end == -1) c_end = document.cookie.length
+                    return unescape(document.cookie.substring(c_start, c_end))
+                }
+            }
+            return ""
+        }
+        //删除cookie  把对应的cookie的有效期设置成无效
+        function delCookie(c_name) {
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() - 1);
+            var value = getCookie(c_name);
+            if (value != null) {
+                document.cookie = c_name + "=" + value + ";expires=" + exdate.toGMTString();
+            }
+        }
+
+       
+    </script>
+</head>
+<body>
+
+</body>
+</html>

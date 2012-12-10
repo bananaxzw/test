@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="jquery-1.4.1-vsdoc.js" type="text/javascript"></script>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+  <form>
+    <input name="name" />
+    <input name="name" />
+    <label id="safsa">Name:</label>
+    <input name="name" />
+    <input name="name" />
+    <input name="name" />
+    <input name="name" />
+
+    <fieldset>
+      <label>Newsletter:</label>
+
+      <input name="newsletter" />
+    </fieldset>
+  </form>
+  <input name="none" />
+<script>   
+
+ $("#safsa ~ input").css("color", "blue").val("Labeled!")
+    window.onresize = function () {
+        document.getElementById("pagehead").style.width = document.body.clientWidth || document.documentElement.clientWidth + "px";
+    }
+
+</script>
+
+
+</body>
+</html>

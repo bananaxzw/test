@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+   <style>
+   .hover
+   {
+   	 background-color:Red;
+   	
+   	}
+  .normal
+  {
+  	 background-color:Gray;
+  	}
+   </style>
+    <script language="javascript">
+        function show() {
+            var tr = document.getElementsByTagName("tr");
+            for (var i = 0; i < tr.length; i++) {
+                if (i % 2 == 0) {
+                    tr[i].style.backgroundColor = "#ccc";
+
+                    tr[i].onmouseout = function () {
+                        this.style.backgroundColor = "#ccc";
+                    };
+                    tr[i].onmouseover = function () {
+                        this.style.backgroundColor = "red";
+                    };
+                }
+                else {
+                   tr[i].style.backgroundColor = "#ddd";
+                    tr[i].onmouseout = function () {
+                        this.style.backgroundColor = "#ddd";
+                    };
+                    tr[i].onmouseover = function () {
+                        this.style.backgroundColor = "red";
+                    };
+                }
+            }
+        }
+        window.onload = function () {
+            show();
+        }
+    </script>
+</head>
+<body>
+
+
+    <table>
+        <tr >
+            <td>
+                safsa
+            </td>
+        </tr>
+        <tr>
+            <td>
+                safsa
+            </td>
+        </tr>
+        <tr>
+            <td>
+                safsa
+            </td>
+        </tr>
+        <tr>
+            <td>
+                safsa
+            </td>
+        </tr>
+        <tr>
+            <td>
+                safsa
+            </td>
+        </tr>
+        <tr>
+            <td>
+                safsa
+            </td>
+        </tr>
+    </table>
+
+
+</body>
+</html>

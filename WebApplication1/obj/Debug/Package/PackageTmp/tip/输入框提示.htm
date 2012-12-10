@@ -1,0 +1,53 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<!-- saved from url=(0036)http://code.js.cn/demo/tip/tip2.html -->
+<HTML xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE>code.js.cn</TITLE>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<STYLE type=text/css>BODY {
+	BACKGROUND: #eee
+}
+HTML {
+	BACKGROUND: #eee
+}
+.tip_wrap {
+	POSITION: absolute; DISPLAY: inline; FONT: 12px/1.5 arial; FLOAT: left; LEFT: -999999px
+}
+.tip_content {
+	BORDER-BOTTOM: #c00000 1px solid; BORDER-LEFT: #c00000 1px solid; PADDING-BOTTOM: 3px; PADDING-LEFT: 10px; PADDING-RIGHT: 10px; ZOOM: 1; DISPLAY: inline; BACKGROUND: #fff; FLOAT: left; MARGIN-LEFT: 5px; BORDER-TOP: #c00000 1px solid; BORDER-RIGHT: #c00000 1px solid; PADDING-TOP: 3px; _padding-bottom: 1px
+}
+.arrow_left {
+	POSITION: absolute; WIDTH: 6px; DISPLAY: block; BACKGROUND: url(输入框提示_files/tip_arrow.gif) no-repeat; HEIGHT: 26px; TOP: 250px; LEFT: 0px
+}
+.arrow_right {
+	POSITION: absolute; WIDTH: 6px; DISPLAY: block; BACKGROUND: url(输入框提示_files/tip_arrow.gif) no-repeat 100% 0px; HEIGHT: 26px; TOP: 250px; RIGHT: -6px
+}
+UL {
+	PADDING-BOTTOM: 0px; LIST-STYLE-TYPE: none; MARGIN: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; DISPLAY: inline; FLOAT: left; LIST-STYLE-IMAGE: none; PADDING-TOP: 0px
+}
+LI {
+	PADDING-BOTTOM: 0px; LIST-STYLE-TYPE: none; MARGIN: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; DISPLAY: inline; FLOAT: left; LIST-STYLE-IMAGE: none; PADDING-TOP: 0px
+}
+LI {
+	MARGIN: 10px
+}
+LI IMG {
+	BORDER-BOTTOM: #000 1px solid; BORDER-LEFT: #000 1px solid; BORDER-TOP: #000 1px solid; BORDER-RIGHT: #000 1px solid
+}
+</STYLE>
+
+<SCRIPT type=text/javascript src=""></SCRIPT>
+
+<META name=GENERATOR content="MSHTML 8.00.7600.16821"></HEAD>
+<BODY><INPUT type=text name="" info="输入有效的帐号名"><BR><INPUT type=text name="" 
+info="输入您的密码"><BR><INPUT value=Login type=button name="" info="点击登陆您的帐户">
+<SCRIPT type=text/javascript src="输入框提示_files/tip.js"></SCRIPT>
+
+<SCRIPT type=text/javascript>
+//<![CDATA[
+var g=new Tip();
+g.bind(document.getElementsByTagName('INPUT'));
+g.setHtml=function (el){
+    return el.getAttribute('info')
+};
+ //]]>
+</SCRIPT>
+ </BODY></HTML>

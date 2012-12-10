@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript">
+        var reg = /^(\w+)/;
+        var reg1 = /^(\w+)/g;
+        var str = "1 plus 2 equal 3"
+
+    var ss = reg.test(str);
+    var ss1 = reg1.exec(str, function (a, b) {
+
+        console.dir(a);
+    });
+    console.dir(ss1);
+
+
+    str.replace(reg1, function (a, b) {
+        console.dir(a);
+        console.dir(b);
+    });
+
+
+//    while ((result = /(\d+)/g.exec(str)) != null) {
+//        document.write(result);
+//        document.write("<br />");
+//        document.write(reg1.lastIndex);
+//        document.write("<br />");
+//    }
+
+
+//    while ((result = str.match(/\d+/g)) != null) {
+//        document.write(result);
+//        document.write("<br />");
+//        document.write(reg1.lastIndex);
+//        document.write("<br />");
+//    }
+
+    var str = "Visit W3School, W3School is a place to study web technology.";
+    var patt =/(W3School)/g;
+    var result;
+
+    while ((result = patt.exec(str)) != null) {
+        document.write(result);
+        document.write("<br />");
+        document.write(patt.lastIndex);
+        document.write("<br />");
+    }
+
+    var patt = /(W3School)/;
+    var ss = patt.exec(str)
+
+   console.dir(ss);
+  
+</script>
+
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../jquery-1.4.1-vsdoc.js" type="text/javascript"></script>
+    <script src="SL.Core.js" type="text/javascript"></script>
+    <script src="SL.Data.js" type="text/javascript"></script>
+    <script src="SL.Event.js" type="text/javascript"></script>
+</head>
+<body>
+<form id="sf">
+<input id="Text1" type="text"  name='sffs' />
+<input id="Text2" type="text" />
+<input id="Text3" type="text" name='sffs' />
+</form>
+    
+<div id="sff" onclick="console.log('me')">sfsa</div>
+<div  style=" background:red; width:200px; height:100px" id="hoverdiv">safsa</div>
+<script type="text/javascript">
+    var tt = document.getElementById("sff");
+//    SL().Event.hover(hoverdiv, function () {
+//        console.log("in");
+//    }, function () {
+//        console.log("out");
+//    });
+    var mm = new SL();
+    SL().Event.addEvent(tt, "click", function (event) {
+        console.log(event.extendData.name);
+    }, { "name": "xuzhiwei" });
+    SL().Event.addEvent(tt, "click", function (event) {
+        console.log(1);
+       // console.log(event.extendData.name);
+    });
+    SL().Event.addEvent(tt, "click11", function (event) {
+        console.log(event.extendData.name);
+    }, { "name": "xuzhiwei1" });
+    function see() {
+        alert("i see you!");
+    }
+//    SL().Event.addEvent(tt, "click", see);
+
+//    SL().Event.removeEvent(tt, "click", see);
+
+    SL().Event.triggerEvent("click", [], tt);
+    // SL().Event.triggerEvent("click11", [], tt);
+  
+</script>
+</body>
+</html>

@@ -1,0 +1,2110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		
+		<title>SL API 开发参考文档 - Dom</title>
+
+		<style type="text/css">
+			/* default.css */
+
+body
+{
+	font: 12px 'Lucida Grande', Tahoma, Arial, Helvetica, sans-serif;
+	/*width: 800px;*/
+	margin:0;
+	padding:0;
+}
+
+#header
+{
+	clear: both;
+	/*background-color: #f2f2e2;*/
+	padding: 8px;
+}
+
+h1
+{
+	font-size: 150%;
+	font-weight: bold;
+	padding: 0;
+	margin: 1em 0 0 .3em;
+}
+
+hr
+{
+	border: none 0;
+	border-top: 0px solid #e0e0e0;
+	height: 0px;
+}
+
+pre.code
+{
+	display: block;
+	padding: 8px;
+	border: 1px dashed #ccc;
+	background: #ffffee;
+	color: #666666;
+}
+
+#index
+{
+	float: left;
+	width: 160px;
+	position: absolute;
+	left: 8px;
+	background-color: #efefe0;
+	border:0px solid #eeeeee;
+	padding: 15px 8px 8px;
+}
+
+#content
+{
+	margin-left: 190px;
+	width: 600px;
+}
+
+.classList
+{
+	list-style-type: none;
+	padding: 0;
+	margin: 0 0 0 8px;
+	font-family: arial, sans-serif;
+	font-size: 1em;
+	overflow: auto;
+}
+
+.classList li
+{
+	padding: 0;
+	margin: 0 0 8px 0;
+}
+
+.summaryTable { width: 100%; }
+h1{
+	margin:0;
+}
+h1.classTitle
+{
+	font-size:170%;
+	line-height:130%;
+	background:#000044;
+	border-bottom: 1px solid #cccccc;
+	padding: 10px;
+	color:#ffffff;
+}
+
+h2 { font-size: 110%; }
+caption, div.sectionTitle
+{
+	background-color: #003399;
+	color: #fff;
+	font-size:118%;
+	text-align: left;
+	padding: 8px 6px;
+	border: 1px #7F8FB1 solid;
+}
+
+div.sectionTitle { margin-bottom: 8px; }
+.summaryTable thead { display: none; }
+
+.summaryTable td
+{
+	vertical-align: top;
+	padding: 4px;
+	border-bottom: 1px #7F8FB1 solid;
+	border-right: 1px #7F8FB1 solid;
+}
+
+/*col#summaryAttributes {}*/
+.summaryTable td.attributes
+{
+	border-left: 1px #7F8FB1 solid;
+	width: 140px;
+	text-align: right;
+}
+
+td.attributes, .fixedFont
+{
+	line-height: 15px;
+	color: #002EBE;
+	font-family: "Courier New",Courier,monospace;
+	font-size: 13px;
+}
+
+.summaryTable td.nameDescription
+{
+	text-align: left;
+	font-size: 13px;
+	line-height: 15px;
+}
+
+.summaryTable td.nameDescription
+{
+	line-height: 15px;
+	padding: 4px;
+	padding-left: 4px;
+	color: #888888;
+}
+
+.summaryTable { margin-bottom: 8px; }
+
+ul.inheritsList
+{
+	list-style: square;
+	margin-left: 20px;
+	padding-left: 0;
+}
+.description{
+	color: #888888;
+	margin-left: 20px; 
+	line-height: 15px;
+}
+.description .heading
+{
+	font-weight: bold;
+	padding-bottom: 6px;
+	margin-left: 0;
+	color: #444444;
+}
+.description dt { margin: 10px 0 0 20px; }
+.description dd { color: #748189; }
+
+
+.detailList {
+	margin-left: 20px; 
+	line-height: 15px;
+}
+.detailTitle{
+	padding: 0 5px;
+	line-height:25px;
+	background: #ececec;
+	border-bottom: 1px solid #cccccc; 
+}
+.detailTitle span.methodType{
+	display:none;
+	color: #999999;
+	
+}
+.detailTitle span.methodReturn{
+	display:none;
+}
+
+
+.detailList dt { margin: 10px 0 0 20px; }
+.detailList dt b{ color: #222288; }
+.detailList dd { color: #748189; margin: 0 0 0 30px;}
+
+.paramsList dt { margin: 10px 0 0 20px; }
+.paramsList dt b{ color: #222288; }
+.paramsList dd { color: #748189; margin: 0 0 0 100px;}
+
+.detailList .heading
+{
+	font-weight: bold;
+	padding-bottom: 6px;
+	margin-left: 0;
+	color: #444444;
+}
+
+.light, td.attributes, .light a:link, .light a:visited
+{
+	color: #777;
+	/*font-style: italic;*/
+}
+
+.fineprint
+{
+	text-align: right;
+	padding: 5px;
+	font-size: 12px;
+	color: #666666;
+	background:#f2f2e2;
+	width:590px;
+	margin: 10px 0 0 190px;
+}
+		</style>
+	</head>
+
+	<body>
+<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<div>
+    <div style="font-size: large; color: Red; margin-top: 10px; text-align: center">
+        <img src="http://bananaxzw2.s138.288idc.com/JsCode/niupigu.gif" />域名备案中 网站构建中 蛋疼的期待吧
+        <img src="http://bananaxzw2.s138.288idc.com/JsCode/niupigu.gif" /></div>
+</div>
+<div>
+    <div style="font-size: large; color: Red; margin-top: 10px; text-align: center">
+        <img src="http://bananaxzw2.s138.288idc.com/JsCode/niupigu.gif" /><a href="http://bananaxzw2.s138.288idc.com/JsCode/MenuButton.htm" target="_blank"> UI目前正在整理构造中，尽情期待
+            GO-> </a>
+        <img src="http://bananaxzw2.s138.288idc.com/JsCode/niupigu.gif" /></div>
+</div>
+<div id="header">
+    <h1>
+        SL 1.0 API 开发参考文档</h1>
+    <p>
+        <a href="#" title="SL官网">paladin-xu</a></p>
+    <p>
+        许志伟-感谢jquery protype jet框架的作者们 感谢franky
+    </p>
+</div>
+
+		<!-- end static/header.html -->
+
+<!-- ============================== classes index ============================ -->
+		<div id="index">
+			<!-- begin publish.classesIndex -->
+			<div align="center"><a href="../index.html">Class Index</a>
+| <a href="../files.html">File Index</a></div>
+<hr />
+<h2>Classes</h2>
+<ul class="classList">
+	
+	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
+	
+	<li><a href="../symbols/array.html">array</a></li>
+	
+	<li><a href="../symbols/Browser.html">Browser</a></li>
+	
+	<li><a href="../symbols/Cookie.html">Cookie</a></li>
+	
+	<li><a href="../symbols/data.html">data</a></li>
+	
+	<li><a href="../symbols/date.html">date</a></li>
+	
+	<li><a href="../symbols/Dom.html">Dom</a></li>
+	
+	<li><a href="../symbols/Event.html">Event</a></li>
+	
+	<li><a href="../symbols/InstanceOf.html">InstanceOf</a></li>
+	
+	<li><a href="../symbols/json.html">json</a></li>
+	
+	<li><a href="../symbols/number.html">number</a></li>
+	
+	<li><a href="../symbols/Object.html">Object</a></li>
+	
+	<li><a href="../symbols/QueryString.html">QueryString</a></li>
+	
+	<li><a href="../symbols/SL.html">SL</a></li>
+	
+	<li><a href="../symbols/SLFunction.html">SLFunction</a></li>
+	
+	<li><a href="../symbols/string.html">string</a></li>
+	
+</ul>
+<hr />
+			<!-- end publish.classesIndex -->
+		</div>
+		
+		<div id="content">
+<!-- ============================== class title ============================ -->
+			<h1 class="classTitle">
+				
+				类 Dom
+			</h1>
+
+<!-- ============================== class summary ========================== -->			
+			<p class="description">
+				
+			
+				
+				
+				
+					<br /><i>Defined in: </i> <a href="../symbols/src/SL.Dom.js.html">SL.Dom.js</a>.
+				
+			</p>
+
+<!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Dom.">
+				<caption>类 概要</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/Dom.html#constructor">Dom</a></b>()
+							</div>
+							<div class="description"></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+
+<!-- ============================== properties summary ===================== -->
+			
+
+<!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Dom.">
+					<caption>方法概要</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#$className">$className</a></b>(className, sTagName, parent)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#$id">$id</a></b>(id)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#$Name">$Name</a></b>(sName, sTagName, parent)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#appendFirstChild">appendFirstChild</a></b>(newNode, parent)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#convertPixelValue">convertPixelValue</a></b>(el, value)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#firstChild">firstChild</a></b>(elem)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#getCurrentStyle">getCurrentStyle</a></b>(node, styleString)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#getDocumentElement">getDocumentElement</a></b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#getDocumentSize">getDocumentSize</a></b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#getIEOpacity">getIEOpacity</a></b>(el)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#getNodeAlpha">getNodeAlpha</a></b>(node)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#getNodeFloat">getNodeFloat</a></b>(node)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#height">height</a></b>(node)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#innerHeight">innerHeight</a></b>(node)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#innerWidth">innerWidth</a></b>(node)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#insertAfter">insertAfter</a></b>(newNode, targetNode)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#insertBefore">insertBefore</a></b>(newNode, tagetNode)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#lastChild">lastChild</a></b>(elem)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#nextSibling">nextSibling</a></b>(elem)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#offset">offset</a></b>(oElement)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#outerHeight">outerHeight</a></b>(node)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#outerWidth">outerWidth</a></b>(node)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#parentNode">parentNode</a></b>(elem, level)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#prevSibling">prevSibling</a></b>(elem)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#scrollLeft">scrollLeft</a></b>(node, val)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#scrollTop">scrollTop</a></b>(node, val)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#setNodeAlpha">setNodeAlpha</a></b>(node, opacityValue)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#setNodeFloat">setNodeFloat</a></b>(node, floatString)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#setNodeStyle">setNodeStyle</a></b>(node, styleString)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Dom.html#width">width</a></b>(node)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
+<!-- ============================== events summary ======================== -->
+			
+
+<!-- ============================== constructor details ==================== -->		
+			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					类  详解
+				</div>
+				
+				<div class="detailTitle fixedFont">
+					<span class="methodType"></span>
+						<b>Dom</b>()
+				</div>
+				
+				
+				<dl class="description">
+					<dt class="heading">功能:</dt>
+					<dd>
+					
+					
+					</dd>
+				</dl>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
+
+<!-- ============================== field details ========================== -->		
+			
+
+<!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					方法详解
+				</div>
+				
+					<a name="$className"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>$className</b>(className, sTagName, parent)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>className</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>sTagName</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>parent</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="$id"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>$id</b>(id)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>id</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="$Name"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>$Name</b>(sName, sTagName, parent)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>sName</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>sTagName</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>parent</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="appendFirstChild"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>appendFirstChild</b>(newNode, parent)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>newNode</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>parent</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="convertPixelValue"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>convertPixelValue</b>(el, value)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>el</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>value</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="firstChild"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>firstChild</b>(elem)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>elem</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getCurrentStyle"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>getCurrentStyle</b>(node, styleString)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>styleString</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getDocumentElement"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>getDocumentElement</b>()
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getDocumentSize"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>getDocumentSize</b>()
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getIEOpacity"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>getIEOpacity</b>(el)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>el</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getNodeAlpha"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>getNodeAlpha</b>(node)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getNodeFloat"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>getNodeFloat</b>(node)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="height"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>height</b>(node)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="innerHeight"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>innerHeight</b>(node)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="innerWidth"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>innerWidth</b>(node)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="insertAfter"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>insertAfter</b>(newNode, targetNode)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>newNode</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>targetNode</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="insertBefore"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>insertBefore</b>(newNode, tagetNode)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>newNode</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>tagetNode</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="lastChild"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>lastChild</b>(elem)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>elem</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="nextSibling"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>nextSibling</b>(elem)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>elem</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="offset"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>offset</b>(oElement)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>oElement</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="outerHeight"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>outerHeight</b>(node)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="outerWidth"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>outerWidth</b>(node)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="parentNode"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>parentNode</b>(elem, level)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>elem</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>level</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="prevSibling"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>prevSibling</b>(elem)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>elem</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="scrollLeft"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>scrollLeft</b>(node, val)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>val</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="scrollTop"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>scrollTop</b>(node, val)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>val</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setNodeAlpha"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>setNodeAlpha</b>(node, opacityValue)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>opacityValue</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setNodeFloat"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>setNodeFloat</b>(node, floatString)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>floatString</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setNodeStyle"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>setNodeStyle</b>(node, styleString)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>styleString</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="width"> </a>
+					<div class="detailTitle fixedFont">
+						<span class="methodType"></span>
+					
+					
+					<b>width</b>(node)
+					
+					</div>
+					<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
+						
+						
+						
+						</dd>
+					</dl>
+					
+					
+					
+						
+							<dl class="detailList">
+								<dt class="heading">参数:</dt>
+								<dd>
+									
+									<dl class="paramsList">
+										<dt>
+											<b>node</b>
+											
+										</dt>
+										<dd></dd>
+									</dl>
+									
+								</dd>
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
+			
+			
+<!-- ============================== event details ========================= -->		
+			
+			
+			<hr />
+		</div>
+
+		
+<!-- ============================== footer ================================= -->
+		<div class="fineprint" style="clear:both">
+			&copy;1998-2012<br />
+			文档生成 by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Jul 22 2012 22:04:21 GMT+0800 (CST)
+		</div>
+	</body>
+</html>

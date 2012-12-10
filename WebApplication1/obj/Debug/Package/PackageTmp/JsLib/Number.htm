@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="SL.Core.js" type="text/javascript"></script>
+    <script src="SL.Number.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function format() {
+            var number = Number(document.getElementById("Text1").value);
+            var formate = document.getElementById("Text2").value;
+            var sl = new SL();
+            document.getElementById("Text3").value = sl.Number.format(number, formate);
+        }
+    
+    </script>
+</head>
+<body>
+   Number: <input id="Text1" type="text"  value="1533.444"/>
+   formate:<input id="Text2" type="text"  value="0,0.00000"/>
+   result:<input id="Text3" type="text" />
+    <input id="Button1" type="button" value="button" onclick="format();" />
+</body>
+</html>

@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <script src="jq1.72.js" type="text/javascript"></script>
+    <title>opacity_CSS参考手册_web前端开发参考手册</title>
+    <meta name="author" content="Joy Du(飘零雾雨), dooyoe@gmail.com" />
+    <meta name="copyright" content="www.doyoe.com" />
+    <script src="SL.Core.js" type="text/javascript"></script>
+    <script src="SL.CSS.js" type="text/javascript"></script>
+    <script src="SL.offset.js" type="text/javascript"></script>
+    
+    <style>
+        h1
+        {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .test
+        {
+            width: 300px;
+            height: 150px;
+            padding: 10px;
+            background: #050;
+        }
+        .test2
+        {
+            width: 300px;
+            height: 150px;
+            margin: -120px 0 0 50px;
+            padding: 10px;
+            background: #000;
+            filter: alpha(opacity=50);
+            opacity:.7;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        下例是一个半透明的效果：</h1>
+    <div>
+        不透明度为100%的box</div>
+    <div id="test2" class="test2">
+        不透明度为50%的box</div>
+    <script type="text/javascript">
+        $("#test2").css("opacity");
+        var node = document.getElementById("test2");
+        console.log(sl.css(node, "opacity"));
+
+        sl.css(node, "opacity", 70);
+        console.log(sl.css(node, "opacity"));
+    </script>
+</body>
+</html>

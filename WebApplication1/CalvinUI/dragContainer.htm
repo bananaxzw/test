@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="JS/jquery.min.js" type="text/javascript"></script>
+    <script src="JS/CalvinBase.js" type="text/javascript"></script>
+    <script src="JS/CalvinDraggable.js" type="text/javascript"></script>
+    <script src="JS/CalvinDroppable.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+              $("#sfs").CalvinDraggable({ containment: document.getElementById("Div1") });
+//            var left = document.getElementById("left");
+//            var top = document.getElementById("top");
+//            $("#sfs").CalvinDraggable({ onDrag: function (e) {
+//                left.innerHTML = e.data.left;
+//                top.innerHTML = e.data.top;
+//            }
+//            });
+            //  $("#Div1").CalvinDroppable();
+            $("#Button1").click(function () {
+                alert($("#sfs").offset().left);
+            })
+        })
+      
+       
+    </script>
+</head>
+<body>
+
+    <div id='Div1' style="height: 600px; background-color: Red; width: 600px; padding: 10px; position:relative; margin:0 auto;">
+        <div id='sfs' style="height: 50px; background-color: green; width: 50px;">
+        </div>
+    </div>
+
+    left:<span id="left">0</span>;top<span id='top'>0</span>
+    <input id="Button1" type="button" value="button" style="position: absolute" />
+    <div style='width: 1500px'>
+        ssfs
+    </div>
+</body>
+</html>

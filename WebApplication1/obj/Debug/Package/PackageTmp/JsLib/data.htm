@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="SL.Core.js" type="text/javascript"></script>
+    <script src="SL.Selector.js" type="text/javascript"></script>
+      <script src="SL.Data.js" type="text/javascript"></script>
+    <script src="SL.Node.js" type="text/javascript"></script>
+  
+</head>
+<body>
+<div id="safsa"></div>
+<div id="Div1"></div>
+<script type="text/javascript">
+
+    window.onload = function () {
+        var tt = new SL();
+        /*
+        console.log(tt.expando);
+        var d = document.getElementById("safsa");
+        tt.data(d, "text", { "sfsa": 1, "asffs": 2 });
+        var d1 = document.getElementById("Div1");
+        tt.data(d1, "text", { "sfsa": 1, "asffs": 2 });
+        console.dir(tt.data(d, "text"));
+        console.dir(tt.data(d1, "text"));
+        var mm = new SL();
+        console.log(mm.uuid);
+        mm.data(d1, "text", { "sfsa": 1, "asffs": 66 });
+        console.dir(mm.data(d1, "text"));
+        console.log(mm.uuid);
+        mm.removeData(d1);
+        console.dir(mm.data(d1, "text"));
+        console.dir(tt.cache);
+        console.log(tt.expando);*/
+        $("div").data("me", { "sfsa": 1, "asffs": 2 });
+        $("div").data("me1", { "sfsa": 1, "asffs": 2 });
+        console.log($("#Div1").data("me").asffs);
+        $("div").removeData("me");
+        console.log($("#Div1").data("me").asffs);
+        console.log($("#Div1").data("me1").asffs);
+    }
+//    function Button1_onclick() {
+//        console.log(tt.expando);
+//    }
+
+</script>
+    <input id="Button1" type="button" value="button" onclick="return Button1_onclick()" />
+</body>
+</html>

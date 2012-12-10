@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript">
+
+        var ss = "[object Array]";
+        alert(ss.slice(-2));
+        window.onload = function () {
+            var pa = document.getElementById("pa");
+            var txt1 = document.getElementById("Text1");
+            var txt2 = document.getElementById("Text2")
+            pa.insertBefore(txt2, txt1);
+        }
+    </script>
+</head>
+<body>
+    <div id='pa'>
+        <input id="Text1" type="text" value='1' /><input id="Text2" type="text" value=2 />
+    </div>
+</body>
+</html>
