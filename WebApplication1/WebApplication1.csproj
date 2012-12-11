@@ -204,8 +204,8 @@
     <Content Include="BlockDialog\BigFrame.htm" />
     <Content Include="BlockDialog\block.js" />
     <Content Include="BlockDialog\DEMO.html" />
+    <Content Include="BlockDialog\easy.html" />
     <Content Include="BlockDialog\easydialog.css" />
-    <Content Include="BlockDialog\easydialog.html" />
     <Content Include="BlockDialog\easydialog.js" />
     <Content Include="BlockDialog\easydialog.min.js" />
     <Content Include="BlockDialog\FILE\block.css" />
@@ -919,7 +919,9 @@
     <Content Include="JsLib\SLCssTest.htm" />
     <Content Include="JsLib\SLDocument.js" />
     <Content Include="JsLib\support.htm" />
+    <Content Include="JsLib\UI\default\SLDialog.css" />
     <Content Include="JsLib\UI\masker.htm" />
+    <Content Include="JsLib\UI\SL.Dialog.js" />
     <Content Include="JsLib\UI\SL.Mask.js" />
     <Content Include="JsLib\UI\tabDemo.htm" />
     <Content Include="JsLib\test.js" />
