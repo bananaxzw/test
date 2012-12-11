@@ -70,7 +70,6 @@ var DialogHelper = {
          dialogContent = $('iv class="easyDialog_content"></div>');
          dialog.append(dialogContent);
         $container.append(dialog);
-        dialog.append(
         if (opts.showTitle) {
 
         }
