@@ -204,6 +204,10 @@
     <Content Include="BlockDialog\BigFrame.htm" />
     <Content Include="BlockDialog\block.js" />
     <Content Include="BlockDialog\DEMO.html" />
+    <Content Include="BlockDialog\easydialog.css" />
+    <Content Include="BlockDialog\easydialog.html" />
+    <Content Include="BlockDialog\easydialog.js" />
+    <Content Include="BlockDialog\easydialog.min.js" />
     <Content Include="BlockDialog\FILE\block.css" />
     <Content Include="BlockDialog\FILE\chili-1.7.pack.js" />
     <Content Include="BlockDialog\FILE\gecko.jpg" />
@@ -221,6 +225,7 @@
     <Content Include="BlockDialog\index.html" />
     <Content Include="BlockDialog\jquery.bgiframe.js" />
     <Content Include="BlockDialog\jquery.blockUI.js" />
+    <Content Include="BlockDialog\test_img.jpg" />
     <Content Include="bootstrap\button.htm" />
     <Content Include="bootstrap\css\base.css" />
     <Content Include="bootstrap\css\bootstrap.css" />
@@ -914,6 +919,8 @@
     <Content Include="JsLib\SLCssTest.htm" />
     <Content Include="JsLib\SLDocument.js" />
     <Content Include="JsLib\support.htm" />
+    <Content Include="JsLib\UI\masker.htm" />
+    <Content Include="JsLib\UI\SL.Mask.js" />
     <Content Include="JsLib\UI\tabDemo.htm" />
     <Content Include="JsLib\test.js" />
     <Content Include="JsLib\test.xml" />
@@ -1374,7 +1381,6 @@
     <Content Include="LazyLoad\ImagesLazyLoad.htm" />
     <Content Include="LazyLoad\jquery.lazyload.js" />
     <Content Include="LazyLoad\LazyLoad.htm" />
-    <Content Include="mass\bananaxzw-mass-Framework-08192df\AspNet.exe" />
     <Content Include="mass\bananaxzw-mass-Framework-08192df\bin\AspNet.EXE" />
     <Content Include="mass\bananaxzw-mass-Framework-08192df\code_style.txt" />
     <Content Include="mass\bananaxzw-mass-Framework-08192df\labs\ball.html" />
@@ -2554,7 +2560,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>6015</DevelopmentServerPort>
+          <DevelopmentServerPort>63065</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

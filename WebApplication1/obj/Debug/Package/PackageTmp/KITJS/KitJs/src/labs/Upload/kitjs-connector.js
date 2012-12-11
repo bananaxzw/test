@@ -1,1 +1,0 @@
-$kit.Upload = qq.FileUploader;

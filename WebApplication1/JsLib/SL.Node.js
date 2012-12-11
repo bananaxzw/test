@@ -158,8 +158,7 @@
         */
         domManipulation: function (args, table, fn) {
             if (node = this.elements[0]) {
-                var fragment = (node.ownerDocument || node).createDocumentFragment();
-                var scripts = [];
+                var fragment = (node.ownerDocument || node).createDocumentFragment(),scripts = [];
                 if (this.isChain(args[0])) args = args[0].elements; //sl元素
                 sl.Dom.transactionDom(args, (node.ownerDocument || node), fragment, scripts);
                 var first = fragment.firstChild,

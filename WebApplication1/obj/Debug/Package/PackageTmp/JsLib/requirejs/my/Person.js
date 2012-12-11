@@ -1,3 +1,0 @@
-﻿var person = {
-name:"xuzhiwei"
-}
