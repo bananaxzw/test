@@ -1,80 +1,36 @@
 ﻿//遮罩层
 /// <reference path="../sl.js" />
 var defaults = {
-    // message displayed when blocking (use null for no message)
-    //默认的遮罩层消息
-    message: '<h1>Please wait...</h1>',
-    //是否显示消息面板的头部
-    isShowHeader: true,
-    //是否显示关闭按钮
-    showCloseBtn: true,
-    //关闭
-    closed: false,
-
-    title: null,
-
-    draggable: true,
-
-    blockElement: window,
-
-    //遮罩层的中间消息的样式
-    css: {
-        padding: 0,
-        margin: 0,
-        width: '',
-        top: '40%',
-        left: '35%',
-        textAlign: 'center',
-        color: '#000',
-        border: 'none',
-        backgroundColor: '#fff'
-        // cursor: 'wait'
-    },
     //遮罩层的样式
     overlayCSS: {
         backgroundColor: '#000',
         opacity: 50
     },
-
-
     // IE issues: 'about:blank' fails on HTTPS and javascript:false is s-l-o-w
     // (hat tip to Jorge H. N. de Vasconcelos)
     //IE问题："about:blank" fails on HTTPS and javascript:false is s-l-o-w
     iframeSrc: /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank',
-
     //在非IE浏览器中强制使用iframe(handy for blocking applets)
     forceIframe: false,
-
     baseZ: 1000,
-
-    // set these to true to have the message automatically centered
-    //将信息显示在中间，centerX只有在element blocking时才有效，而page blocking是通过CSS来控制的
-    centerX: true, // <-- only effects element blocking (page block controlled via css above)
-    centerY: true,
-    //是否显示遮罩层
-    showOverlay: true,
     // suppresses the use of overlay styles on FF/Linux (due to performance issues with opacity)
     applyPlatformOpacityRules: true,
-    //遮罩层出现时候 执行回调函数
-    onBlock: function () { },
-
-    //遮罩层关闭时执行回调函数
-    onUnblock: function () { },
-
     // don't ask; if you really must know: http://groups.google.com/group/jquery-en/browse_thread/thread/36640a8730503595/2f6a79a77a78e493#2f6a79a77a78e493
-    quirksmodeOffsetHack: 4,
-    // class name of the message block
-    blockMsgClass: 'blockMsg'
+    quirksmodeOffsetHack: 4
 };
 function Mask(elem, options) {
     this.opts = sl.extend(true, options, defaults);
-    if ((elem.nodeType && elem.nodeType === 9) || sl.InstanceOf.Window(elem)) {
+    if ((elem.nodeType && elem.nodeType === 9) || sl.InstanceOf.Window(elem)||elem.nodeName=="BODY") {
         this.elem = elem.body || elem.document.body;
         this.full = true; //是页面遮罩还是局部的元素遮罩
     }
     else {
         this.elem = elem;
         this.full = false; //是页面遮罩还是局部的元素遮罩
+        //如果不是full的话 元素要设置position=relative 这样是为了方便遮罩层top:0 width100% left:0 height100%
+        //遮盖元素
+        if (sl.css(this.elem, 'position') == 'static')
+            this.elem.style.position = 'relative';
     }
     this.ie6 = sl.Browser.ie == 6.0, this.boxModel = sl.Support.boxModel;
     this.CreateMask();

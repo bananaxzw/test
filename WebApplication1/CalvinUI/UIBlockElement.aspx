@@ -13,8 +13,8 @@
       <script type="text/javascript">
           $(document).ready(function () {
             //  $("#safsaf").CalvinUIBlock("close");
-              $("#safsaf").CalvinUIBlock({ blockElement: window });
-              //$("#safsaf").CalvinUIBlock({ blockElement: document.getElementById("sfs") });
+              //$("#safsaf").CalvinUIBlock({ blockElement: window });
+              $("#safsaf").CalvinUIBlock({ blockElement: document.getElementById("sfs") });
           })
 
           function Button1_onclick() {

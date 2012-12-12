@@ -920,6 +920,8 @@
     <Content Include="JsLib\SLDocument.js" />
     <Content Include="JsLib\support.htm" />
     <Content Include="JsLib\UI\default\SLDialog.css" />
+    <Content Include="JsLib\UI\dialog.htm" />
+    <Content Include="JsLib\UI\dialogElement.htm" />
     <Content Include="JsLib\UI\masker.htm" />
     <Content Include="JsLib\UI\SL.Dialog.js" />
     <Content Include="JsLib\UI\SL.Mask.js" />
