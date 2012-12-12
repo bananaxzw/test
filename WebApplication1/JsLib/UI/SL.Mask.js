@@ -3,7 +3,7 @@
 var defaults = {
     //遮罩层的样式
     overlayCSS: {
-        backgroundColor: '#000',
+        backgroundColor: '#FFF',
         opacity: 50
     },
     // IE issues: 'about:blank' fails on HTTPS and javascript:false is s-l-o-w

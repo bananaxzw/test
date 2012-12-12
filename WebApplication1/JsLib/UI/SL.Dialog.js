@@ -37,14 +37,18 @@ function SLDialog(elem, options) {
     }
     this.ie6 = sl.Browser.ie == 6.0, this.boxModel = sl.Support.boxModel;
     this.options = sl.extend(Defaults, options);
+    this.mask = DialogHelper.createMask(this.elem, this.options);
     this.$dialog = DialogHelper.wrapDialog(this.elem, this.options, this.full);
     DialogHelper.setDialogStyle(this.$dialog, this.options, this.full);
-    this.mask = DialogHelper.createMask(this.elem, this.options);
+
 }
 
 SLDialog.prototype = {
     close: function () {
         this.$dialog.hide();
+        if (this.mask) {
+            this.mask.hideMask();
+        }
     },
     open: function () {
         this.$dialog.show();
@@ -65,7 +69,7 @@ var DialogHelper = {
         if (opts.showTitle) {
             var dialogTitle = $('<div class="Dialog_title" id="Dialog_title" style="cursor: move;"><h4 style="float:left;display:inline-block;margin:0;">' + opts.title + '</h4></div>');
             if (opts.showClose) {
-                var closeBtn = $('<a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn">×</a>');
+                var closeBtn = $('<a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="slCloseBtn">×</a>');
                 closeBtn.click(function () {
                     $dialog.hide();
                 });
@@ -120,9 +124,9 @@ var DialogHelper = {
     }
 }
 var EventHelper = {
+    bindCloseEvent: function () {
 
-    close: function ($dialog, opts) {
-        $dialog.hide();
+
     }
 
 };
