@@ -103,21 +103,21 @@ Mask.prototype = {
     /**
     * @description 移除遮罩层
     */
-    removeMask: function (target) {
+    removeMask: function () {
         this.$lyr1.remove();
         this.$lyr2.remove();
     },
     /**
     * @description 隐藏遮罩层
     */
-    hideMask: function (target) {
+    hideMask: function () {
         this.$lyr1.hide();
         this.$lyr2.hide();
     },
     /**
     * @description 显示遮罩层
     */
-    showMask: function (target) {
+    showMask: function () {
         this.$lyr1.show();
         this.$lyr2.show();
     }

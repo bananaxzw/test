@@ -37,9 +37,9 @@ function SLDialog(elem, options) {
     }
     this.ie6 = sl.Browser.ie == 6.0, this.boxModel = sl.Support.boxModel;
     this.options = sl.extend(Defaults, options);
-    this.mask = DialogHelper.createMask(this.elem, this.options);
-    this.$dialog = DialogHelper.wrapDialog(this.elem, this.options, this.full);
-    DialogHelper.setDialogStyle(this.$dialog, this.options, this.full);
+    this.mask = DialogHelper.createMask(this);
+    this.$dialog = DialogHelper.wrapDialog(this);
+    DialogHelper.setDialogStyle(this);
 
 }
 
@@ -52,26 +52,27 @@ SLDialog.prototype = {
     },
     open: function () {
         this.$dialog.show();
+        if (this.mask) {
+            this.mask.showMask();
+        }
     }
 
 }
 var DialogHelper = {
-    wrapDialog: function (container, opts, full) {
+    wrapDialog: function (sldiablogObj) {
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="container"></param>
-        /// <param name="opts"></param>
-        /// <param name="full">是否window或者document</param>
-        var $container = $(container),
-         $dialog = $("<div id='SLDialog' class='SLDialog' style='display:block;position:" + (full ? 'fixed' : 'absolute') + ";z-index:" + (opts.zIndex + 2) + ";margin: 0px;'></div>"),
-         dialogContent = $('<div class="Dialog_content"></div>');
+        /// <param name="sldiablogObj">dialog对象</param>
+        /// <returns type=""></returns>
+        var opts = sldiablogObj.options, $dialog = $("<div id='SLDialog' class='SLDialog' style='display:block;position:" + (sldiablogObj.full ? 'fixed' : 'absolute') + ";z-index:" + (opts.zIndex + 2) + ";margin: 0px;'></div>"),
+        dialogContent = $('<div class="Dialog_content"></div>');
         if (opts.showTitle) {
             var dialogTitle = $('<div class="Dialog_title" id="Dialog_title" style="cursor: move;"><h4 style="float:left;display:inline-block;margin:0;">' + opts.title + '</h4></div>');
             if (opts.showClose) {
                 var closeBtn = $('<a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="slCloseBtn">×</a>');
                 closeBtn.click(function () {
-                    $dialog.hide();
+                    sldiablogObj.close();
                 });
                 dialogTitle.prepend(closeBtn);
             }
@@ -90,23 +91,24 @@ var DialogHelper = {
         if (!opts.autoShow) {
             $dialog.hide();
         }
-        $container.append($dialog);
+        $(sldiablogObj.elem).append($dialog);
         return $dialog;
     },
-    createMask: function (elem, opts) {
+    createMask: function (sldiablogObj) {
+        var opts = sldiablogObj.options;
         if (opts.showOverlay) {
-            var mask = new Mask(elem, { baseZ: opts.zIndex++, overlayCSS: opts.overlayCSS });
+            var mask = new Mask(sldiablogObj.elem, { baseZ: opts.zIndex++, overlayCSS: opts.overlayCSS });
             return mask;
         }
         return null;
     },
-    setDialogStyle: function ($dialog, opts, full) {
+    setDialogStyle: function (sldiablogObj) {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="$dialog"></param>
         /// <param name="full">是否window或者documen</param>
-
+        var $dialog = sldiablogObj.$dialog, opts = sldiablogObj.options, full = sldiablogObj.full;
         //IE6的话 可以采用setExpression来居中消息   其他的可以采用fiexed属性来居中
         if (sl.Browser.ie == 6.0 && full) {
             $dialog.css("position", 'absolute');
@@ -123,13 +125,6 @@ var DialogHelper = {
 
     }
 }
-var EventHelper = {
-    bindCloseEvent: function () {
-
-
-    }
-
-};
 var styleHelper = {
     /*
     *@description 让对象在父元素中居中

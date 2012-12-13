@@ -924,6 +924,7 @@
     <Content Include="JsLib\UI\dialogElement.htm" />
     <Content Include="JsLib\UI\masker.htm" />
     <Content Include="JsLib\UI\SL.Dialog.js" />
+    <Content Include="JsLib\UI\SL.Draggable.js" />
     <Content Include="JsLib\UI\SL.Mask.js" />
     <Content Include="JsLib\UI\tabDemo.htm" />
     <Content Include="JsLib\test.js" />

@@ -150,6 +150,17 @@
         find: function (selector) {
             return this.pushStack(selector, this.elements);
         },
+        filter: function () {
+            if (sl.InstanceOf.String(arguments[0])) {
+                return this.find(arguments);
+            }
+            if (sl.InstanceOf.Function(arguments[0])) {
+
+                return this.map(arguments[0]);
+            }
+            return null;
+
+        },
         /**
         *对dom进行统一操作
         *@param {mixed} args 要进行操作的字符串或者dom元素
@@ -158,7 +169,7 @@
         */
         domManipulation: function (args, table, fn) {
             if (node = this.elements[0]) {
-                var fragment = (node.ownerDocument || node).createDocumentFragment(),scripts = [];
+                var fragment = (node.ownerDocument || node).createDocumentFragment(), scripts = [];
                 if (this.isChain(args[0])) args = args[0].elements; //sl元素
                 sl.Dom.transactionDom(args, (node.ownerDocument || node), fragment, scripts);
                 var first = fragment.firstChild,

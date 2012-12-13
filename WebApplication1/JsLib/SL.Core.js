@@ -22,9 +22,6 @@
             SL.VERSIONS = VERSIONS;
             SL.Instances = Instances;
         }
-
-
-
         /**
         * SL对象原型
         * @class
