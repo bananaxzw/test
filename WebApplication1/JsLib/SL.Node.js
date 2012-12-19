@@ -8,6 +8,7 @@
 /// <reference path="SL.Data.js" />
 /// <reference path="SL.attr.js" />
 /// <reference path="SL.lang.js" />
+/// <reference path="SL.offset.js" />
 
 (function () {
     //链式操作
@@ -370,6 +371,13 @@
                 return sl.offset(this.elements, arguments[0]);
             }
 
+        },
+        position: function () {
+
+            if (!this.elements[0]) {
+                return null;
+            }
+            return sl.position(this.elements[0]);
         }
     };
 

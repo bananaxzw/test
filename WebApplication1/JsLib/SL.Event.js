@@ -84,7 +84,7 @@ SL().create(function (SL) {
                 for (var i in handlers) {
                     var handler = handlers[i]["handler"];
                     event.extendData = handlers[i]["data"];
-                    var ret = handler.apply(this, !!arguments.length ? arguments:[event]);
+                    var ret = handler.apply(this, !!arguments.length ? arguments : [event]);
 
                     if (ret !== undefined) {
                         event.result = ret;
@@ -106,13 +106,17 @@ SL().create(function (SL) {
         *   SL().Event.removeEvent(tt, "click", see);
         */
         removeEvent: function (element, type, handler) {
-            if (element.events && element.events[type] && type && handler) {
-                delete element.events[type][handler.$$guid];
+            var events = sl.data(element, "events");
+            if (events && events[type] && type && handler) {
+                delete events[type][handler.$$guid];
             }
-            else if (element.events && element.events[type] && type) {
-                delete element.events[type];
-            } else if (element.events) {
-                delete element.events;
+            else if (events && events[type] && type) {
+                delete events[type];
+                element["on" + type] = null;
+                delete element["on"+type];
+
+            } else if (events) {
+                delete events;
             }
         },
         fixEvent: function (oEvent) {

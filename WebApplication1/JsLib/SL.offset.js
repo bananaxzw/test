@@ -88,13 +88,13 @@ sl.create(function () {
         position: function (elem) {
 
             var offsetParent = this.offsetParent(elem), offset = this.getOffset(elem);
-            parentOffset = /^(?:body|html)$/i.test(offsetParent[0].nodeName) ? { top: 0, left: 0} : this.getOffset(offsetParent);
+            parentOffset = /^(?:body|html)$/i.test(offsetParent.nodeName) ? { top: 0, left: 0} : this.getOffset(offsetParent);
 
             offset.top -= parseFloat(sl.css(elem, "marginTop")) || 0;
             offset.left -= parseFloat(sl.css(elem, "marginLeft")) || 0;
 
-            parentOffset.top += parseFloat(sl.css(offsetParent[0], "borderTopWidth")) || 0;
-            parentOffset.left += parseFloat(sl.css(offsetParent[0], "borderLeftWidth")) || 0;
+            parentOffset.top += parseFloat(sl.css(offsetParent, "borderTopWidth")) || 0;
+            parentOffset.left += parseFloat(sl.css(offsetParent, "borderLeftWidth")) || 0;
 
             // (top-parentTop-parentBodrder-maigin)
             return {
@@ -119,17 +119,19 @@ sl.create(function () {
         nodes = sl.Convert.convertToArray(nodes, null, sl);
         return sl.access(nodes, "offset", value, _offset.getOffset, _offset.setOffset, null, null);
     }
-
+    sl.position = function (elem) {
+        return _offset.position(elem);
+    };
     var scrollFun = {};
     sl.each(["scrollLeft", "scrollTop"], function (index, name) {
-        scrollFun[name] = function (elem,nouse, value) {
+        scrollFun[name] = function (elem, nouse, value) {
 
             var win = ("scrollTo" in elem && elem.document) ? elem : (elem.nodeType == 9) ? (elem.defaultView || elem.parentWindow) : false;
             if (!elem) {
                 return null;
             }
 
-            if (value!==undefined) {
+            if (value !== undefined) {
                 if (win) {
                     win.scrollTo(
 						!index ? value : sl.scrollLef(win),

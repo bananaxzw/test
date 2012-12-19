@@ -4,8 +4,6 @@
 
 /// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
-
-(function () {
     var defaults = {
         //值为"clone"或者是返回jq元素的function
         proxy: null,
@@ -27,16 +25,16 @@
     };
     var eventHelper = {
         beginDrag: function (e) {
-            var opts = sl.data(e.data.target, 'draggable').options;
+            var opts = sl.data(e.extendData.target, 'draggable').options;
 
             //获取可以停靠的对象
             var droppables = $('.droppable').filter(function () {
-                return e.data.target != this;
+                return e.extendData.target != this;
             }).filter(function () {
                 var accept = sl.data(this, 'droppable').options.accept;
                 if (accept) {
                     return $(accept).filter(function () {
-                        return this == e.data.target;
+                        return this == e.extendData.target;
                     }).length > 0;
                 }
                 else {
@@ -71,19 +69,19 @@
             return false;
         },
         onDrag: function (e) {
-            var opts = sl.data(e.data.target, 'draggable').options;
+            var opts = sl.data(e.extendData.target, 'draggable').options;
             if (opts.containment) {
                 eventHelper.moveInContainment(e);
             }
             else {
                 eventHelper.drag(e);
             }
-            if (sl.data(e.data.target, 'draggable').options.onDrag.call(e.data.target, e) != false) {
+            if (sl.data(e.extendData.target, 'draggable').options.onDrag.call(e.extendData.target, e) != false) {
                 eventHelper.applyDrag(e);
             }
-            var source = e.data.target;
+            var source = e.extendData.target;
             //触发droppable事件
-            sl.data(e.data.target, 'draggable').droppables.each(function () {
+            sl.data(e.extendData.target, 'draggable').droppables.each(function () {
                 var dropObj = $(this);
                 var p2 = $(this).offset();
                 if (e.pageX > p2.left && e.pageX < p2.left + dropObj.outerWidth()
@@ -106,7 +104,12 @@
             return false;
         },
         endDrag: function (e) {
-            var opts = sl.data(e.data.target, 'draggable').options;
+        	/// <summary>
+        	/// 结束拖拉 在mouseup触发
+        	/// </summary>
+        	/// <param name="e"></param>
+        	/// <returns type=""></returns>
+            var opts = sl.data(e.extendData.target, 'draggable').options;
             if (opts.containment) {
                 eventHelper.moveInContainment(e);
             }
@@ -114,59 +117,59 @@
                 eventHelper.drag(e);
             }
 
-            var proxy = sl.data(e.data.target, 'draggable').proxy;
+            var proxy = sl.data(e.extendData.target, 'draggable').proxy;
             //如果设置revert 为true则会还原到原先位置
             if (opts.revert) {
                 //如果是拖动到可drop对象内 应该立即消失 模拟已经放到容器中 （可定制事件）
                 if (checkDrop() == true) {
                     removeProxy();
-                    $(e.data.target).css({
-                        position: e.data.startPosition,
-                        left: e.data.startLeft,
-                        top: e.data.startTop
+                    $(e.extendData.target).css({
+                        position: e.extendData.startPosition,
+                        left: e.extendData.startLeft,
+                        top: e.extendData.startTop
                     });
                 }
                 else {
                     //如果没有拖动对象内 则用动画返回
                     if (proxy) {
                         proxy.animate({
-                            left: e.data.startLeft,
-                            top: e.data.startTop
+                            left: e.extendData.startLeft,
+                            top: e.extendData.startTop
                         }, function () {
                             removeProxy();
                         });
                     }
                     else {
-                        $(e.data.target).animate({
-                            left: e.data.startLeft,
-                            top: e.data.startTop
+                        $(e.extendData.target).animate({
+                            left: e.extendData.startLeft,
+                            top: e.extendData.startTop
                         }, function () {
-                            $(e.data.target).css('position', e.data.startPosition);
+                            $(e.extendData.target).css('position', e.extendData.startPosition);
                         });
                     }
                 }
             }
             else {
-                $(e.data.target).css({
+                $(e.extendData.target).css({
                     position: 'absolute',
-                    left: e.data.left,
-                    top: e.data.top
+                    left: e.extendData.left,
+                    top: e.extendData.top
                 });
                 removeProxy();
                 checkDrop();
             }
 
-            opts.onStopDrag.call(e.data.target, e);
+            opts.onStopDrag.call(e.extendData.target, e);
 
             function removeProxy() {
                 if (proxy) {
                     proxy.remove();
                 }
-                sl.data(e.data.target, 'draggable').proxy = null;
+                sl.data(e.extendData.target, 'draggable').proxy = null;
             }
 
             function checkDrop() {
-                var data = sl.data(e.data.target, 'draggable');
+                var data = sl.data(e.extendData.target, 'draggable');
                 if (!data.droppables) return;
                 var dropped = false;
                 data.droppables.each(function () {
@@ -175,13 +178,13 @@
                     if (e.pageX > p2.left && e.pageX < p2.left + dropObj.outerWidth()
 						&& e.pageY > p2.top && e.pageY < p2.top + dropObj.outerHeight()) {
                         if (opts.revert) {
-                            $(e.data.target).css({
-                                position: e.data.startPosition,
-                                left: e.data.startLeft,
-                                top: e.data.startTop
+                            $(e.extendData.target).css({
+                                position: e.extendData.startPosition,
+                                left: e.extendData.startLeft,
+                                top: e.extendData.startTop
                             });
                         }
-                        $(this).trigger('_drop', [e.data.target]);
+                        $(this).trigger('_drop', [e.extendData.target]);
                         dropped = true;
                         this.entered = false;
                     }
@@ -189,22 +192,24 @@
                 return dropped;
             }
 
-            $(document).unbind('.draggable');
+            $(document).unbind("mousedown");
+            $(document).unbind("mousemove");
+            $(document).unbind("mouseup");
             return false;
 
         },
         applyDrag: function (e) {
-            var opts = sl.data(e.data.target, 'draggable').options;
-            var proxy = sl.data(e.data.target, 'draggable').proxy;
+            var opts = sl.data(e.extendData.target, 'draggable').options;
+            var proxy = sl.data(e.extendData.target, 'draggable').proxy;
             if (proxy) {
                 proxy.css('cursor', opts.cursor);
             } else {
-                proxy = $(e.data.target);
-                sl.data(e.data.target, 'draggable').handle.css('cursor', opts.cursor);
+                proxy = $(e.extendData.target);
+                sl.data(e.extendData.target, 'draggable').handle.css('cursor', opts.cursor);
             }
             proxy.css({
-                left: e.data.left,
-                top: e.data.top
+                left: e.extendData.left,
+                top: e.extendData.top
             });
         },
         drag: function (e) {
@@ -212,9 +217,9 @@
             /// 无容器的移动 这里只是获取e的位置信息 然后applyDrag应用这个位置信息
             /// </summary>
             /// <param name="e"></param>
-            var opts = sl.data(e.data.target, 'draggable').options;
+            var opts = sl.data(e.extendData.target, 'draggable').options;
 
-            var dragData = e.data;
+            var dragData = e.extendData;
             var left = dragData.startLeft + e.pageX - dragData.startX;
             var top = dragData.startTop + e.pageY - dragData.startY;
 
@@ -225,10 +230,10 @@
                 top = e.pageY + opts.deltaY;
             }
             //如果父元素不是body就加上滚动条
-            if (e.data.parent != document.body) {
+            if (e.extendData.parent != document.body) {
                 if (sl.boxModel == true) {
-                    left += $(e.data.parent).scrollLeft();
-                    top += $(e.data.parent).scrollTop();
+                    left += $(e.extendData.parent).scrollLeft();
+                    top += $(e.extendData.parent).scrollTop();
                 }
             }
             //如果只允许水平或者垂直 只单单设置top或者left
@@ -241,16 +246,15 @@
                 dragData.top = top;
             }
         },
-
         moveInContainment: function (e) {
             /// <summary>
             /// 有容器的移动 这里只是获取e的位置信息 然后applyDrag应用这个位置信息
             /// </summary>
             /// <param name="e"></param>
-            var data = sl.data(e.data.target, 'draggable');
+            var data = sl.data(e.extendData.target, 'draggable');
             var opts = data.options;
             var containment = opts.containment;
-            var dragData = e.data;
+            var dragData = e.extendData;
             var target = dragData.target;
             var targetHeight = $(target).outerHeight();
             var targetWidth = $(target).outerWidth();
@@ -357,7 +361,7 @@
 
         function onMouseDown(e) {
             if (checkArea(e) == false) return;
-            var $target = $(e.data.target);
+            var $target = $(e.extendData.target);
             var position = $target.position();
             var data = {
                 startPosition: $target.css('position'),
@@ -367,13 +371,13 @@
                 top: position.top,
                 startX: e.pageX,
                 startY: e.pageY,
-                target: e.data.target,
-                parent: $(e.data.target).parent()[0],
+                target: e.extendData.target,
+                parent: $(e.extendData.target).parent()[0],
                 targetArea: {},
                 ConstrainArea: {},
                 proxy: opts.proxy
             };
-            computeArea(opts.containment, e.data.target);
+            computeArea(opts.containment, e.extendData.target);
             $(document).bind('mousedown', data, eventHelper.beginDrag);
             $(document).bind('mousemove', data, eventHelper.onDrag);
             $(document).bind('mouseup', data, eventHelper.endDrag);
@@ -414,4 +418,3 @@
             return false;
         }
     }
-})();

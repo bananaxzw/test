@@ -2607,13 +2607,13 @@ sl.create(function () {
         position: function (elem) {
 
             var offsetParent = this.offsetParent(elem), offset = this.getOffset(elem);
-            parentOffset = /^(?:body|html)$/i.test(offsetParent[0].nodeName) ? { top: 0, left: 0} : this.getOffset(offsetParent);
+            parentOffset = /^(?:body|html)$/i.test(offsetParent.nodeName) ? { top: 0, left: 0} : this.getOffset(offsetParent);
 
             offset.top -= parseFloat(sl.css(elem, "marginTop")) || 0;
             offset.left -= parseFloat(sl.css(elem, "marginLeft")) || 0;
 
-            parentOffset.top += parseFloat(sl.css(offsetParent[0], "borderTopWidth")) || 0;
-            parentOffset.left += parseFloat(sl.css(offsetParent[0], "borderLeftWidth")) || 0;
+            parentOffset.top += parseFloat(sl.css(offsetParent, "borderTopWidth")) || 0;
+            parentOffset.left += parseFloat(sl.css(offsetParent, "borderLeftWidth")) || 0;
 
             // (top-parentTop-parentBodrder-maigin)
             return {
@@ -2638,7 +2638,9 @@ sl.create(function () {
         nodes = sl.Convert.convertToArray(nodes, null, sl);
         return sl.access(nodes, "offset", value, _offset.getOffset, _offset.setOffset, null, null);
     }
-
+    sl.position = function (elem) {
+        return _offset.position(elem);
+    };
     var scrollFun = {};
     sl.each(["scrollLeft", "scrollTop"], function (index, name) {
         scrollFun[name] = function (elem, nouse, value) {
@@ -3191,13 +3193,17 @@ SL().create(function (SL) {
         *   SL().Event.removeEvent(tt, "click", see);
         */
         removeEvent: function (element, type, handler) {
-            if (element.events && element.events[type] && type && handler) {
-                delete element.events[type][handler.$$guid];
+            var events = sl.data(element, "events");
+            if (events && events[type] && type && handler) {
+                delete events[type][handler.$$guid];
             }
-            else if (element.events && element.events[type] && type) {
-                delete element.events[type];
-            } else if (element.events) {
-                delete element.events;
+            else if (events && events[type] && type) {
+                delete events[type];
+                element["on" + type] = null;
+                delete element["on" + type];
+
+            } else if (events) {
+                delete events;
             }
         },
         fixEvent: function (oEvent) {
