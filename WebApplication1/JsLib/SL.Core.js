@@ -190,6 +190,11 @@
             /**
             *@ignore
             */
+            /*事件句柄唯一键*/
+            guid:1,
+            /**
+            *@ignore
+            */
             uuid: 0,
             /**
             *@ignore

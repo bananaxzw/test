@@ -899,6 +899,7 @@
     <Content Include="JsLib\SL.DomE.js" />
     <Content Include="JsLib\SL.Effect.js" />
     <Content Include="JsLib\SL.Event.js" />
+    <Content Include="JsLib\SL.EventEX.js" />
     <Content Include="JsLib\SL.Function.js" />
     <Content Include="JsLib\SL.HttpUrl.js" />
     <Content Include="JsLib\sl.js" />

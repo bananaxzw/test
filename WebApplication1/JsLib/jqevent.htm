@@ -7,16 +7,8 @@
 <body>
 <p style="bo" id="bo">sfassf</p>
 <script>
-        document.getElementById("bo").attachEvent("onclick", function () {
-            //alert(e.type);
-            alert(arguments[0].type);
-            alert(window.event.type);
-            alert(this.nodeName);
-        });
-        document.getElementById("bo").attachEvent("onclick", function (e) {
-            alert(e.type);
-          
-        });
+    $("#bo").bind("click", function () { });
+    $("#bo").trigger("click");
     </script>
 
 </body>
