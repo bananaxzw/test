@@ -592,12 +592,17 @@ SL().create(function (SL) {
                     fn = arguments[0];
                 }
             }
+            else {
+                fn = arguments[0];
+            }
             context = context || SL;
             if (fn) {
                 proxy = function () {
-                    return fn.call(context);
+                    return fn.apply(context,arguments);
                 }
             }
+            //事件中有用到
+            if (fn.guid) { proxy.guid = fn.guid; }
             return proxy;
         };
         //把json转换成querying形式 比如{width:100,height:100}=>width=100&height=100

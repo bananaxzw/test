@@ -5,7 +5,7 @@
     <script src="../jquery-1.4.1-vsdoc.js" type="text/javascript"></script>
     <script src="SL.Core.js" type="text/javascript"></script>
     <script src="SL.Data.js" type="text/javascript"></script>
-    <script src="SL.Event.js" type="text/javascript"></script>
+    <script src="SL.EventEX.js" type="text/javascript"></script>
 </head>
 <body>
 <form id="sf">
@@ -39,10 +39,10 @@
     }
 //    SL().Event.addEvent(tt, "click", see);
 
-//    SL().Event.removeEvent(tt, "click", see);
-
-    SL().Event.triggerEvent("click", [], tt);
-    // SL().Event.triggerEvent("click11", [], tt);
+   SL().Event.removeEvent(tt, "click");
+   SL().Event.removeEvent(tt, "click11");
+   // SL().Event.triggerEvent("click", [], tt);
+   // SL().Event.triggerEvent("click11", [], tt);
   
 </script>
 </body>

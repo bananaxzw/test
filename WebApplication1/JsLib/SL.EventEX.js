@@ -3,8 +3,8 @@
 sl.create(function () {
 
     EventOperator = {
+        triggered: false,
         addEvent: function (elem, type, handler, data) {
-
             if (elem.nodeType == 3 || elem.nodeType == 8) {
                 return;
             }
@@ -15,14 +15,14 @@ sl.create(function () {
                 var fn = handler;
                 // 创建一个代理的handler 来保存data 保障data的唯一性
                 handler = sl.proxy(fn);
-                handler.data = data;
+                handler.extendData = data;
             }
             var events = sl.data(elem, "events") || sl.data(elem, "events", {}),
 			handle = sl.data(elem, "handle"), eventHandle;
             if (!handle) {
                 eventHandle = function () {
-
-                    EventOperator.handle.call(eventHandle.elem, arguments);
+                    return !EventOperator.triggered ?
+                    EventOperator.handle.apply(eventHandle.elem, arguments) : undefined;
                 };
                 handle = sl.data(elem, "handle", eventHandle);
             }
@@ -46,72 +46,136 @@ sl.create(function () {
             if (elem.nodeType === 3 || elem.nodeType === 8) {
                 return;
             }
-
             var events = sl.data(elem, "events"), ret, type, fn;
-
             if (events) {
-                // types is actually an event object here
-                if (types.type) {
-                    handler = types.handler;
-                    types = types.type;
-                }
-
-
-
                 if (events[type]) {
-                    // remove the given handler for the given type
                     if (handler) {
                         fn = events[type][handler.guid];
                         delete events[type][handler.guid];
-
-                        // remove all handlers for the given type
                     } else {
                         for (var handle in events[type]) {
-                          
-                                delete events[type][handle];
-                            
+                            delete events[type][handle];
+
                         }
                     }
-
-                
-
                     // remove generic event handler if no more handlers exist
                     for (ret in events[type]) {
                         break;
                     }
                     if (!ret) {
-                        if (!special.teardown || special.teardown.call(elem, namespaces) === false) {
-                            if (elem.removeEventListener) {
-                                elem.removeEventListener(type, jQuery.data(elem, "handle"), false);
-                            } else if (elem.detachEvent) {
-                                elem.detachEvent("on" + type, jQuery.data(elem, "handle"));
-                            }
+                        if (elem.removeEventListener) {
+                            elem.removeEventListener(type, sl.data(elem, "handle"), false);
+                        } else if (elem.detachEvent) {
+                            elem.detachEvent("on" + type, sl.data(elem, "handle"));
                         }
+
                         ret = null;
                         delete events[type];
                     }
                 }
-
-
-
-                // Remove the expando if it's no longer used
+                // event没任何东西
                 for (ret in events) {
                     break;
                 }
                 if (!ret) {
-                    var handle = jQuery.data(elem, "handle");
+                    var handle = sl.data(elem, "handle");
                     if (handle) {
                         handle.elem = null;
                     }
-                    jQuery.removeData(elem, "events");
-                    jQuery.removeData(elem, "handle");
+                    sl.removeData(elem, "events");
+                    sl.removeData(elem, "handle");
                 }
             }
+        },
+        triggerEvent: function (event, data,elem, bubbling) {
+            var type = event.type || event;
+
+            if (!bubbling) {
+                event = typeof event === "object" ?
+				event[sl.expando] ? event :
+				sl.extend(SL.Event(type), event) :
+                //(string)
+				SL.Event(type);
+
+                if (!elem || elem.nodeType === 3 || elem.nodeType === 8) {
+                    return undefined;
+                }
+
+                event.result = undefined;
+                event.target = elem;
+                data = sl.Convert.convertToArray(data);
+                data.unshift(event);
+            }
+
+            event.currentTarget = elem;
+            var handle = sl.data(elem, "handle");
+            if (handle) {
+                handle.apply(elem, data);
+            }
+
+            var parent = elem.parentNode || elem.ownerDocument;
+            //处理通过onType属性添加的事件处理器（如：elem.onClick = function(){...};）
+            try {
+                if (!(elem && elem.nodeName)) {
+                    if (elem["on" + type] && elem["on" + type].apply(elem, data) === false) {
+                        event.result = false;
+                    }
+                }
+            } catch (e) { }
+
+            if (!event.isPropagationStopped && parent) {
+                //冒泡动作
+                EventOperator.triggerEvent(event, data, parent,true);
+
+            } else if (!event.isDefaultPrevented) {
+                //触发默认动作···
+                var target = event.target, old,
+				isClick = target.nodeName == "A" && type === "click";
+
+                if (!isClick && !(target && target.nodeName)) {
+                    try {
+                        if (target[type]) {
+                            /* 假设type为click
+                            因为下面想通过click()来触发默认操作，
+                            但是又不想执行对应的事件处理器（re-trigger），
+                            所以需要做两方面工作：
+                            首先将elem.onclick = null；
+                            然后将jQuery.event.triggered = 'click'; 
+                            将在入口handle（第62行）不再dispatch了
+                            之后再将它们还原*/
+                            old = target["on" + type];
+
+                            if (old) {
+                                target["on" + type] = null;
+                            }
+
+                            this.triggered = true;
+                            target[type]();
+                        }
+
+                        // prevent IE from throwing an error for some elements with some event types, see #3533
+                    } catch (e) { }
+
+                    if (old) {
+                        target["on" + type] = old;
+                    }
+
+                    this.triggered = false;
+                }
+            }
+
+
+
         },
         props: "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode layerX layerY metaKey newValue offsetX offsetY originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which".split(" "),
         //处理实际的event 忽略其差异性 实际的trigger中的event切勿fix
         fixEvent: function (event) {
 
+            if (event[sl.expando]) {
+                return event;
+            }
+            var originalEvent = event;
+            event = SL.Event(originalEvent);
             for (var i = EventOperator.props.length, prop; i; ) {
                 prop = EventOperator.props[--i];
                 event[prop] = originalEvent[prop];
@@ -153,8 +217,8 @@ sl.create(function () {
             // 5：左键与中键同时被按下 
             // 6：中键与右键同时被按下 
             // 7：三个键同时被按下
-            if (!event.which && button !== undefined) {
-                event.which = [0, 1, 3, 0, 2, 0, 0, 0][button];
+            if (!event.which && event.button !== undefined) {
+                event.which = [0, 1, 3, 0, 2, 0, 0, 0][event.button];
             }
             event.charCode = (event.type == "keypress") ? oEvent.keyCode : 0;
             event.eventPhase = 2;
@@ -163,7 +227,7 @@ sl.create(function () {
         },
         handle: function (event) {
             // returned undefined or false
-            var all, handlers;
+            var handlers;
             event = arguments[0] = EventOperator.fixEvent(event || window.event);
             event.currentTarget = this;
             handlers = (sl.data(this, "events") || {})[event.type];
@@ -171,7 +235,7 @@ sl.create(function () {
             for (var j in handlers) {
                 var handler = handlers[j];
                 event.handler = handler;
-                event.data = handler.data;
+                event.extendData = handler.extendData;
 
                 var ret = handler.apply(this, arguments);
 
@@ -182,7 +246,7 @@ sl.create(function () {
                         event.stopPropagation();
                     }
                 }
-                if (event.isImmediatePropagationStopped()) {
+                if (event.isImmediatePropagationStopped) {
                     break;
                 }
             }
@@ -202,7 +266,7 @@ sl.create(function () {
         } else {
             this.type = src;
         }
-        this.timeStamp = now();
+        this.timeStamp = new Date();
 
         //用来标注已经初始化
         this[sl.expando] = true;
@@ -253,5 +317,5 @@ sl.create(function () {
         isImmediatePropagationStopped: false
     };
 
-
+    sl.Event = EventOperator;
 });
