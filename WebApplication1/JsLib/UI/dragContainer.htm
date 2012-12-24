@@ -7,7 +7,7 @@
     <script src="SL.Draggable.js" type="text/javascript"></script>
     <script type="text/javascript">
         sl.ready(function () {
-            new Draggable(document.getElementById("sfs"), { containment: document.getElementById("Div1") });
+            new Draggable(document.getElementById("sfs"), { containment: window });
             //$("#sfs").CalvinDraggable({ containment: document.getElementById("Div1") });
             //            var left = document.getElementById("left");
             //            var top = document.getElementById("top");
@@ -27,8 +27,8 @@
 </head>
 <body>
 
-    <div id='Div1' style="height: 600px; background-color: Red; width: 600px; padding: 10px; position:relative; margin:0 auto;">
-        <div id='sfs' style="height: 50px; background-color: green; width: 50px;">
+    <div id='Div1' style="height: 600px; background-color: Red; width: 600px; padding: 10px; position:relative; margin:10px 10px;">
+        <div id='sfs' style="height: 50px; background-color: green; width: 50px; border:5px solid black;">
         </div>
     </div>
 

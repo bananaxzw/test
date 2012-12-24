@@ -12,6 +12,7 @@
 *注意：允许你使用该框架 但是不允许修改该框架 有发现BUG请通知作者 切勿擅自修改框架内容
 */
 
+
 (function () {
 
     var version = "1.0", topNamespace = this;
@@ -22,9 +23,6 @@
             SL.VERSIONS = VERSIONS;
             SL.Instances = Instances;
         }
-
-
-
         /**
         * SL对象原型
         * @class
@@ -190,6 +188,11 @@
             */
             /*数据缓存*/
             expando: "SL" + (new Date()).getTime(),
+            /**
+            *@ignore
+            */
+            /*事件句柄唯一键*/
+            guid: 1,
             /**
             *@ignore
             */
@@ -561,9 +564,14 @@ SL().create(function (SL) {
                     for (name in object)
                         if (callback.call(object[name], name, object[name]) === false)
                             break;
-                } else
-                    for (var value = object[0];
-					i < length && callback.call(value, i, value) !== false; value = object[++i]) { }
+                } else {
+                    for (; i < length; ) {
+                        if (callback.call(object[i], i, object[i++]) === false) {
+                            break;
+                        }
+                    }
+
+                }
             }
         };
         /**
@@ -585,12 +593,17 @@ SL().create(function (SL) {
                     fn = arguments[0];
                 }
             }
+            else {
+                fn = arguments[0];
+            }
             context = context || SL;
             if (fn) {
                 proxy = function () {
-                    return fn.call(context);
+                    return fn.apply(context, arguments);
                 }
             }
+            //事件中有用到
+            if (fn.guid) { proxy.guid = fn.guid; }
             return proxy;
         };
         //把json转换成querying形式 比如{width:100,height:100}=>width=100&height=100
@@ -763,6 +776,7 @@ SL().create(function (SL) {
     }
     SL.ready = ready;
 });
+
 
 //support
 SL().create(function (SL) {
@@ -3103,151 +3117,324 @@ SL().create(function (SL) {
 
 });
 //event
-SL().create(function (SL) {
+sl.create(function () {
 
-    /**
-    * Event
-    * @class
-    *@name Event
-    */
-    var Event = function () {
-        //事件注册函数的唯一标识
-        this.guid = 1;
-    };
-    Event.prototype = {
-        /**
-        *注册事件
-        *@param {domElement} element dom元素
-        *@param {String} type 事件类型 
-        *@param {Function} handler 事件处理函数
-        *@param {Object} data 事件扩展数据
-        *@example 
-        * var tt = document.getElementById("sff");
-        * SL().Event.addEvent(tt, "click", function (event) {
-        *    console.log(event.extendData.name);
-        *}, { "name": "xuzhiwei" });
-        *SL().Event.addEvent(tt, "click", function (event) {
-        *    console.log(event.extendData.name);
-        *}, { "name": "xuzhiwei1" });
-        *function see() {
-        *    alert("i see you!");
-        *}
-        *SL().Event.addEvent(tt, "click", see);
-        */
-        addEvent: function (element, type, handler, data) {
-            var _this = this;
-            //给函数分配唯一的标志ID
-            if (!handler.$$guid) handler.$$guid = this.guid++;
-            //创建一个hash table来保存各种事件的处理函数  
-            //element.events = element.events || {};
-            var events = sl.data(element, "events") || sl.data(element, "events", {});
-            //创建一个hash table来保存某个事件处理函数
-            //var handlers = element.events[type];
-            var handlers = events[type];
-            if (!handlers) {
-                //handlers = element.events[type] = {};
-                handlers = events[type] = {};
-                //储存已经存在的事件处理函数
-                if (element["on" + type]) {
-                    handlers[0] = { "handler": element["on" + type], "data": null };
-                }
+    EventOperator = {
+        triggered: false,
+        addEvent: function (elem, type, handler, data) {
+            if (elem.nodeType == 3 || elem.nodeType == 8) {
+                return;
             }
-            // 保存时间处理函数到hash table中
-            handlers[handler.$$guid] = { "handler": handler, "data": data };
-            // 为事件提供一个统一全局的处理函数 这句是关键handleEvent函数属于element，也就是说函数的内部this是指向element
-            element["on" + type] = handleEvent;
+            if (!handler.guid) {
+                handler.guid = sl.guid++;
+            }
+            if (data !== undefined) {
+                var fn = handler;
+                // 创建一个代理的handler 来保存data 保障data的唯一性
+                handler = sl.proxy(fn);
+                handler.extendData = data;
+            }
+            var events = sl.data(elem, "events") || sl.data(elem, "events", {}),
+			handle = sl.data(elem, "handle"), eventHandle;
+            if (!handle) {
+                eventHandle = function () {
+                    return !EventOperator.triggered ?
+                    EventOperator.handle.apply(eventHandle.elem, arguments) : undefined;
+                };
+                handle = sl.data(elem, "handle", eventHandle);
+            }
+            handle.elem = elem;
+            var handlers = events[type];
+            //防止重复绑定事件
+            if (!handlers) {
+                handlers = events[type] = {};
+                // Bind the global event handler to the element
+                if (elem.addEventListener) {
+                    elem.addEventListener(type, handle, false);
+                } else if (elem.attachEvent) {
+                    elem.attachEvent("on" + type, handle);
+                }
 
-            function handleEvent() {
+            }
+            handlers[handler.guid] = handler;
 
-                var event = arguments[0] = (arguments[0] || _this.fixEvent(window.event));
-                //                if (!this.events) return;
-                //                if (!this.events[event.type]) return;
-                if (!sl.data(this, "events") || !sl.data(this, "events")[event.type]) return;
-                //注意这里的this指向dom元素 因为addEvent中element["on" + type] = handleEvent
-                //获取已经缓存到dom元素的events属性的各个事件函数
-                //var handlers = this.events[event.type];
-                var handlers = sl.data(this, "events")[event.type];
-                //遍历已经缓存到元素的事件
-                for (var i in handlers) {
-                    var handler = handlers[i]["handler"];
-                    event.extendData = handlers[i]["data"];
-                    var ret = handler.apply(this, !!arguments.length ? arguments : [event]);
+        },
+        removeEvent: function (elem, type, handler) {
+            if (elem.nodeType === 3 || elem.nodeType === 8) {
+                return;
+            }
+            var events = sl.data(elem, "events"), ret, type, fn;
+            if (events) {
+                if (events[type]) {
+                    if (handler) {
+                        fn = events[type][handler.guid];
+                        delete events[type][handler.guid];
+                    } else {
+                        for (var handle in events[type]) {
+                            delete events[type][handle];
 
-                    if (ret !== undefined) {
-                        event.result = ret;
-                        if (ret === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
                         }
                     }
+                    // remove generic event handler if no more handlers exist
+                    for (ret in events[type]) {
+                        break;
+                    }
+                    if (!ret) {
+                        if (elem.removeEventListener) {
+                            elem.removeEventListener(type, sl.data(elem, "handle"), false);
+                        } else if (elem.detachEvent) {
+                            elem.detachEvent("on" + type, sl.data(elem, "handle"));
+                        }
+
+                        ret = null;
+                        delete events[type];
+                    }
                 }
-                return event.result;
+                // event没任何东西
+                for (ret in events) {
+                    break;
+                }
+                if (!ret) {
+                    var handle = sl.data(elem, "handle");
+                    if (handle) {
+                        handle.elem = null;
+                    }
+                    sl.removeData(elem, "events");
+                    sl.removeData(elem, "handle");
+                }
             }
         },
-        /**
-        *反注册事件
-        *@param {domElement} element dom元素
-        *@param {String} type 事件类型 
-        *@param {Function} handler 事件处理函数
-        *@example
-        *   SL().Event.removeEvent(tt, "click", see);
-        */
-        removeEvent: function (element, type, handler) {
-            var events = sl.data(element, "events");
-            if (events && events[type] && type && handler) {
-                delete events[type][handler.$$guid];
-            }
-            else if (events && events[type] && type) {
-                delete events[type];
-                element["on" + type] = null;
-                delete element["on" + type];
-
-            } else if (events) {
-                delete events;
-            }
-        },
-        fixEvent: function (oEvent) {
-            oEvent.charCode = (oEvent.type == "keypress") ? oEvent.keyCode : 0;
-            oEvent.eventPhase = 2;
-            oEvent.isChar = (oEvent.charCode > 0);
-            oEvent.pageX = oEvent.clientX + document.documentElement.scrollLeft || document.body.scrollLeft;
-            oEvent.pageY = oEvent.clientY + document.documentElement.scrollTop || document.body.scrollTop;
-            oEvent.preventDefault = function () {
-                this.returnValue = false;
-            };
-            if (oEvent.type == "mouseout") {
-                oEvent.relatedTarget = oEvent.toElement;
-            } else if (oEvent.type == "mouseover") {
-                oEvent.relatedTarget = oEvent.fromElement;
-            }
-            oEvent.stopPropagation = function () {
-                this.cancelBubble = true;
-            };
-            oEvent.target = oEvent.srcElement;
-            oEvent.time = (new Date).getTime();
-            return oEvent;
-        },
-        triggerEvent: function (event, data, element) {
+        triggerEvent: function (event, data, elem, bubbling) {
             var type = event.type || event;
-            var handle = element["on" + type];
-            event = {};
-            event["target"] = element, event["type"] = type;
-            if (handle) {
-                data = SL.Convert.convertToArray(data);
+
+            if (!bubbling) {
+                event = typeof event === "object" ?
+				event[sl.expando] ? event :
+				sl.extend(SL.Event(type), event) :
+                //(string)
+				SL.Event(type);
+
+                if (!elem || elem.nodeType === 3 || elem.nodeType === 8) {
+                    return undefined;
+                }
+
+                event.result = undefined;
+                event.target = elem;
+                data = sl.Convert.convertToArray(data);
                 data.unshift(event);
-                handle.apply(element, data);
+            }
+
+            event.currentTarget = elem;
+            var handle = sl.data(elem, "handle");
+            if (handle) {
+                handle.apply(elem, data);
+            }
+
+            var parent = elem.parentNode || elem.ownerDocument;
+            //处理通过onType属性添加的事件处理器（如：elem.onClick = function(){...};）
+            try {
+                if (!(elem && elem.nodeName)) {
+                    if (elem["on" + type] && elem["on" + type].apply(elem, data) === false) {
+                        event.result = false;
+                    }
+                }
+            } catch (e) { }
+
+            if (!event.isPropagationStopped && parent) {
+                //冒泡动作
+                EventOperator.triggerEvent(event, data, parent, true);
+
+            } else if (!event.isDefaultPrevented) {
+                //触发默认动作···
+                var target = event.target, old,
+				isClick = target.nodeName == "A" && type === "click";
+
+                if (!isClick && !(target && target.nodeName)) {
+                    try {
+                        if (target[type]) {
+                            /* 假设type为click
+                            因为下面想通过click()来触发默认操作，
+                            但是又不想执行对应的事件处理器（re-trigger），
+                            所以需要做两方面工作：
+                            首先将elem.onclick = null；
+                            然后将jQuery.event.triggered = 'click'; 
+                            将在入口handle（第62行）不再dispatch了
+                            之后再将它们还原*/
+                            old = target["on" + type];
+
+                            if (old) {
+                                target["on" + type] = null;
+                            }
+
+                            this.triggered = true;
+                            target[type]();
+                        }
+
+                        // prevent IE from throwing an error for some elements with some event types, see #3533
+                    } catch (e) { }
+
+                    if (old) {
+                        target["on" + type] = old;
+                    }
+
+                    this.triggered = false;
+                }
+            }
+
+
+
+        },
+        props: "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode layerX layerY metaKey newValue offsetX offsetY originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which".split(" "),
+        //处理实际的event 忽略其差异性 实际的trigger中的event切勿fix
+        fixEvent: function (event) {
+
+            if (event[sl.expando]) {
+                return event;
+            }
+            var originalEvent = event;
+            event = SL.Event(originalEvent);
+            for (var i = EventOperator.props.length, prop; i; ) {
+                prop = EventOperator.props[--i];
+                event[prop] = originalEvent[prop];
+            }
+            if (!event.target) {
+                event.target = event.srcElement || document;
+            }
+
+            //(safari)
+            if (event.target.nodeType === 3) {
+                event.target = event.target.parentNode;
+            }
+            if (!event.relatedTarget && event.fromElement) {
+                event.relatedTarget = event.fromElement === event.target ? event.toElement : event.fromElement;
+            }
+
+            if (event.pageX == null && event.clientX != null) {
+                var doc = document.documentElement, body = document.body;
+                event.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
+                event.pageY = event.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc && doc.clientTop || body && body.clientTop || 0);
+            }
+            // Netscape/Firefox/Opera
+            if (!event.which && ((event.charCode || event.charCode === 0) ? event.charCode : event.keyCode)) {
+                event.which = event.charCode || event.keyCode;
+            }
+
+            // Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
+            if (!event.metaKey && event.ctrlKey) {
+                event.metaKey = event.ctrlKey;
+            }
+
+            // 为 click 事件添加 which 属性，左1 中2 右3
+            // IE button的含义：
+            // 0：没有键被按下 
+            // 1：按下左键 
+            // 2：按下右键 
+            // 3：左键与右键同时被按下 
+            // 4：按下中键 
+            // 5：左键与中键同时被按下 
+            // 6：中键与右键同时被按下 
+            // 7：三个键同时被按下
+            if (!event.which && event.button !== undefined) {
+                event.which = [0, 1, 3, 0, 2, 0, 0, 0][event.button];
+            }
+            event.charCode = (event.type == "keypress") ? oEvent.keyCode : 0;
+            event.eventPhase = 2;
+            event.isChar = (event.charCode > 0);
+            return event;
+        },
+        handle: function (event) {
+            // returned undefined or false
+            var handlers;
+            event = arguments[0] = EventOperator.fixEvent(event || window.event);
+            event.currentTarget = this;
+            handlers = (sl.data(this, "events") || {})[event.type];
+
+            for (var j in handlers) {
+                var handler = handlers[j];
+                event.handler = handler;
+                event.extendData = handler.extendData;
+
+                var ret = handler.apply(this, arguments);
+
+                if (ret !== undefined) {
+                    event.result = ret;
+                    if (ret === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                }
+                if (event.isImmediatePropagationStopped) {
+                    break;
+                }
+            }
+
+            return event.result;
+        }
+    }
+
+    SL.Event = function (src) {
+        //是否已经经过初始化的event
+        if (!this.preventDefault) {
+            return new SL.Event(src);
+        }
+        if (src && src.type) {
+            this.originalEvent = src;
+            this.type = src.type;
+        } else {
+            this.type = src;
+        }
+        this.timeStamp = new Date();
+
+        //用来标注已经初始化
+        this[sl.expando] = true;
+    };
+    SL.Event.prototype = {
+        preventDefault: function () {
+            // DOM LV3
+            this.isDefaultPrevented = true;
+            var e = this.originalEvent;
+
+            if (!e) {
+                return;
+            }
+
+            // DOM LV2
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            // IE6-8
+            else {
+                e.returnValue = false;
             }
         },
-        hover: function (element, enterfn, leavefn) {
-            this.addEvent(element, "mouseover", enterfn);
-            this.addEvent(element, "mouseout", leavefn);
-        }
+        stopPropagation: function () {
+            // DOM LV3
+            this.isPropagationStopped = true;
+            var e = this.originalEvent;
 
+            if (!e) {
+                return;
+            }
+
+            // DOM LV2
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            else {
+                // IE6-8
+                e.cancelBubble = true;
+            }
+        },
+        stopImmediatePropagation: function () {
+            this.isImmediatePropagationStopped = true;
+            this.stopPropagation();
+        },
+        isDefaultPrevented: false,
+        isPropagationStopped: false,
+        isImmediatePropagationStopped: false
     };
 
-    SL.Event = SL.Event || {};
-    SL.Event = new Event();
-
+    sl.Event = EventOperator;
 });
 //attr
 SL().create(function () {

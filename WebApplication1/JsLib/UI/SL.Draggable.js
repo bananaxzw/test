@@ -383,8 +383,11 @@
             $(document).bind('mouseup', data, eventHelper.endDrag);
             //计算目标区划 和 限制区划
             function computeArea(constrain, target) {
-                var areas = domHelper.getElementsArea(constrain, target);
+                var areas = domHelper.getElementsArea(constrain, target),$target=$(target);
                 data.ConstrainArea = areas[0];
+                
+                areas[1].under = (areas[1].under+ parseFloat($target.css("border-top-width"))+parseFloat($target.css("border-bottom-width")));
+                 areas[1].right= (areas[1].right+parseFloat($target.css("border-left-width"))+parseFloat($target.css("border-right-width")));
                 data.targetArea = areas[1];
             }
         }
