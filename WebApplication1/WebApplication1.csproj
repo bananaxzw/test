@@ -916,10 +916,12 @@
     <Content Include="JsLib\SL.Select.js" />
     <Content Include="JsLib\SL.Selector.js" />
     <Content Include="JsLib\SL.support.js" />
+    <Content Include="JsLib\SL.throttle.js" />
     <Content Include="JsLib\SL.XML.js" />
     <Content Include="JsLib\SLCssTest.htm" />
     <Content Include="JsLib\SLDocument.js" />
     <Content Include="JsLib\support.htm" />
+    <Content Include="JsLib\throttle.htm" />
     <Content Include="JsLib\UI\default\SLDialog.css" />
     <Content Include="JsLib\UI\dialog.htm" />
     <Content Include="JsLib\UI\dialogElement.htm" />
@@ -927,6 +929,7 @@
     <Content Include="JsLib\UI\masker.htm" />
     <Content Include="JsLib\UI\SL.Dialog.js" />
     <Content Include="JsLib\UI\SL.Draggable.js" />
+    <Content Include="JsLib\UI\SL.LazyLoad.js" />
     <Content Include="JsLib\UI\SL.Mask.js" />
     <Content Include="JsLib\UI\tabDemo.htm" />
     <Content Include="JsLib\test.js" />

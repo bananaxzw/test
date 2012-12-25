@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 debounce
 形像的比喻是橡皮球。如果手指按住橡皮球不放，它就一直受力，不能反弹起来，直到松手。
@@ -29,7 +29,7 @@ throttle 的关注点是连续的执行间隔时间。
 样例代码
 // ajaxQuery 将在停止输入 250 毫秒后执行
 $('#autocomplete').addEventListener('keyup',debounce(250,function() {
-    ajaxQuery(this.value,renderUI);
+ajaxQuery(this.value,renderUI);
 },true))
 // 当窗口大小改变时，以 50 毫秒一次的频率为单位执行定位函数 position
 /*window.addEventListener('resize',throttle(50,position,true) );
@@ -65,45 +65,49 @@ DOM 元素动态定位，window对象的resize和scroll 事件
 * @param tail?  {bool}      是否在尾部用定时器补齐调用
 * @return {function}	返回客户调用函数
 */
-var throttle = function(delay,action,tail,debounce) {
-    var now = Date.now, last_call = 0, last_exec = 0, timer = null, curr, diff,
-        ctx, args, exec = function() {
+/// <reference path="SL.Core.js" />
+sl.create(function () {
+    var throttle = function (delay, action, tail, debounce) {
+        var now = Date.now, last_call = 0, last_exec = 0, timer = null, curr, diff,
+        ctx, args, exec = function () {
             last_exec = now();
-            action.apply(ctx,args);
+            action.apply(ctx, args);
         };
 
-    return function() {
-        ctx = this, args = arguments,
-        curr = now(), diff = curr - (debounce?last_call:last_exec) - delay;
-        
-        clearTimeout(timer);
+        return function () {
+            ctx = this, args = arguments,
+        curr = now(), diff = curr - (debounce ? last_call : last_exec) - delay;
 
-        if(debounce){
-            if(tail){
-                timer = setTimeout(exec,delay); 
-            }else if(diff>=0){
-                exec();
+            clearTimeout(timer);
+
+            if (debounce) {
+                if (tail) {
+                    timer = setTimeout(exec, delay);
+                } else if (diff >= 0) {
+                    exec();
+                }
+            } else {
+                if (diff >= 0) {
+                    exec();
+                } else if (tail) {
+                    timer = setTimeout(exec, -diff);
+                }
             }
-        }else{
-            if(diff>=0){
-                exec();
-            }else if(tail){
-                timer = setTimeout(exec,-diff);
-            }
+
+            last_call = curr;
         }
-
-        last_call = curr;
     }
-}
+    /*
+    * 空闲控制 返回函数连续调用时，空闲时间必须大于或等于 idle，action 才会执行
+    * @param idle   {number}    空闲时间，单位毫秒
+    * @param action {function}  请求关联函数，实际应用需要调用的函数
+    * @param tail?  {bool}      是否在尾部执行
+    * @return {function}	返回客户调用函数
+    */
+    var debounce = function (idle, action, tail) {
+        return throttle(idle, action, tail, true);
+    }
+    sl.throttle = throttle;
+    sl.debounce = debounce;
 
-
-/*
-* 空闲控制 返回函数连续调用时，空闲时间必须大于或等于 idle，action 才会执行
-* @param idle   {number}    空闲时间，单位毫秒
-* @param action {function}  请求关联函数，实际应用需要调用的函数
-* @param tail?  {bool}      是否在尾部执行
-* @return {function}	返回客户调用函数
-*/
-var debounce = function(idle,action,tail) {
-    return throttle(idle,action,tail,true);
-}
+});

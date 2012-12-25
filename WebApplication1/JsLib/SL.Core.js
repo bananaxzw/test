@@ -360,6 +360,7 @@ SL().create(function (SL) {
         Window: function (obj) {
             return obj != null && obj === window;
         },
+        BodyOrHtmlOrWindow:function(){},
         /**
         *判断是否普通对象 由{}构建或者object
         */
