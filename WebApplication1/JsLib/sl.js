@@ -629,7 +629,6 @@ SL().create(function (SL) {
         this.access = function (elems, key, value, getter, setter, bind, setReturn) {
             var length = elems.length;
             setter = typeof setter === "function" ? setter : getter;
-            bind = arguments[arguments.length - 1];
             if (typeof key === "object") {
                 for (var k in key) {            //为所有元素设置N个属性
                     for (var i = 0; i < length; i++) {
@@ -776,6 +775,7 @@ SL().create(function (SL) {
     }
     SL.ready = ready;
 });
+
 
 
 //support
@@ -2537,7 +2537,8 @@ SL().create(function (SL) {
 sl.create(function () {
     function offset() {
         this.init = function () {
-            var body = document.body, container = document.createElement("div"), innerDiv, checkDiv, table, td, bodyMarginTop = parseFloat(jQuery.curCSS(body, "marginTop", true)) || 0,
+            if (this.Initialed) return;
+            var body = document.body, container = document.createElement("div"), innerDiv, checkDiv, table, td, bodyMarginTop = parseFloat(sl.css(body, "marginTop")) || 0,
 			html = "<div style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;'><div></div></div><table style='position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;' cellpadding='0' cellspacing='0'><tr><td></td></tr></table>";
 
             sl.extend(container.style, { position: "absolute", top: 0, left: 0, margin: 0, border: 0, width: "1px", height: "1px", visibility: "hidden" });
@@ -2566,7 +2567,8 @@ sl.create(function () {
 
             body.removeChild(container);
             body = container = innerDiv = checkDiv = table = td = null;
-        }
+        };
+        this.Initialed = false;
     }
 
     offset.prototype = {
@@ -2650,7 +2652,7 @@ sl.create(function () {
     var _offset = new offset();
     sl.offset = function (nodes, value) {
         nodes = sl.Convert.convertToArray(nodes, null, sl);
-        return sl.access(nodes, "offset", value, _offset.getOffset, _offset.setOffset, null, null);
+        return sl.access(nodes, "offset", value, _offset.getOffset, _offset.setOffset, _offset, null);
     }
     sl.position = function (elem) {
         return _offset.position(elem);

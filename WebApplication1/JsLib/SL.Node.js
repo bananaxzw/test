@@ -315,7 +315,14 @@
             });
         },
         css: function (style, value) {
-            return sl.css(this.elements, style, value);
+            if (!value && !sl.InstanceOf.PlainObject(style)) {
+                return sl.css(this.elements, style, value);
+            }
+            else {
+                sl.css(this.elements, style, value);
+                return this;
+            }
+
         },
         hide: function () {
             return this.each(function () {

@@ -1388,6 +1388,7 @@
     <Content Include="LazyLoad\ImagesLazyLoad.htm" />
     <Content Include="LazyLoad\jquery.lazyload.js" />
     <Content Include="LazyLoad\LazyLoad.htm" />
+    <Content Include="margin.htm" />
     <Content Include="mass\bananaxzw-mass-Framework-08192df\bin\AspNet.EXE" />
     <Content Include="mass\bananaxzw-mass-Framework-08192df\code_style.txt" />
     <Content Include="mass\bananaxzw-mass-Framework-08192df\labs\ball.html" />

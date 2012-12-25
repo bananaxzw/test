@@ -628,7 +628,6 @@ SL().create(function (SL) {
         this.access = function (elems, key, value, getter, setter, bind, setReturn) {
             var length = elems.length;
             setter = typeof setter === "function" ? setter : getter;
-            bind = arguments[arguments.length - 1];
             if (typeof key === "object") {
                 for (var k in key) {            //为所有元素设置N个属性
                     for (var i = 0; i < length; i++) {

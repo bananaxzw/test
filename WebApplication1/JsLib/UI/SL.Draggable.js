@@ -4,9 +4,12 @@
 
 /// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
+
+(function () {
     var defaults = {
         //值为"clone"或者是返回jq元素的function
         proxy: null,
+        proxyClass: { "opacity": 70 },
         revert: false,
         cursor: 'move',
         deltaX: null,
@@ -60,7 +63,7 @@
                 }
             }
 
-            proxy.css('position', 'absolute');
+            proxy.css('position', 'absolute').css(opts.proxyClass);
 
             eventHelper.drag(e);
             eventHelper.applyDrag(e);
@@ -104,11 +107,11 @@
             return false;
         },
         endDrag: function (e) {
-        	/// <summary>
-        	/// 结束拖拉 在mouseup触发
-        	/// </summary>
-        	/// <param name="e"></param>
-        	/// <returns type=""></returns>
+            /// <summary>
+            /// 结束拖拉 在mouseup触发
+            /// </summary>
+            /// <param name="e"></param>
+            /// <returns type=""></returns>
             var opts = sl.data(e.extendData.target, 'draggable').options;
             if (opts.containment) {
                 eventHelper.moveInContainment(e);
@@ -324,25 +327,26 @@
             return isWindow;
         }
     };
-    
+
 
     function Draggable(elem, options, params) {
+        if (!elem || !elem.nodeType || elem.nodeType != 1) { alert("无效拖拉对象"); return; }
         //handle代表对象拖拉的 手柄的区域 比如有个panel可以设置它的handle为header部位
         var opts, state = sl.data(elem, 'draggable');
         if (state) {
-           // state.handle.unbind('.draggable');
+            // state.handle.unbind('.draggable');
             opts = sl.extend(state.options, options);
         } else {
             opts = sl.extend({}, defaults, options || {});
         }
-
+        opts.containment = opts.containment || elem.ownerDocument.documentElement || elem.ownerDocument.body;
         if (opts.disabled == true) {
             $(this).css('cursor', 'default');
             return;
         }
-        if (opts.containment) {
-            $(elem).css("margin", "0px");
-        }
+        //        if (opts.containment) {
+        //            $(elem).css("margin", "0px");
+        //        }
 
         var handle = null;
         if (typeof opts.handle == 'undefined' || opts.handle == null) {
@@ -383,11 +387,11 @@
             $(document).bind('mouseup', data, eventHelper.endDrag);
             //计算目标区划 和 限制区划
             function computeArea(constrain, target) {
-                var areas = domHelper.getElementsArea(constrain, target),$target=$(target);
+                var areas = domHelper.getElementsArea(constrain, target), $target = $(target);
                 data.ConstrainArea = areas[0];
-                
-                areas[1].under = (areas[1].under+ parseFloat($target.css("border-top-width"))+parseFloat($target.css("border-bottom-width")));
-                 areas[1].right= (areas[1].right+parseFloat($target.css("border-left-width"))+parseFloat($target.css("border-right-width")));
+
+                areas[1].under = (areas[1].under + parseFloat($target.css("border-top-width")) + parseFloat($target.css("border-bottom-width")));
+                areas[1].right = (areas[1].right + parseFloat($target.css("border-left-width")) + parseFloat($target.css("border-right-width")));
                 data.targetArea = areas[1];
             }
         }
@@ -421,3 +425,5 @@
             return false;
         }
     }
+    window.Draggable = Draggable;
+})();

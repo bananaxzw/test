@@ -8,7 +8,7 @@
     <script src="SL.support.js" type="text/javascript"></script>
     <script src="jq1.72.js" type="text/javascript"></script>
 </head>
-<body style="border: 5px solid red; position: relative; padding: 0px; margin: 0px;
+<body style="border: 5px solid red; position: relative; padding: 0px; margin: 2px;
     font-size: 62.5%">
     <div style="font-size: 2em; position: absolute; top: 0px; margin-top: 20px; background-color: White;
         border: 5px solid red; width: 200px;" id="sss">
@@ -21,6 +21,8 @@
         var ffff = document.getElementById("ffff");
         console.dir($(sss).offset());
         console.dir(sl.offset(sss));
+        console.dir($(document.body).offset());
+        console.dir(sl.offset(document.body));
     </script>
 </body>
 </html>
