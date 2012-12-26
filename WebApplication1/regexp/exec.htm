@@ -14,6 +14,9 @@
         document.write(patt.lastIndex);
         document.write("<br />");
     }
+    patt.exec(str, function () {
+        console.log(1);
+    })
 </script>
 
 </body>

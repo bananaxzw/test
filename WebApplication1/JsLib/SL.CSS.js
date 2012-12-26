@@ -189,6 +189,22 @@ SL().create(function () {
                 if (sl.InstanceOf.Window(elem)) {
                     return elem.document.documentElement["client" + i] || document.body["client" + i];
                 }
+                if (elem.nodeType && elem.nodeType == 9) {
+                    if (elem.nodeType === 9) {
+                     
+                       var doc = elem.documentElement;
+                        // support:IE6
+                        if (doc["client"+i] >= doc["scroll"+i]) {
+                            return doc["client" + i];
+                        }
+
+                        return Math.max(
+					elem.body["scroll" + i], doc["scroll" + i],
+					elem.body["offset" + i], doc["offset" + i]
+				);
+                    }
+
+                }
                 if (elem.offsetWidth !== 0 || getStyle(elem, "display") !== "none") {
                     return getWH(elem, d);
                 } else {

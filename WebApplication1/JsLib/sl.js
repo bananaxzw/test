@@ -13,6 +13,7 @@
 */
 
 
+
 (function () {
 
     var version = "1.0", topNamespace = this;
@@ -360,6 +361,11 @@ SL().create(function (SL) {
         },
         Window: function (obj) {
             return obj != null && obj === window;
+        },
+        BodyOrHtmlOrWindow: function (obj) {
+            var isWindow = obj == window || obj == document
+			|| !obj.tagName || (/^(?:body|html)$/i).test(obj.tagName);
+            return isWindow;
         },
         /**
         *判断是否普通对象 由{}构建或者object
@@ -2579,7 +2585,7 @@ sl.create(function () {
 
             if (this.doesNotIncludeMarginInBodyOffset) {
                 top += parseFloat(sl.css(body, "marginTop")) || 0;
-                left += parseFloat(sl.css(body, "marginLeft", true)) || 0;
+                left += parseFloat(sl.css(body, "marginLeft")) || 0;
             }
 
             return { top: top, left: left };
@@ -2881,6 +2887,22 @@ SL().create(function () {
             get: function (elem) {
                 if (sl.InstanceOf.Window(elem)) {
                     return elem.document.documentElement["client" + i] || document.body["client" + i];
+                }
+                if (elem.nodeType && elem.nodeType == 9) {
+                    if (elem.nodeType === 9) {
+
+                        var doc = elem.documentElement;
+                        // support:IE6
+                        if (doc["client" + i] >= doc["scroll" + i]) {
+                            return doc["client" + i];
+                        }
+
+                        return Math.max(
+					elem.body["scroll" + i], doc["scroll" + i],
+					elem.body["offset" + i], doc["offset" + i]
+				);
+                    }
+
                 }
                 if (elem.offsetWidth !== 0 || getStyle(elem, "display") !== "none") {
                     return getWH(elem, d);

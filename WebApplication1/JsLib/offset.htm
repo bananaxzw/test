@@ -10,12 +10,28 @@
 </head>
 <body style="border: 5px solid red; position: relative; padding: 0px; margin: 2px;
     font-size: 62.5%">
-    <div style="font-size: 2em; position: absolute; top: 0px; margin-top: 20px; background-color: White;
+    <div style="font-size: 2em; position: relative; top: 0px; margin-top: 20px; background-color: White;
         border: 5px solid red; width: 200px;" id="sss">
         safasfas
         <div id="ffff" style="margin-top: 20%">
             safsafasf</div>
     </div>
+
+
+
+   <div style=" position:relative; height:100px; width:110px; overflow:auto; ">
+   <div id="dddd" style=" float:left; height:40px; width:40px; margin-left:5px; margin-top:5px; background:red;"></div>
+   <div style=" float:left; height:40px; width:40px; margin-left:5px; margin-top:5px; background:red;"></div>
+   <div style=" float:left; height:40px; width:40px; margin-left:5px; margin-top:5px; background:red;"></div>
+   <div style=" float:left; height:40px; width:40px; margin-left:5px; margin-top:5px; background:red;"></div>
+   <div style=" float:left; height:40px; width:40px; margin-left:5px; margin-top:5px; background:red;"></div>
+   <div style=" float:left; height:40px; width:40px; margin-left:5px; margin-top:5px; background:red;"></div>
+   <div style=" float:left; height:40px; width:40px; margin-left:5px; margin-top:5px; background:red;"></div>
+   <div style=" float:left; height:40px; width:40px; margin-left:5px; margin-top:5px; background:red;"></div>
+   </div>
+       <p>
+        <input id="Button1" type="button" value="button" onclick="return Button1_onclick()" /></p>
+  <div  style=" height:20000px;">asfsaf</div>
     <script type="text/javascript">
         var sss = document.getElementById("sss");
         var ffff = document.getElementById("ffff");
@@ -23,6 +39,15 @@
         console.dir(sl.offset(sss));
         console.dir($(document.body).offset());
         console.dir(sl.offset(document.body));
+        function Button1_onclick() {
+            var gsg = document.getElementById("sss");
+            console.dir($(gsg).offset());
+         //  console.log($((sl.(document));
+//            console.dir($(document.).offset());
+            console.dir(sl.offset(document.body));
+        }
+
     </script>
+
 </body>
 </html>

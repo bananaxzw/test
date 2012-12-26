@@ -809,6 +809,7 @@
     <Content Include="JsLib\DOM.htm" />
     <Content Include="JsLib\domReady.htm" />
     <Content Include="JsLib\anim.html" />
+    <Content Include="JsLib\invisible.htm" />
     <Content Include="JsLib\jqtest.htm" />
     <Content Include="JsLib\load.htm" />
     <Content Include="JsLib\requirejs\my\increment.js" />
@@ -926,6 +927,8 @@
     <Content Include="JsLib\UI\dialog.htm" />
     <Content Include="JsLib\UI\dialogElement.htm" />
     <Content Include="JsLib\UI\dragContainer.htm" />
+    <Content Include="JsLib\UI\layoutDemo.htm" />
+    <Content Include="JsLib\UI\LazyLoad.htm" />
     <Content Include="JsLib\UI\masker.htm" />
     <Content Include="JsLib\UI\SL.Dialog.js" />
     <Content Include="JsLib\UI\SL.Draggable.js" />
@@ -2407,6 +2410,7 @@
     <Content Include="regexp\exec.htm" />
     <Content Include="regexp\march.htm" />
     <Content Include="regexp\search.htm" />
+    <Content Include="regexp\test.htm" />
     <Content Include="select.htm" />
     <Content Include="setinterval.htm" />
     <Content Include="Sleep.htm" />

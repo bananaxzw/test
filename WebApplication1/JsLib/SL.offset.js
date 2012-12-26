@@ -46,7 +46,7 @@ sl.create(function () {
 
             if (this.doesNotIncludeMarginInBodyOffset) {
                 top += parseFloat(sl.css(body, "marginTop")) || 0;
-                left += parseFloat(sl.css(body, "marginLeft", true)) || 0;
+                left += parseFloat(sl.css(body, "marginLeft")) || 0;
             }
 
             return { top: top, left: left };

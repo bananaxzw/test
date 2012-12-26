@@ -360,7 +360,11 @@ SL().create(function (SL) {
         Window: function (obj) {
             return obj != null && obj === window;
         },
-        BodyOrHtmlOrWindow:function(){},
+        BodyOrHtmlOrWindow: function (obj) {
+            var isWindow = obj == window || obj == document
+			|| !obj.tagName || (/^(?:body|html)$/i).test(obj.tagName);
+            return isWindow;
+        },
         /**
         *判断是否普通对象 由{}构建或者object
         */

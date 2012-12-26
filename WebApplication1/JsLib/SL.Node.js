@@ -120,9 +120,14 @@
             return sl.Dom.text(this.elements[0]);
         },
         html: function (html) {
-            return this.each(function () {
-                sl.Dom.html(this, html);
-            });
+            if (html) {
+                return this.each(function () {
+                    sl.Dom.html(this, html);
+                });
+            } else {
+                return sl.Dom.html(this.elements[0]);
+
+            }
         },
         val: function (value) {
             if (value) {
@@ -378,6 +383,31 @@
                 return sl.offset(this.elements, arguments[0]);
             }
 
+        },
+        getVisibleRect: function (addBoarder) {
+            /// <summary>
+            /// 获取可视区域
+            /// </summary>
+            /// <param name="addBoarder">是否包括边框</param>
+
+            if (!this.elements.length) return { top: 0, bottom: 0, left: 0, right: 0 };
+
+            var elem = this.elements[0], isTop = sl.InstanceOf.BodyOrHtmlOrWindow(this.elements[0]);
+            var offset = sl.offset(this.elements[0]), top = offset.top, left = offset.left, right, bottom;
+            var borderTopWidth = parseFloat(this.css("borderTopWidth")), borderRightWidth = parseFloat(this.css("borderRightWidth")),
+            borderLeftWidth = parseFloat(this.css("borderLeftWidth")), borderBottomWidth = parseFloat(this.css("borderBottomWidth")),
+            innerHeight = parseFloat(this.innerHeight()), innerWidth = parseFloat(this.innerWidth());
+            if (isTop) {
+                innerHeight = parseFloat(document.body["clientHeight"] || document.documentElement["clientHeight"]);
+                innerWidth = parseFloat(document.body["clientWidth"] || document.documentElement["clientWidth"]);
+            }
+            if (!addBoarder) {
+                top = top + borderTopWidth, bottom = top + innerHeight, left = left + borderLeftWidth, right = left + innerWidth;
+            }
+            else {
+                bottom = top + borderTopWidth + innerHeight + borderBottomWidth, right = left + borderLeftWidth + innerWidth + borderRightWidth;
+            }
+            return { top: top, bottom: bottom, left: left, right: right };
         },
         position: function () {
 

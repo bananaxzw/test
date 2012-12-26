@@ -30,21 +30,48 @@
             height: 31px;
             width: 214px;
         }
+        .style1
+        {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-    <div id="easyDialogWrapper" class="easyDialog_wrapper" style="display: block; margin: 0px;">
-        <div class="easyDialog_content">
-            <h4 class="easyDialog_title" id="easyDialogTitle" style="cursor: move;">
-                <a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn">×</a>弹出层标题</h4>
-            <div class="easyDialog_text">
-                欢迎使用easyDialog : )</div>
-            <div class="easyDialog_footer">
-                <button class="btn_normal" id="easyDialogNoBtn">
-                    取消</button>
-                <button class="btn_highlight" id="easyDialogYesBtn">
-                        确定</button></div>
-        </div>
-    </div>
+   
+    <table class="style1">
+        <tr>
+            <td rowspan="2">
+                姓名</td>
+            <td colspan="3">
+                加班（小时）</td>
+            <td colspan="3">
+                出差（小时）</td>
+            <td colspan="3">
+                请假（小时）</td>
+            <td rowspan="2">
+                总价</td>
+        </tr>
+        <tr>
+            <td>
+                总时间</td>
+            <td>
+                有偿时间</td>
+            <td>
+                补偿金额（元）</td>
+            <td>
+                总时间</td>
+            <td>
+                有偿时间</td>
+            <td>
+                补偿金额（元）</td>
+            <td>
+                总时间</td>
+            <td>
+                扣发时间</td>
+            <td>
+                扣发金额（元）</td>
+        </tr>
+    </table>
+   
 </body>
 </html>
