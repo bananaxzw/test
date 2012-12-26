@@ -398,8 +398,9 @@
             borderLeftWidth = parseFloat(this.css("borderLeftWidth")), borderBottomWidth = parseFloat(this.css("borderBottomWidth")),
             innerHeight = parseFloat(this.innerHeight()), innerWidth = parseFloat(this.innerWidth());
             if (isTop) {
-                innerHeight = parseFloat(document.body["clientHeight"] || document.documentElement["clientHeight"]);
-                innerWidth = parseFloat(document.body["clientWidth"] || document.documentElement["clientWidth"]);
+                innerHeight = parseFloat(document.documentElement["clientHeight"] || document.body["clientHeight"]);
+                innerWidth = parseFloat(document.documentElement["clientWidth"] || document.body["clientWidth"]);
+                top += $(document).scrollTop(), left += $(document).scrollLeft();
             }
             if (!addBoarder) {
                 top = top + borderTopWidth, bottom = top + innerHeight, left = left + borderLeftWidth, right = left + innerWidth;
@@ -407,6 +408,7 @@
             else {
                 bottom = top + borderTopWidth + innerHeight + borderBottomWidth, right = left + borderLeftWidth + innerWidth + borderRightWidth;
             }
+
             return { top: top, bottom: bottom, left: left, right: right };
         },
         position: function () {

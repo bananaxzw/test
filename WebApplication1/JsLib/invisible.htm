@@ -13,7 +13,19 @@
     <input id="Button1" type="button" value="button" onclick="return Button1_onclick()" />
 </body>
   <script type="text/javascript">
-
+      function _insideRange(elem, mode) {
+          var range = this._range, rect = elem._rect || this._getRect(elem),
+		insideH = rect.right >= range.left && rect.left <= range.right,
+		insideV = rect.bottom >= range.top && rect.top <= range.bottom,
+		inside = {
+		    "horizontal": insideH,
+		    "vertical": insideV,
+		    "cross": insideH && insideV
+		}[mode || "cross"];
+          //在加载范围内加载数据
+          if (inside) { this._onLoadData(elem); }
+          return inside;
+      }
       var ttt = $(document.body).getVisibleRect();
 
       function Button1_onclick() {
