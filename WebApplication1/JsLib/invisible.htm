@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-    <script src="sl.js" type="text/javascript"></script>
-    <script src="SL.Node.js" type="text/javascript"></script>
+  <!--  <script src="sl.js" type="text/javascript"></script>
+    <script src="SL.Node.js" type="text/javascript"></script>-->
    <!--   <script src="SL.Core.js" type="text/javascript"></script>
     <script src="SL.CSS.js" type="text/javascript"></script>
     <script src="SL.offset.js" type="text/javascript"></script>
     <script src="SL.support.js" type="text/javascript"></script>-->
-   <!-- <script src="jq1.72.js" type="text/javascript"></script>-->
+   <script src="jq1.72.js" type="text/javascript"></script>
 </head>
 <body style="border: 5px solid red; position: relative; padding: 0px; margin: 2px;
     font-size: 62.5%">
@@ -34,7 +34,7 @@
    </div>
        <p>
         <input id="Button1" type="button" value="button" style=" position:fixed;top:0px;" onclick="return Button1_onclick()" /></p>
-  <div  style=" height:20000px;">asfsaf</div>
+  <div  style=" height:2000px;">asfsaf</div>
    <div id="Div1" style=" float:left; height:40px; width:40px; margin-left:5px; margin-top:5px; background:black;"></div>
      <input id="Button2" type="button" value="button" style="" onclick="return Button1_onclick()" /></p>
     <script type="text/javascript">
@@ -61,7 +61,8 @@
         console.dir($(document.body).offset());
         console.dir(sl.offset(document.body));*/
         function Button1_onclick() {
-            _insideRange();
+            alert($(document.documentElement).offset().top);
+          //  _insideRange();
             // var gsg = document.getElementById("dddd");
             //  console.dir($(gsg).offset());
             //  console.log($((sl.(document));

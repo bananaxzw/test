@@ -30,7 +30,7 @@
 
     window.CalvinLazyLoad = function (elems, options) {
 
-        this.opts = sl.extend(true, options, defaults);
+        this.opts = sl.extend(true, defaults, options);
         if (!elems || elems.length == 0) {
             return;
         }
@@ -40,13 +40,16 @@
         this.retSetElementsRect();
         //如果没有元素就退出
         if (this.isFinish()) return;
-        //初始化模式设置
-        this._initMode();
         //进行第一次触发
-        this._resize(true);
+        if (this.isTop) {
+            $(window).trigger("scroll");
+        } else {
+            this._load();
+        }
     };
 
     CalvinLazyLoad.prototype = {
+        elems:[],
         isTop: false,
         //初始化容器设置
         _initContainer: function (container) {
@@ -69,7 +72,7 @@
                 var clientWidth = container.clientWidth, clientHeight = container.clientHeight;
                 if (clientWidth != width || clientHeight != height) {
                     width = clientWidth; height = clientHeight;
-                    oThis._resize.call(oThis)
+                    oThis._load.call(oThis)
                 }
             }, true));
             this.containerRect = getVisibleRect(container);
@@ -79,34 +82,38 @@
         //加载程序
         _load: function (force) {
             if (this.isTop) {
-                this.rect = getVisibleRect(this.container);
+                this.containerRect = getVisibleRect(this.container);
             } else {
                 this.retSetElementsRect();
 
             }
             //加载数据
-            this.beforeLoad();
+            //this.beforeLoad();
             this._loadData(force);
         },
         retSetElementsRect: function () {
-            for (var i = 0, elem = this.elems[i], length = this.elems.length; i < length; i++) {
-                elem.rect = getVisibleRect(elem);
+            var elem;
+            for (var i = 0; i < this.elems.length; i++) {
+                elem = this.elems[i];
+                elem.rect = getVisibleRect(elem, true);
             }
         },
         _loadData: function (force) {
-            var mode = this.opts.mode;
+            var mode = this.opts.mode, elem;
             var onloadData = this.opts.onLoadData;
-            for (var i = 0, elem = this.elems[i], length = this.elems.length; i < length; i++) {
+            for (var i = 0; i < this.elems.length; i++) {
+                elem = this.elems[i];
                 if (this.insideRange(elem, mode)) {
                     onloadData.call(elem, elem);
                     sl.Array.remove(this.elems, elem);
+                    --i;
                 }
             }
 
         },
         //判断是否加载范围内
         insideRange: function (elem, mode) {
-            var range = this._range, rect = elem._rect || this._getRect(elem),
+            var range = this.containerRect, rect = elem.rect,
 		insideH = rect.right >= range.left && rect.left <= range.right,
 		insideV = rect.bottom >= range.top && rect.top <= range.bottom,
 		inside = {
@@ -144,13 +151,13 @@
         /// </summary>
         /// <param name="addBoarder">是否包括边框</param>
         if (!elem) return { top: 0, bottom: 0, left: 0, right: 0 };
-
         var isTop = sl.InstanceOf.BodyOrHtmlOrWindow(elem);
-        var offset = sl.offset(elem), top = offset.top, left = offset.left, right, bottom;
-        var borderTopWidth = parseFloat(this.css("borderTopWidth")), borderRightWidth = parseFloat(this.css("borderRightWidth")),
-            borderLeftWidth = parseFloat(this.css("borderLeftWidth")), borderBottomWidth = parseFloat(this.css("borderBottomWidth")),
-            innerHeight = parseFloat(this.innerHeight()), innerWidth = parseFloat(this.innerWidth());
+        var $elem = $(elem), offset = sl.offset(elem), top = offset.top, left = offset.left, right, bottom;
+        var borderTopWidth = parseFloat($elem.css("borderTopWidth")), borderRightWidth = parseFloat($elem.css("borderRightWidth")),
+            borderLeftWidth = parseFloat($elem.css("borderLeftWidth")), borderBottomWidth = parseFloat($elem.css("borderBottomWidth")),
+            innerHeight = parseFloat($elem.innerHeight()), innerWidth = parseFloat($elem.innerWidth());
         if (isTop) {
+            top = 0, left = 0, bottom = 0, right = 0;
             innerHeight = parseFloat(document.documentElement["clientHeight"] || document.body["clientHeight"]);
             innerWidth = parseFloat(document.documentElement["clientWidth"] || document.body["clientWidth"]);
             top += $(document).scrollTop(), left += $(document).scrollLeft();
@@ -161,12 +168,10 @@
         else {
             bottom = top + borderTopWidth + innerHeight + borderBottomWidth, right = left + borderLeftWidth + innerWidth + borderRightWidth;
         }
-
         return { top: top, bottom: bottom, left: left, right: right };
     }
 
     function getScroll() {
-
         return { scrollTop: $(document).scrollTop(), scrollLeft: $(document).scrollLeft() };
     }
 })();

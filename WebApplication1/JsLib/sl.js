@@ -1425,7 +1425,7 @@ SL().create(function (SL) {
             /// <returns type="">删除成功返回true</returns>
             var index = -1;
             index = this.indexOf(arr, item)
-            while (index > 0) {
+            while (index >= 0) {
                 if (index >= 0) {
                     arr.splice(index, 1);
                 }
@@ -2596,10 +2596,18 @@ sl.create(function () {
                 if (!node || !node.ownerDocument) {
                     return null;
                 }
+
                 if (node === node.ownerDocument.body) {
                     return this.bodyOffset(node);
                 }
-                var box = node.getBoundingClientRect(), doc = node.ownerDocument, body = doc.body, docElem = doc.documentElement,
+                var box = node.getBoundingClientRect();
+                if (!box || node.ownerDocument.documentElement == node) {
+                    return box ? { top: box.top, left: box.left} : { top: 0, left: 0 };
+                }
+
+
+
+                var doc = node.ownerDocument, body = doc.body, docElem = doc.documentElement,
 			clientTop = docElem.clientTop || body.clientTop || 0, clientLeft = docElem.clientLeft || body.clientLeft || 0,
 			top = box.top + (self.pageYOffset || sl.Support.boxModel && docElem.scrollTop || body.scrollTop) - clientTop,
 			left = box.left + (self.pageXOffset || sl.Support.boxModel && docElem.scrollLeft || body.scrollLeft) - clientLeft;

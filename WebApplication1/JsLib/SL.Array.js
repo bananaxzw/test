@@ -210,7 +210,7 @@ SL().create(function (SL) {
             /// <returns type="">删除成功返回true</returns>
             var index = -1;
             index = this.indexOf(arr, item)
-            while (index>0) {
+            while (index>=0) {
                 if (index >= 0) {
                     arr.splice(index, 1);
                 }

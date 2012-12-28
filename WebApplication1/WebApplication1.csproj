@@ -926,12 +926,14 @@
     <Content Include="JsLib\UI\default\SLDialog.css" />
     <Content Include="JsLib\UI\dialog.htm" />
     <Content Include="JsLib\UI\dialogElement.htm" />
+    <Content Include="JsLib\UI\documentLazy.htm" />
     <Content Include="JsLib\UI\dragContainer.htm" />
     <Content Include="JsLib\UI\layoutDemo.htm" />
-    <Content Include="JsLib\UI\LazyLoad.htm" />
+    <Content Include="JsLib\UI\lazyDemo.htm" />
     <Content Include="JsLib\UI\masker.htm" />
     <Content Include="JsLib\UI\SL.Dialog.js" />
     <Content Include="JsLib\UI\SL.Draggable.js" />
+    <Content Include="JsLib\UI\SL.ImageLazyLoad.js" />
     <Content Include="JsLib\UI\SL.LazyLoad.js" />
     <Content Include="JsLib\UI\SL.Mask.js" />
     <Content Include="JsLib\UI\tabDemo.htm" />
