@@ -928,6 +928,7 @@
     <Content Include="JsLib\UI\dialogElement.htm" />
     <Content Include="JsLib\UI\documentLazy.htm" />
     <Content Include="JsLib\UI\dragContainer.htm" />
+    <Content Include="JsLib\UI\ImagesLazyLoad.htm" />
     <Content Include="JsLib\UI\layoutDemo.htm" />
     <Content Include="JsLib\UI\lazyDemo.htm" />
     <Content Include="JsLib\UI\masker.htm" />

@@ -5,6 +5,18 @@
 /// <reference path="../SL.throttle.js" />
 (function () {
 
+    /*
+    window.onscroll=function(){  
+    var a = document.documentElement.scrollTop==0? document.body.clientHeight : document.documentElement.clientHeight;  
+    var b = document.documentElement.scrollTop==0? document.body.scrollTop : document.documentElement.scrollTop;  
+    var c = document.documentElement.scrollTop==0? document.body.scrollHeight : document.documentElement.scrollHeight;  
+  
+    if(a+b==c){  
+        alert("new message");  
+    }  
+}
+    
+    */
     /*_initMode->_initStatic主要是对_loadData属性进行绑定 当是动态加载的时候就绑定到_loadDynamic 
     当静态加载的时候先调用_initStatic初始化方向参数和把 _loadData绑定到 _loadStatic
     
@@ -29,30 +41,44 @@
     };
 
     window.CalvinLazyLoad = function (elems, options) {
-
-        this.opts = sl.extend(true, defaults, options);
         if (!elems || elems.length == 0) {
             return;
         }
-        this.elems = elems;
         //初始化程序
-        this.container = this._initContainer(this.opts.container);
-        this.retSetElementsRect();
+        this.initialize(elems, options);
         //如果没有元素就退出
         if (this.isFinish()) return;
         //进行第一次触发
         if (this.isTop) {
-            $(window).trigger("scroll");
+          //  $(window).trigger("scroll");
         } else {
-            this._load();
+            this.load();
         }
     };
 
     CalvinLazyLoad.prototype = {
-        elems:[],
+        initializeLoaded:false,
+        elems: [],
         isTop: false,
+        initialize: function (elems, options) {
+            this.setOptions(options);
+            this.elems = elems;
+            this.container = this.initContainer(this.opts.container);
+            this.retSetElementsRect();
+        },
+        setOptions: function (options) {
+            this.opts = {//默认值
+                container: window, //容器
+                mode: "cross", //模式
+                threshold: 0, //加载范围阈值
+                delay: 100, //延时时间
+                beforeLoad: function () { }, //加载前执行
+                onLoadData: function () { } //显示加载数据
+            };
+            return sl.extend(this.opts, options || {});
+        },
         //初始化容器设置
-        _initContainer: function (container) {
+        initContainer: function (container) {
             var doc = document, isTop = sl.InstanceOf.BodyOrHtmlOrWindow(container);
             this.isTop = isTop;
             if (isTop) {
@@ -65,14 +91,14 @@
 
             //绑定事件 滚动时候和relize时候触发
             $(isTop ? window : container).bind("scroll", sl.throttle(oThis.delay, function () {
-                oThis._load.call(oThis);
+                oThis.load.call(oThis);
             }, true));
             isTop && $(window).bind("resize", sl.throttle(oThis.delay, function () {
                 //是否已经改变了 宽度
                 var clientWidth = container.clientWidth, clientHeight = container.clientHeight;
                 if (clientWidth != width || clientHeight != height) {
                     width = clientWidth; height = clientHeight;
-                    oThis._load.call(oThis)
+                    oThis.load.call(oThis)
                 }
             }, true));
             this.containerRect = getVisibleRect(container);
@@ -80,7 +106,7 @@
             return container;
         },
         //加载程序
-        _load: function (force) {
+        load: function (force) {
             if (this.isTop) {
                 this.containerRect = getVisibleRect(this.container);
             } else {
@@ -89,7 +115,7 @@
             }
             //加载数据
             //this.beforeLoad();
-            this._loadData(force);
+            this.loadData(force);
         },
         retSetElementsRect: function () {
             var elem;
@@ -98,13 +124,13 @@
                 elem.rect = getVisibleRect(elem, true);
             }
         },
-        _loadData: function (force) {
+        loadData: function (force) {
             var mode = this.opts.mode, elem;
             var onloadData = this.opts.onLoadData;
             for (var i = 0; i < this.elems.length; i++) {
                 elem = this.elems[i];
                 if (this.insideRange(elem, mode)) {
-                    onloadData.call(elem, elem);
+                    onloadData.call(this, elem);
                     sl.Array.remove(this.elems, elem);
                     --i;
                 }

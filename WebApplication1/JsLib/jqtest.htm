@@ -11,11 +11,13 @@
 <div id="Div2"  class="dd"  style="width:20px;height:20px;"><div id="Div3" class="dd" style="width:20px;height:40px;">safsafasf</div></div>
     <input id="Button1" type="button" value="button" onclick="return Button1_onclick()" />
     <input id="Button2" type="button" value="button" onclick="return Button2_onclick()" />
+    <div style="width:20px;height:2000px;"></div>
 <script type="text/javascript">
-    $(window).width(1);
-    $(window).outerWidth();
+//    $(window).width(1);
+//    $(window).outerWidth();
 
     function Button1_onclick() {
+        $(document.documentElement).height();
         $("#Div2").scrollTop(10);
     }
 
