@@ -5,6 +5,17 @@
     
 </head>
 <body>
+  <h2 align="center">
+        请调整浏览器窗口大小</h2>
+    <hr>
+    <form action="#" method="get" name="form1" id="form1">
+    <!--显示浏览器窗口的实际尺寸-->
+    浏览器窗口 的实际高度:
+    <input type="text" name="availHeight" size="4"><br>
+    浏览器窗口 的实际宽度:
+    <input type="text" name="availWidth" size="4"><br>
+    </form>
+ 
     <ul id="safsa">
       <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
@@ -98,8 +109,34 @@
     <script src="SL.LazyLoad.js" type="text/javascript"></script>
     <script src="SL.ImageLazyLoad.js" type="text/javascript"></script>
     <script type="text/javascript">
-        alert(document.body.offsetHeight);
-        alert(document.documentElement.offsetHeight);
+      // 可视区域
+        //怪异模式document.body.clientHeight
+        //标准模式IE document.documentElement.clientHeight
+        //标准模式其他  document.body.clientHeight
+
+        //+滚动高度
+        //怪异模式  document.body.scrollHeight
+        //标准模式IE document.body.clientHeight
+        //标准其他 //标准模式其他  document.documentElement.clientHeight
+        function getWindowVisiable() {
+            if (window.innerHeight) {
+                return { height: window.innerHeight, width: window.innerWidth };
+            } else {
+
+                if (document.compatMode === "BackCompat") {
+                    return { height: document.body.clientHeight, width: document.body.clientWidth };
+                }
+                else {
+                    if (sl.Browser.ie) {
+                        return { height: document.documentElement.clientHeight, width: document.documentElement.clientWidth };
+                    }
+                    return { height: document.body.clientHeight, width: document.body.clientWidth };
+                }
+            }
+        }
+        
+        alert(document.body.clientHeight);
+        alert(document.documentElement.clientHeight);
         alert(document.body.scrollHeight);
         alert(document.documentElement.scrollHeight);
         $(window).scroll(sl.throttle(100, function () {

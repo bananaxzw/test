@@ -924,6 +924,7 @@
     <Content Include="JsLib\support.htm" />
     <Content Include="JsLib\throttle.htm" />
     <Content Include="JsLib\UI\default\SLDialog.css" />
+    <Content Include="JsLib\UI\demisionWindow.htm" />
     <Content Include="JsLib\UI\dialog.htm" />
     <Content Include="JsLib\UI\dialogElement.htm" />
     <Content Include="JsLib\UI\documentLazy.htm" />
