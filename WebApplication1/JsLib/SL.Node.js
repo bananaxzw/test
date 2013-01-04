@@ -120,7 +120,7 @@
             return sl.Dom.text(this.elements[0]);
         },
         html: function (html) {
-            if (html) {
+            if (html!==undefined) {
                 return this.each(function () {
                     sl.Dom.html(this, html);
                 });
@@ -130,7 +130,7 @@
             }
         },
         val: function (value) {
-            if (value) {
+            if (value!==undefined) {
                 return this.each(function () {
                     sl.attr.setValue(this, value);
                 })
@@ -364,7 +364,7 @@
             });
         },
         data: function (key, value) {
-            if (value) {
+            if (value!==undefined) {
                 return this.each(function () {
                     sl.data(this, key, value);
                 });

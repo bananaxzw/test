@@ -12,9 +12,9 @@
     var c = document.documentElement.scrollTop==0? document.body.scrollHeight : document.documentElement.scrollHeight;  
   
     if(a+b==c){  
-        alert("new message");  
+    alert("new message");  
     }  
-}
+    }
     
     */
     /*_initMode->_initStatic主要是对_loadData属性进行绑定 当是动态加载的时候就绑定到_loadDynamic 
@@ -50,14 +50,14 @@
         if (this.isFinish()) return;
         //进行第一次触发
         if (this.isTop) {
-          //  $(window).trigger("scroll");
+            //  $(window).trigger("scroll");
         } else {
             this.load();
         }
     };
 
     CalvinLazyLoad.prototype = {
-        initializeLoaded:false,
+        initializeLoaded: false,
         elems: [],
         isTop: false,
         initialize: function (elems, options) {
@@ -107,6 +107,9 @@
         },
         //加载程序
         load: function (force) {
+            if (this.isFinish()) {
+                this.dispose();
+            }
             if (this.isTop) {
                 this.containerRect = getVisibleRect(this.container);
             } else {

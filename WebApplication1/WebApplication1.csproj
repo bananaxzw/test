@@ -928,10 +928,12 @@
     <Content Include="JsLib\UI\dialogElement.htm" />
     <Content Include="JsLib\UI\documentLazy.htm" />
     <Content Include="JsLib\UI\dragContainer.htm" />
+    <Content Include="JsLib\UI\imageLazyLoad1.htm" />
     <Content Include="JsLib\UI\ImagesLazyLoad.htm" />
     <Content Include="JsLib\UI\layoutDemo.htm" />
     <Content Include="JsLib\UI\lazyDemo.htm" />
     <Content Include="JsLib\UI\masker.htm" />
+    <Content Include="JsLib\UI\scrollBottom.htm" />
     <Content Include="JsLib\UI\SL.Dialog.js" />
     <Content Include="JsLib\UI\SL.Draggable.js" />
     <Content Include="JsLib\UI\SL.ImageLazyLoad.js" />

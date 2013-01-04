@@ -3971,7 +3971,7 @@ SL().create(function (SL) {
         text: function (elem, text) {
             var i, node, nodeType = elem.nodeType, ret = "";
             if (nodeType) {
-                if (text) {
+                if (text !== undefined) {
                     return this.empty().append((elem && elem.ownerDocument || document).createTextNode(text));
                 }
                 else {
@@ -3992,7 +3992,7 @@ SL().create(function (SL) {
         },
 
         html: function (node, html) {
-            if (html) {
+            if (html !== undefined) {
                 if (node != null && 'innerHTML' in node) {
                     node.innerHTML = html;
                 }

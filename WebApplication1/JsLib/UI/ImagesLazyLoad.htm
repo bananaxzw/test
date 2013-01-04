@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
@@ -33,7 +33,6 @@
         #idLazyContainer
         {
             height: 160px;
-            overflow-y: hidden;
             position: relative;
         }
         #idLazyContainer img
@@ -44,6 +43,7 @@
             border: 0;
         }
     </style>
+    行： <input id="rowcount" type="text" size="3" maxlength="2" value="1" />
     图片延迟加载：共有图片
     <input id="idTotal" type="text" size="3" maxlength="2" value="50" />
     张，未载入 <span id="idShow"></span>张
@@ -51,8 +51,8 @@
     <input id="idAuto" type="button" value="自动播放" />
     <input id="idPos" type="button" value="位置改变" />
     <div class="lazy" id="idLazyContainer" style="position: relative">
-        <table cellspacing="0" cellpadding="0">
-            <tr id="idLazy">
+        <table cellspacing="0" cellpadding="0" id="clasetgaf">
+            <tr class='teplate'>
                 <td>
                     <a href="http://www.cnblogs.com/cloudgamer/archive/2009/12/22/ImagePreview.html">
                         <img _lazysrc="http://images.cnblogs.com/cnblogs_com/cloudgamer/143727/r_song1.jpg"
@@ -88,7 +88,7 @@
     </div>
     <script type="text/javascript">
 
-        var row = $("#idLazy"), msg = $("#idShow"), total = $("#idTotal"), cells = [];
+        var row = $(".teplate"), msg = $("#idShow"), total = $("#idTotal"), cells = [], rowcount = $("#rowcount").val();
         for (var i = 0, n = row.elements[0].cells.length; i < n; cells.push(row.elements[0].cells[i++])) { }
 
         function Lazy() {
@@ -99,18 +99,24 @@
                 img.setAttribute("_lazysrc", img.getAttribute("_lazysrc") + "?" + Math.random());
                 cells.push(cells.shift());
             }
-            msg.html(i);
-            var lazy = new CalvinImagesLazyLoad($("#idLazyContainer").elements[0].getElementsByTagName("img"), {
-                container: $("#idLazyContainer").elements[0], mode: "horizontal",
-                holder: "http://www.cnblogs.com/images/cnblogs_com/cloudgamer/169629/o_dot.gif",
-                onLoad: function (img) {
-                    msg.html(--i);
-                }
-            });
-            $("#idReset").click(function () {
+            for (var h = 0; h <  parseInt($("#rowcount").val()) - 1; h++) {
+               var t= row.elements[0].cloneNode(true);
+               $("#clasetgaf").append(t);
+            }
+                msg.html(i);
+                var lazy = new CalvinImagesLazyLoad($("#idLazyContainer").elements[0].getElementsByTagName("img"), {
+                    container: $("#idLazyContainer").elements[0], mode: "cross",
+                    holder: "http://www.cnblogs.com/images/cnblogs_com/cloudgamer/169629/o_dot.gif",
+                    onLoad: function (img) {
+                        i--;
+                        msg.html(i);
+
+                    }
+                });
+            $("#idReset").unbind("click").click(function () {
                 lazy.dispose(); Lazy();
              });
-             $("#idPos").click(function () {
+             $("#idPos").unbind("click").click(function () {
                  with ($("#idLazyContainer").elements[0].style) {
                      if (width == "300px") { left = 0; width = "600px"; } else { left = width = "300px"; }
                  }

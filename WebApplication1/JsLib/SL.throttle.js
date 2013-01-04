@@ -68,7 +68,9 @@ DOM 元素动态定位，window对象的resize和scroll 事件
 /// <reference path="SL.Core.js" />
 sl.create(function () {
     var throttle = function (delay, action, tail, debounce) {
-        var now = Date.now, last_call = 0, last_exec = 0, timer = null, curr, diff,
+        var now = function () {
+            return new Date();
+        }, last_call = 0, last_exec = 0, timer = null, curr, diff,
         ctx, args, exec = function () {
             last_exec = now();
             action.apply(ctx, args);
