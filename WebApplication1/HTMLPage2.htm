@@ -30,21 +30,13 @@
         }
     </style>
     <script type="text/javascript">
-       function (a) {
-            alert(a);
-        })(2);
-        function mm() {
-            console.log(arguments[0]);
+        var mm = 2;
+        var tt = function () {
+            var mm = 3;
+            alert(mm);
         }
-        function tt() {
-
-            arguments[0] = 2;
-            mm.apply(window, arguments);
- 
-        }
-
         tt();
-        tt(1);
+        alert(mm);
     </script>
 </head>
 <body>
