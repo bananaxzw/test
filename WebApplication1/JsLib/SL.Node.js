@@ -120,7 +120,7 @@
             return sl.Dom.text(this.elements[0]);
         },
         html: function (html) {
-            if (html!==undefined) {
+            if (html !== undefined) {
                 return this.each(function () {
                     sl.Dom.html(this, html);
                 });
@@ -130,7 +130,7 @@
             }
         },
         val: function (value) {
-            if (value!==undefined) {
+            if (value !== undefined) {
                 return this.each(function () {
                     sl.attr.setValue(this, value);
                 })
@@ -161,8 +161,10 @@
                 return this.find(arguments);
             }
             if (sl.InstanceOf.Function(arguments[0])) {
+                this.pushStack(sl.grep(this.elements, function (elem, i) {
+                    arguments[0].call(elem, elem);
+                }));
 
-                return this.map(arguments[0]);
             }
             return null;
 
@@ -364,7 +366,7 @@
             });
         },
         data: function (key, value) {
-            if (value!==undefined) {
+            if (value !== undefined) {
                 return this.each(function () {
                     sl.data(this, key, value);
                 });
