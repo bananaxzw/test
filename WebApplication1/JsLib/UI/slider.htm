@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Sliderbarr : A simple JavaScript slider component." />
+    <style>
+        .sliderbarr
+        {
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            -ms-border-radius: 5px;
+            -o-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-box-shadow: inset 0px 1px 2px 1px #d1d1d1;
+            -moz-box-shadow: inset 0px 1px 2px 1px #d1d1d1;
+            box-shadow: inset 0px 1px 2px 1px #d1d1d1;
+            width: 700px;
+            height: 10px;
+            background-color: #B4F6F9;
+            position: relative;
+            cursor: pointer;
+        }
+        .sliderbarr .bar
+        {
+            -webkit-border-radius: 1px;
+            -moz-border-radius: 1px;
+            -ms-border-radius: 1px;
+            -o-border-radius: 1px;
+            border-radius: 1px;
+            display: block;
+            height: 2px;
+            top: 4px;
+            left: 5px;
+            position: absolute;
+            background-color: #2585ff;
+        }
+        .sliderbarr .handle
+        {
+           
+            height: 20px;
+            width: 20px;
+            margin-top: -7px;
+            margin-left: -12px;
+            position: absolute;
+            background:url('img/slider_handle.png') no-repeat;
+        }
+      
+        .sliderbarr .label
+        {
+            position: absolute;
+            top: -20px;
+            font-size: 10px;
+        }
+        .sliderbarr .label.min
+        {
+            left: 0;
+        }
+        .sliderbarr .label.max
+        {
+            right: 0;
+        }
+        .sliderbarr .label.current
+        {
+            width: 300px;
+            text-align: center;
+            display: block;
+        }
+    </style>
+    <style type="text/css">
+        body
+        {
+            background-color: #F5F5F5;
+            text-align: center;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-size: 13px;
+            color: #696969;
+        }
+        
+        h1
+        {
+            font-size: 14px;
+        }
+        
+        .sliderbarr
+        {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    <title>Sliderbarr</title>
+</head>
+<body>
+    <br />
+    <br />
+    <h1>
+        Slider</h1>
+    <br />
+    <br />
+    <div id="slider" class="sliderbarr">
+    </div>
+    <br />
+    <br />
+    <br />
+    <h1>
+        Slider with a 10 step</h1>
+    <br />
+    <br />
+    <div id="sliderTwo" class="sliderbarr">
+    </div>
+    <br />
+    <br />
+    <br />
+    <h1>
+        Slider with labels</h1>
+    <br />
+    <br />
+    <div id="sliderThree" class="sliderbarr">
+    </div>
+    <br />
+    <br />
+    <h1>
+        Slider with Granular Step</h1>
+    <br />
+    <br />
+    <div id="sliderFour" class="sliderbarr">
+    </div>
+    <script src="../jq1.72.js" type="text/javascript"></script>
+    <script src="JScript1.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        (function () {
+
+            new SliderBarr({
+                el: $('#slider'),
+                value: 15,
+                step: 1
+            });
+
+            new SliderBarr({
+                el: $('#sliderTwo'),
+                value: 75,
+                step: 10
+            });
+
+            new SliderBarr({
+                el: $('#sliderThree'),
+                value: 50,
+                step: 1,
+                labels: true
+            });
+
+            new SliderBarr({
+                el: $('#sliderFour'),
+                value: 50,
+                step: 0.1,
+                labels: true
+            });
+
+        }).call(this);
+    </script>
+</body>
+</html>

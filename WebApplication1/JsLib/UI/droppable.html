@@ -44,8 +44,11 @@
 		<div id="dd" class="targetarea"></div>
 	</div>
     <script type="text/javascript">
-        new Draggable(document.getElementById("d1"), { proxy: "clone" });
+        new Draggable(document.getElementById("d1"), { proxy: "clone",revert:true });
+        new Draggable(document.getElementById("d2"), { proxy: "clone" });
+        new Draggable(document.getElementById("d3"), { proxy: "clone" });
         new SLDroppable(document.getElementById("dd"), {
+            accept: '#d1,#d3',
             onDragEnter: function (e, source) {
                 $(this).html('enter')
             },

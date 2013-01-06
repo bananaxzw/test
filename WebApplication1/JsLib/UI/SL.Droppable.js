@@ -14,6 +14,7 @@
 
     function SLDroppable(elem, options) {
         this.opts = sl.extend(defaults, options);
+        sl.data(elem, "droppable", { options: this.opts });
         this.elem = elem;
         this.init(elem);
 

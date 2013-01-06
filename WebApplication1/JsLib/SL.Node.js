@@ -161,13 +161,13 @@
                 return this.find(arguments);
             }
             if (sl.InstanceOf.Function(arguments[0])) {
-                this.pushStack(sl.grep(this.elements, function (elem, i) {
-                    arguments[0].call(elem, elem);
+                var callFun = arguments[0];
+               return this.pushStack(sl.grep(this.elements, function (elem, i) {
+                    return callFun.call(elem, elem);
                 }));
 
             }
             return null;
-
         },
         /**
         *对dom进行统一操作

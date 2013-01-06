@@ -932,6 +932,8 @@
     <Content Include="JsLib\UI\droppable.html" />
     <Content Include="JsLib\UI\imageLazyLoad1.htm" />
     <Content Include="JsLib\UI\ImagesLazyLoad.htm" />
+    <Content Include="JsLib\UI\img\slider_handle.png" />
+    <Content Include="JsLib\UI\JScript1.js" />
     <Content Include="JsLib\UI\layoutDemo.htm" />
     <Content Include="JsLib\UI\lazyDemo.htm" />
     <Content Include="JsLib\UI\masker.htm" />
@@ -943,6 +945,9 @@
     <Content Include="JsLib\UI\SL.ImageLazyLoad.js" />
     <Content Include="JsLib\UI\SL.LazyLoad.js" />
     <Content Include="JsLib\UI\SL.Mask.js" />
+    <Content Include="JsLib\UI\SL.Slider.js" />
+    <Content Include="JsLib\UI\slider.htm" />
+    <Content Include="JsLib\UI\sliderBar1.htm" />
     <Content Include="JsLib\UI\tabDemo.htm" />
     <Content Include="JsLib\test.js" />
     <Content Include="JsLib\test.xml" />

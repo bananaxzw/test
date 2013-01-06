@@ -4,6 +4,7 @@
 
 /// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
+/// <reference path="../SL.throttle.js" />
 
 (function () {
     var defaults = {
@@ -57,14 +58,13 @@
                         proxy = opts.proxy.call(e.extendData.target, e.extendData.target);
                     }
                     sl.data(e.extendData.target, 'draggable').proxy = proxy;
+                    proxy.css(opts.proxyClass);
                 }
                 else {
                     proxy = $(e.extendData.target);
                 }
             }
-
-            proxy.css('position', 'absolute').css(opts.proxyClass);
-
+            proxy.css('position', 'absolute');
             eventHelper.drag(e);
             eventHelper.applyDrag(e);
 
@@ -135,20 +135,32 @@
                 else {
                     //如果没有拖动对象内 则用动画返回
                     if (proxy) {
+                        /*
                         proxy.animate({
+                        left: e.extendData.startLeft,
+                        top: e.extendData.startTop
+                        }, function () {
+                        removeProxy();
+                        });*/
+                        proxy.css({
                             left: e.extendData.startLeft,
                             top: e.extendData.startTop
-                        }, function () {
-                            removeProxy();
                         });
+                        removeProxy();
                     }
                     else {
+                        /*
                         $(e.extendData.target).animate({
+                        left: e.extendData.startLeft,
+                        top: e.extendData.startTop
+                        }, function () {
+                        $(e.extendData.target).css('position', e.extendData.startPosition);
+                        });*/
+                        $(e.extendData.target).css({
                             left: e.extendData.startLeft,
                             top: e.extendData.startTop
-                        }, function () {
-                            $(e.extendData.target).css('position', e.extendData.startPosition);
                         });
+                        $(e.extendData.target).css('position', e.extendData.startPosition);
                     }
                 }
             }
@@ -383,7 +395,7 @@
             };
             computeArea(opts.containment, e.extendData.target);
             $(document).bind('mousedown', data, eventHelper.beginDrag);
-            $(document).bind('mousemove', data, eventHelper.onDrag);
+            $(document).bind('mousemove', data, sl.throttle(50, eventHelper.onDrag, true));
             $(document).bind('mouseup', data, eventHelper.endDrag);
             //计算目标区划 和 限制区划
             function computeArea(constrain, target) {

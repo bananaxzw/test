@@ -19,22 +19,26 @@
         <span></span>
        sfaf
         </div>
-        <div class='class1'>safaf</div>
-         <div class='class1'>asfsa</div>
+        <div class='class1' id="safsa">safaf</div>
+         <div class='class1' id='sfs'>asfsa</div>
     </div>
     <script type="text/javascript">
-        $(document.getElementById("tt")).append().attr("sffs", "safs");
-        var t1 = $("#tt");
+   var tt=     $(".class1").filter(function () {
+            return this.id == "sfs";
+        });
+        console.log(tt);
+//        $(document.getElementById("tt")).append().attr("sffs", "safs");
+//        var t1 = $("#tt");
 
-        var t2 = $("<div id='tttt'>safsaf</div>");
-       
-        var t3 = $(".gg", $("<div id='tttt'>safsaf<span class='gg'>safasfs</span></div>"))
-        t2.append("<span></span>");
-        t2.appendTo("body");
+//        var t2 = $("<div id='tttt'>safsaf</div>");
+//       
+//        var t3 = $(".gg", $("<div id='tttt'>safsaf<span class='gg'>safasfs</span></div>"))
+//        t2.append("<span></span>");
+//        t2.appendTo("body");
 
-        //$("div.class1").wrapInner("<b></b>");
-        $("div.class1").wrapAll("<div id='wrapAll'><div></div><center></center></div><div/>");
-        $("div.class1").wrap("<div id='wrapAll'><div></div><center></center></div><div/>");
+//        //$("div.class1").wrapInner("<b></b>");
+//        $("div.class1").wrapAll("<div id='wrapAll'><div></div><center></center></div><div/>");
+//        $("div.class1").wrap("<div id='wrapAll'><div></div><center></center></div><div/>");
     </script>
 </body>
 </html>
