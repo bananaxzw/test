@@ -8,15 +8,14 @@ var Defaults = {
     bar: true,
     labels: false,
     step: 1,
-    onChange: null,
-    onDrag: null,
+    onChange: function () { },
+    onDrag: function () { },
     axis: "h"
 
 }
 var eventHelper = {
     beginDrag: function (e) {
         var opts = sl.data(e.extendData.target, 'draggable').options;
-        opts.onStartDrag.call(e.extendData.target, e);
         return false;
     },
     onDrag: function (e) {
@@ -35,10 +34,6 @@ var eventHelper = {
         /// <returns type=""></returns>
         var opts = sl.data(e.extendData.target, 'draggable').options;
         eventHelper.drag(e);
-
-        opts.onStopDrag.call(e.extendData.target, e);
-
-
         $(document).unbind("mousedown");
         $(document).unbind("mousemove");
         $(document).unbind("mouseup");
@@ -50,8 +45,6 @@ var eventHelper = {
             left: e.extendData.left,
             top: e.extendData.top
         });
-
-
     },
     drag: function (e) {
         /// <summary>
@@ -59,12 +52,9 @@ var eventHelper = {
         /// </summary>
         /// <param name="e"></param>
         var opts = sl.data(e.extendData.target, 'draggable').options;
-
-
         var dragData = e.extendData;
         var left = dragData.startLeft + e.pageX - dragData.startX;
         var top = dragData.startTop + e.pageY - dragData.startY;
-
         if (opts.deltaX != null && opts.deltaX != undefined) {
             left = e.pageX + opts.deltaX;
         }
@@ -96,56 +86,21 @@ var eventHelper = {
     fixedValue: function (value, step) {
         var places, _ref;
         if (step % 1 === 0) {
-            return parseInt(val, 10);
+            return parseInt(value, 10);
         }
         _ref = (step + "").split("."), places = _ref[1];
-        return parseFloat(val.toFixed(places.length));
-    }
-};
-var domHelper = {
-    //获取传入的各个元素的边界值
-    getElementsArea: function () {
-        if (arguments.length == 0) return;
-        var tempArray = new Array();
-        for (var i = 0, m = arguments.length; i < m; i++) {
-            var ConstrainArea = {};
-            if (arguments[i] == window)
-                arguments[i] = document.body || document.documentElement;
-            var $containment = $(arguments[i]);
-
-
-            ConstrainArea.top = $containment.offset().top;
-            ConstrainArea.left = $containment.offset().left;
-            ConstrainArea.under = ConstrainArea.top + $containment.innerHeight();
-            ConstrainArea.right = ConstrainArea.left + $containment.innerWidth();
-
-            //                    if ($.support.boxModel) {
-            //                        ConstrainArea.under = ConstrainArea.top + $containment.outerHeight();
-            //                        ConstrainArea.right = ConstrainArea.left + $containment.outerWidth();
-            //                    }
-            //                    else {
-            //                        ConstrainArea.under = ConstrainArea.top + $containment.height();
-            //                        ConstrainArea.right = ConstrainArea.left + $containment.width();
-            // }
-            tempArray.push(ConstrainArea);
-        }
-        return tempArray;
-    },
-
-    //判断对象是否是window 或者 html 或者body
-    isWindow: function (obj) {
-        var isWindow = obj == window || obj == document
-			|| !obj.tagName || (/^(?:body|html)$/i).test(obj.tagName);
-        return isWindow;
+        return parseFloat(value.toFixed(places.length));
     }
 };
 function SLSilider(elem, options) {
     this.opts = sl.extend(Defaults, options);
     this.elem = elem;
+    this._render();
+    var othis = this;
     // bind mouse event using event namespace draggable
-    elem.bind('mousedown', { target: elem }, onMouseDown);
-    elem.bind('mousemove', { target: elem }, onMouseMove);
-    sl.data(elem, 'draggable', {
+    this.$handle.bind('mousedown', { target: this.$handle.elements[0]}, onMouseDown);
+    this.$handle.bind('mousemove', { target: this.$handle.elements[0] }, onMouseMove);
+    sl.data(this.$handle.elements[0], 'draggable', {
         options: this.opts
     });
     function onMouseDown(e) {
@@ -169,26 +124,24 @@ function SLSilider(elem, options) {
     }
 
     function onMouseMove(e) {
-        if (checkArea(e)) {
-            $(this).css('cursor', opts.cursor);
-        } else {
-            $(this).css('cursor', 'default');
-        }
+        $(this).css('cursor', othis.opts.cursor);
+       
     }
 
 }
 
 SLSilider.prototype._render = function () {
+    var $elem = $(this.elem);
     if (this.opts.labels) {
         this.$labelmin = $('<span class="label min"></span>');
         this.$labelcurr = $('<span class="label current"></span>');
         this.$labelmax = $('<span class="label max"></span>');
-        this.elem.append(this.$labelmin).append(this.$labelcurr).append(this.$labelmax);
+        $elem.append(this.$labelmin).append(this.$labelcurr).append(this.$labelmax);
     }
     if (this.opts.bar) {
         this.$bar = $('<div class="bar"></div>');
-        this.elem.el.append(this.$bar);
+        $elem.append(this.$bar);
     }
     this.$handle = $('<a href="#" class="handle"></a>');
-    return this.elem.el.append(this.handle);
+    $elem.append(this.$handle);
 };

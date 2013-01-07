@@ -130,36 +130,7 @@
     <script src="../SL.throttle.js" type="text/javascript"></script>
     <script src="SL.Slider.js" type="text/javascript"></script>
     <script type="text/javascript">
-
-        (function () {
-
-            new SliderBarr({
-                el: $('#slider'),
-                value: 15,
-                step: 1
-            });
-
-            new SliderBarr({
-                el: $('#sliderTwo'),
-                value: 75,
-                step: 10
-            });
-
-            new SliderBarr({
-                el: $('#sliderThree'),
-                value: 50,
-                step: 1,
-                labels: true
-            });
-
-            new SliderBarr({
-                el: $('#sliderFour'),
-                value: 50,
-                step: 0.2,
-                labels: true
-            });
-
-        }).call(this);
+        new SLSilider(document.getElementById("slider"), {step:10});
     </script>
 </body>
 </html>
