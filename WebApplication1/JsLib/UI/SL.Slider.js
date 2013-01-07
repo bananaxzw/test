@@ -10,7 +10,7 @@ var Defaults = {
     step: 1,
     onChange: null,
     onDrag: null,
-    direction: "h"
+    axis: "h"
 
 }
 var eventHelper = {
@@ -46,18 +46,12 @@ var eventHelper = {
 
     },
     applyDrag: function (e) {
-        var opts = sl.data(e.extendData.target, 'draggable').options;
-        var proxy = sl.data(e.extendData.target, 'draggable').proxy;
-        if (proxy) {
-            proxy.css('cursor', opts.cursor);
-        } else {
-            proxy = $(e.extendData.target);
-            sl.data(e.extendData.target, 'draggable').handle.css('cursor', opts.cursor);
-        }
-        proxy.css({
+        $(e.extendData.target).css({
             left: e.extendData.left,
             top: e.extendData.top
         });
+
+
     },
     drag: function (e) {
         /// <summary>
@@ -65,6 +59,7 @@ var eventHelper = {
         /// </summary>
         /// <param name="e"></param>
         var opts = sl.data(e.extendData.target, 'draggable').options;
+
 
         var dragData = e.extendData;
         var left = dragData.startLeft + e.pageX - dragData.startX;
@@ -84,14 +79,27 @@ var eventHelper = {
             }
         }
         //如果只允许水平或者垂直 只单单设置top或者left
-        if (opts.axis == 'h') {
-            dragData.left = left;
-        } else if (opts.axis == 'v') {
-            dragData.top = top;
+        if (opts.axis == 'v') {
+            dragData.top = eventHelper.collectValueByStep(parseFloat(top / dragData.height) * 100, opts.step, opts.max, opts.min) + "%";
+
         } else {
-            dragData.left = left;
-            dragData.top = top;
+            dragData.left = eventHelper.collectValueByStep(parseFloat(left / dragData.width) * 100, opts.step, opts.max, opts.min) + "%";
         }
+    },
+    collectValueByStep: function (value, step, max, min) {
+        value = Math.round(value / step) * step;
+        eventHelper.fixedValue(value, step);
+        if (value > max) value = max;
+        if (value < min) value = min;
+        return value;
+    },
+    fixedValue: function (value, step) {
+        var places, _ref;
+        if (step % 1 === 0) {
+            return parseInt(val, 10);
+        }
+        _ref = (step + "").split("."), places = _ref[1];
+        return parseFloat(val.toFixed(places.length));
     }
 };
 var domHelper = {
@@ -151,7 +159,9 @@ function SLSilider(elem, options) {
             top: position.top,
             startX: e.pageX,
             startY: e.pageY,
-            target: e.extendData.target
+            target: e.extendData.target,
+            width: $(elem).outerWidth(),
+            height: $(elem).outerHeight()
         };
         $(document).bind('mousedown', data, eventHelper.beginDrag);
         $(document).bind('mousemove', data, sl.throttle(50, eventHelper.onDrag, true));
@@ -167,3 +177,18 @@ function SLSilider(elem, options) {
     }
 
 }
+
+SLSilider.prototype._render = function () {
+    if (this.opts.labels) {
+        this.$labelmin = $('<span class="label min"></span>');
+        this.$labelcurr = $('<span class="label current"></span>');
+        this.$labelmax = $('<span class="label max"></span>');
+        this.elem.append(this.$labelmin).append(this.$labelcurr).append(this.$labelmax);
+    }
+    if (this.opts.bar) {
+        this.$bar = $('<div class="bar"></div>');
+        this.elem.el.append(this.$bar);
+    }
+    this.$handle = $('<a href="#" class="handle"></a>');
+    return this.elem.el.append(this.handle);
+};
