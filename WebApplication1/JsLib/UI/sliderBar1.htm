@@ -37,15 +37,12 @@
         }
         .sliderbarr .handle
         {
-           
             height: 20px;
             width: 20px;
-            margin-top: -7px;
-            margin-left: -12px;
             position: absolute;
-            background:url('img/slider_handle.png') no-repeat;
+            background: url('img/slider_handle.png') no-repeat 50% 50%;
         }
-      
+        
         .sliderbarr .label
         {
             position: absolute;
@@ -106,7 +103,7 @@
         Slider with a 10 step</h1>
     <br />
     <br />
-    <div id="sliderTwo" class="sliderbarr">
+    <div id="sliderTwo" class="sliderbarr" style="height: 700px; width: 10px;">
     </div>
     <br />
     <br />
@@ -125,12 +122,14 @@
     <br />
     <div id="sliderFour" class="sliderbarr">
     </div>
-       <script src="../sl.js" type="text/javascript"></script>
+    <script src="../sl.js" type="text/javascript"></script>
     <script src="../SL.Node.js" type="text/javascript"></script>
     <script src="../SL.throttle.js" type="text/javascript"></script>
     <script src="SL.Slider.js" type="text/javascript"></script>
     <script type="text/javascript">
-        new SLSilider(document.getElementById("slider"), {step:10});
+        var tt = new SLSilider(document.getElementById("slider"), { step: 10 });
+        var mm = new SLSilider(document.getElementById("sliderTwo"), { step: 10, axis: "v" });
+        var mm = new SLSilider(document.getElementById("sliderThree"), { step: 1 });
     </script>
 </body>
 </html>
