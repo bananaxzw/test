@@ -22,6 +22,7 @@ var eventHelper = {
         eventHelper.drag(e);
         if (opts.onDrag.call(e.extendData.target, e) != false) {
             eventHelper.applyPostion(e.extendData.target, e.extendData.top, e.extendData.left);
+            eventHelper.setBarDisplay(e.extendData.$bar, e.extendData.top, e.extendData.left, opts.axis);
         }
         return false;
     },
@@ -68,7 +69,7 @@ var eventHelper = {
 
         } else {
             opts.value = eventHelper.collectValueByStep(parseFloat(left / dragData.width) * 100, opts.step, opts.max, opts.min);
-            dragData.left = opts.value* + "%";
+            dragData.left = opts.value  +"%";
         }
     },
     applyPostion: function (target, top, left) {
@@ -91,6 +92,14 @@ var eventHelper = {
         }
         _ref = (step + "").split("."), places = _ref[1];
         return parseFloat(value.toFixed(places.length));
+    },
+    setBarDisplay: function ($bar, top, left, axis) {
+        if (axis == "h") {
+            $bar.width(left);
+        }
+        else {
+            $bar.height(top);
+        }
     }
 };
 function SLSlider(elem, options) {
@@ -111,7 +120,8 @@ function SLSlider(elem, options) {
             startY: e.pageY,
             target:e.target,
             width: $(elem).outerWidth(),
-            height: $(elem).outerHeight()
+            height: $(elem).outerHeight(),
+            $bar:othis.$bar
         };
         $(document).bind('mousedown', data, eventHelper.beginDrag);
         $(document).bind('mousemove', data, eventHelper.onDrag);
@@ -128,7 +138,7 @@ function SLSlider(elem, options) {
 
 }
 SLSlider.prototype._render = function () {
-    var $elem = $(this.elem);
+    var $elem = $(this.elem), barcss;
     if (this.opts.labels) {
         this.$labelmin = $('<span class="label min"></span>');
         this.$labelcurr = $('<span class="label current"></span>');
@@ -137,6 +147,7 @@ SLSlider.prototype._render = function () {
     }
     if (this.opts.bar) {
         this.$bar = $('<div class="bar"></div>');
+        barcss = this.opts.axis == "v" ? { width: "2px;"} : {height:"2px;"};
         $elem.append(this.$bar);
     }
     this.$handle = $('<a href="javascript:void(0)" class="handle"></a>');
@@ -157,8 +168,10 @@ SLSlider.prototype.setValue = function (value) {
     if (!/%/.test(value)) value = value + "%";
     if (this.opts.axis == "h") {
         this.$handle.css({ left: value });
+        this.$bar.css({ width: value });
 
     } else {
         this.$handle.css({ top: value });
+        this.$bar.css({ height: value });
     }
 }
