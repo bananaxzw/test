@@ -210,7 +210,7 @@ SL().create(function (SL) {
             /// <returns type="">删除成功返回true</returns>
             var index = -1;
             index = this.indexOf(arr, item)
-            while (index>=0) {
+            while (index >= 0) {
                 if (index >= 0) {
                     arr.splice(index, 1);
                 }
@@ -227,23 +227,25 @@ SL().create(function (SL) {
         * var initalArray = [1, 2, 3, 4, 6, 6, 7];
         * slArray.deleteRepeater(initalArray);
         */
-        deleteRepeater: function (arr) {
-            /// <summary>
-            /// 删除当前数组中重复的项
-            /// </summary>
-            /// <param name="arr"></param>
-            /// <returns type=""></returns>
-            if (arr.length < 2) return arr;
-            var aT = arr.concat();
-            arr.length = 0;
-            for (var i = 0; i < aT.length; i++) {
-                arr.push(aT.splice(i--, 1)[0]);
-                for (var j = 0; j < aT.length; j++) {
-                    if (SL.compare(aT[j], arr[arr.length - 1])) aT.splice(j--, 1);
+        deleteRepeater: function (src) {
+            var arr = [],
+		obj = {},
+		i = 0,
+		len = src.length,
+		result;
+
+            for (; i < len; i++) {
+                result = src[i];
+                if (obj[result] !== result) {
+                    arr.push(result);
+                    obj[result] = result;
                 }
             }
             return arr;
+
         },
+
+
         /**
         *循环遍历数据 并指定函数动作
         *@param {Array} arr  数组
@@ -268,7 +270,7 @@ SL().create(function (SL) {
             if (Array.prototype.forEach) arr.forEach(f, oThis);
             else {
                 for (var i = 0, len = arr.length; i < len; i++) {
-                    f.call(oThis,arr[i],i);
+                    f.call(oThis, arr[i], i);
                 }
             }
             return arr;
@@ -347,7 +349,7 @@ SL().create(function (SL) {
             oThis = oThis || window;
             if (Array.prototype.every) return arr.every(f, oThis);
             for (var i = 0, len = arr.length; i < len; i++) {
-                if (!f.call(oThis,arr[i], i,arr)) return false;
+                if (!f.call(oThis, arr[i], i, arr)) return false;
             }
             return true;
         },
