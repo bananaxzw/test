@@ -14,6 +14,10 @@ var Defaults = {
 
 }
 var eventHelper = {
+    onsliderClick: function (e) {
+        var opts = sl.data(e.extendData.target, 'SLSlider').options;
+        //if
+    },
     beginDrag: function (e) {
         //预留接口
     },
@@ -22,7 +26,7 @@ var eventHelper = {
         eventHelper.drag(e);
         if (opts.onDrag.call(e.extendData.target, e) != false) {
             eventHelper.applyPostion(e.extendData.target, e.extendData.top, e.extendData.left);
-            eventHelper.setBarDisplay(e.extendData.$bar, e.extendData.top, e.extendData.left, opts.axis);
+            eventHelper.setBarDisplay(e.extendData.$bar, opts.axis=="v"?e.extendData.top:e.extendData.left, opts.axis);
         }
         return false;
     },
@@ -69,7 +73,7 @@ var eventHelper = {
 
         } else {
             opts.value = eventHelper.collectValueByStep(parseFloat(left / dragData.width) * 100, opts.step, opts.max, opts.min);
-            dragData.left = opts.value  +"%";
+            dragData.left = opts.value + "%";
         }
     },
     applyPostion: function (target, top, left) {
@@ -93,12 +97,13 @@ var eventHelper = {
         _ref = (step + "").split("."), places = _ref[1];
         return parseFloat(value.toFixed(places.length));
     },
-    setBarDisplay: function ($bar, top, left, axis) {
+    setBarDisplay: function ($bar, value, axis) {
+        if (!/%/.test(value)) value = value + "%";
         if (axis == "h") {
-            $bar.width(left);
+            $bar.width(value);
         }
         else {
-            $bar.height(top);
+            $bar.height(value);
         }
     }
 };
@@ -118,18 +123,64 @@ function SLSlider(elem, options) {
             top: handleInitPosition.top,
             startX: e.pageX,
             startY: e.pageY,
-            target:e.target,
+            target: e.target,
             width: $(elem).outerWidth(),
             height: $(elem).outerHeight(),
-            $bar:othis.$bar
+            $bar: othis.$bar
         };
         $(document).bind('mousedown', data, eventHelper.beginDrag);
         $(document).bind('mousemove', data, eventHelper.onDrag);
         $(document).bind('mouseup', data, eventHelper.endDrag);
 
     });
+
+    this.$handle.bind("keydown", function (e) {
+        var keyCode = e.keyCode;
+        var v = "";
+        if (keyCode == 37 || keyCode == 38) {
+            v = "minus";
+        }
+        if (keyCode == 40 || keyCode == 39) {
+            v = "add";
+        }
+        if (v == "add") {
+            othis.opts.value = eventHelper.collectValueByStep(othis.opts.value + othis.opts.step, othis.opts.step, othis.opts.max, othis.opts.min);
+            if (othis.opts.axis == "v") {
+
+                othis.$handle.css({ top: othis.opts.value + "%" });
+                eventHelper.setBarDisplay(othis.$bar, othis.opts.value, "v");
+            } else {
+                othis.$handle.css({ left: othis.opts.value + "%" });
+                eventHelper.setBarDisplay(othis.$bar, othis.opts.value, "h");
+            }
+
+        }
+        else {
+            othis.opts.value = eventHelper.collectValueByStep(othis.opts.value - othis.opts.step, othis.opts.step, othis.opts.max, othis.opts.min);
+            if (othis.opts.axis == "v") {
+                othis.$handle.css({ top: othis.opts.value + "%" });
+                eventHelper.setBarDisplay(othis.$bar, othis.opts.value, "v");
+            } else {
+                othis.$handle.css({ left: othis.opts.value + "%" });
+                eventHelper.setBarDisplay(othis.$bar, othis.opts.value, "h");
+            }
+        }
+
+    });
     this.$handle.bind('mousemove', function () {
         $(this).css('cursor', othis.opts.cursor);
+    });
+    var sliderOffset = $(elem).offset();
+    $(elem).bind("click", function (e) {
+        if (othis.opts.axis == "v") {
+            othis.opts.value = eventHelper.collectValueByStep(parseFloat((e.pageY - sliderOffset.top) / $(elem).outerHeight()) * 100, othis.opts.step, othis.opts.max, othis.opts.min);
+            othis.$handle.css({ top: othis.opts.value + "%" });
+            eventHelper.setBarDisplay(othis.$bar, othis.opts.value,othis.opts.axis);
+        } else {
+            othis.opts.value = eventHelper.collectValueByStep(parseFloat((e.pageX - sliderOffset.left) / $(elem).outerWidth()) * 100, othis.opts.step, othis.opts.max, othis.opts.min);
+            othis.$handle.css({ left: othis.opts.value + "%" });
+            eventHelper.setBarDisplay(othis.$bar, othis.opts.value,othis.opts.axis);
+        }
     });
     sl.data(this.$handle.elements[0], 'SLSlider', {
         options: this.opts
@@ -147,7 +198,7 @@ SLSlider.prototype._render = function () {
     }
     if (this.opts.bar) {
         this.$bar = $('<div class="bar"></div>');
-        barcss = this.opts.axis == "v" ? { width: "2px;"} : {height:"2px;"};
+        barcss = this.opts.axis == "v" ? { width: "2px;"} : { height: "2px;" };
         $elem.append(this.$bar);
     }
     this.$handle = $('<a href="javascript:void(0)" class="handle"></a>');
