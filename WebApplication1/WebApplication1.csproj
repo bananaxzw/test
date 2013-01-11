@@ -427,6 +427,7 @@
     <Content Include="Common.js" />
     <Content Include="cookie.htm" />
     <Content Include="crtl+f5.htm" />
+    <Content Include="csscolumns.htm" />
     <Content Include="date.htm" />
     <Content Include="dom.htm" />
     <Content Include="easyJS\docs\ajax\ajax.html" />
@@ -1092,6 +1093,8 @@
     <Content Include="JsLib\UI\SL.UI.Dropdown.js" />
     <Content Include="JsLib\UI\SL.UI.Tab.js" />
     <Content Include="JsLib\UI\Style\SL.UI.Tab.css" />
+    <Content Include="JsLib\UI\walkfall.htm" />
+    <Content Include="JsLib\UI\walterfall1.htm" />
     <Content Include="JsLib\WebForm1.aspx" />
     <Content Include="JsLib\WebService1.asmx" />
     <Content Include="JsLib\XmlOp.htm" />

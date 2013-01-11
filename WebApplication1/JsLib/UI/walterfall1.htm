@@ -1,0 +1,222 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>宽高尺寸不同的格子堆砌</title>
+    <style>
+        body
+        {
+            background: #F6F7F8;
+        }
+        .myWidget
+        {
+            position: relative;
+            overflow: hidden;
+            zoom: 1;
+            margin: 0 auto;
+        }
+        .MBox
+        {
+            float: left;
+        }
+        .widgetBox
+        {
+            position: relative;
+            overflow: hidden;
+            zoom: 1;
+            width: 186px;
+            height: 166px;
+            margin: 6px;
+            border: 1px solid rgb(14, 14, 60);
+            border-radius: 10px;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            box-shadow: 2px 3px 5px #d3d3d3;
+            -moz-box-shadow: 2px 3px 5px #d3d3d3;
+            -webkit-box-shadow: 2px 3px 5px #d3d3d3;
+            background: linear-gradient(top, #fefefe, #f6f6f6 ,#f3f3f3,#f2f2f2,#e0e0e2);
+            background: -moz-linear-gradient(top, #fefefe, #f6f6f6 ,#f3f3f3,#f2f2f2,#e0e0e2);
+            background: -webkit-gradient(linear, 0 0, 0 100% , from(#fefefe),to(#e0e0e2));
+            background: -webkit-linear-gradient(0 0, #fefefe, #f6f6f6 ,#f3f3f3,#f2f2f2,#e0e0e2);
+        }
+    </style>
+    <script>
+        var $id = function (o) { return document.getElementById(o) || o; };
+        var getElementsByClassName = function (className, parent, tag) {
+            parent = parent || document;
+            if (parent.getElementsByClassName) {
+                return parent.getElementsByClassName(className)
+            } else {
+                tag = tag || '*';
+                var returnElements = []
+                var els = parent.getElementsByTagName(tag);
+                className = className.replace(/\-/g, "\\-");
+                var pattern = new RegExp("(^|\\s)" + className + "(\\s|$)");
+                var i = 0;
+                while (i < els.length) {
+                    if (pattern.test(els[i].className)) {
+                        returnElements.push(els[i]);
+                    }
+                    i++;
+                }
+                return returnElements;
+            }
+        };
+        /* 格子排序 */
+        var box = {};
+        box.gen = { w: 200, h: 180 };
+        box.init = function (el) {
+            box.size = []; //格子,[1,2]表示1X2的大格子
+            box.obj = {};
+            box.oArray = [];
+            box.maxY = -1;
+            box.mbox = getElementsByClassName("MBox", el, 'div');
+            box.row = document.documentElement.offsetWidth / box.gen.w >> 0;  //每行标准格数
+            el.style.width = box.row * box.gen.w + "px";
+            var i = 0, nx, ny;
+            while (i < this.mbox.length) {
+                if (getElementsByClassName("bigBox", this.mbox[i], 'div').length > 0) {
+                    nx = Math.ceil(this.mbox[i].offsetWidth / this.gen.w);
+                    nx = (nx > this.row) ? this.row : nx; //大小超出限制
+                    ny = Math.ceil(this.mbox[i].offsetHeight / this.gen.h);
+                    this.size.push([nx, ny]);
+                } else {
+                    this.size.push(1);
+                }
+                i++;
+            }
+            box.sort(el);
+        };
+        box.setIfr = function (el) {  //大格子初始化
+            var ifr = getElementsByClassName("bigBox", el, 'div'); ;
+            if (ifr.length == 0) return false;
+            var i = 0, nx, ny, theifr;
+            while (i < ifr.length) {
+                theifr = getElementsByClassName("innerBox", ifr[i], 'div');
+                nx = Math.ceil(theifr[0].offsetWidth / this.gen.w); //bigBox横向占的块数
+                ny = Math.ceil(theifr[0].offsetHeight / this.gen.h);
+                ifr[i].style.width = nx * this.gen.w - 14 + 'px';
+                ifr[i].style.height = ny * this.gen.h - 14 + 'px';
+                i++;
+            }
+        };
+        box.sort = function (el) {
+            var y = 0, x = 0, temp = { x: Infinity, y: Infinity }, flag = Infinity, name;
+            for (var n = 0; n < this.size.length; n++) {
+                if (flag == 0) {
+                    x = temp.x;
+                    y = temp.y;
+                }
+                flag = flag - 1;
+                if (x > box.row - 1) { //换行
+                    x = 0;
+                    y++;
+                }
+                name = x + '_' + y;  //对象属性名（反映占领的格子）
+                if (this.hasN(name)) {  //判断属性名是否存在
+                    n--;
+                    x++;
+                    if (flag < Infinity) flag = flag + 1;
+                    continue;
+                }
+                if (!this.size[n].length) {  //普通格子
+                    this.obj[name] = [x, y];  //项值（反映坐标值）
+                    x++;
+                }
+                else {  //大格子
+                    if (this.over(x, y, n)) {
+                        if (temp.y > y) {
+                            //临时保存值 还没用 后面要用
+                            temp.y = y;
+                            temp.x = x;
+                        }
+                        if (temp.y < Infinity) {
+                            flag = 1;//标注为
+                        }
+                        n--;//退回重新遍历
+                        x++;//换行
+                        continue;
+                    }
+                    this.obj[name] = [x, y];
+                    this.apply(x, y, n);
+                    x += this.size[n][0];
+                }
+                if (flag == -1) {
+                    flag = Infinity;
+                    temp.y = Infinity;
+                    temp.x = Infinity;
+                }
+                var h = this.size[n][1] - 1 || 0;
+                box.maxY = (box.maxY > y + h) ? box.maxY : y + h;
+            }
+            for (var i in this.obj) {
+                if (this.obj[i] === 0 || !this.obj.hasOwnProperty(i)) continue;
+                this.oArray.push(this.obj[i]);
+            }
+            box.put(el);
+        };
+        box.hasN = function (n) {
+            return n in this.obj;
+        };
+        box.over = function (x, y, n) {  //判断是否会重叠
+            var name;
+            if (x + this.size[n][0] > this.row) return true; //超出显示范围
+            for (var k = 1; k < this.size[n][1]; k++) {
+                name = x + '_' + (y - 0 + k);
+                if (this.hasN(name)) { return true; }  //左侧一列有无重叠
+            }
+            for (k = 1; k < this.size[n][0]; k++) {
+                name = (x - 0 + k) + '_' + y;
+                if (this.hasN(name)) { return true; }  //上侧一行有无重叠
+            }
+            return false;
+        };
+        box.apply = function (x, y, n) {  //大格子中多占的位置
+            var posX = x, //大格子左上角位置
+		posY = y;
+            for (var t = 0; t < this.size[n][0]; t++) {
+                for (var k = 0; k < this.size[n][1]; k++) {
+                    name = (posX + t) + '_' + (posY + k);
+                    if (t == 0 && k == 0) { continue; }
+                    this.obj[name] = 0;   //多占的格子无坐标值
+                }
+            }
+        };
+        box.put = function (el) {
+            var x, y;
+            for (var i = 0; i < this.oArray.length; i++) {
+                x = box.gen.w * this.oArray[i][0];
+                y = box.gen.h * this.oArray[i][1];
+                box.mbox[i].style.cssText = "position:absolute;left:" + x + "px;top:" + y + "px;";
+            }
+            el.style.height = box.gen.h * (box.maxY + 1) + 'px';
+        };
+    </script>
+</head>
+<body>
+    <div id="myWidget" class="myWidget">
+    </div>
+    <script>
+        var myWidget = $id("myWidget");
+        //创建随机内容
+        var content = '';
+        for (i = 0; i < 30; i++) {
+            if (!(Math.random() * 3 >> 0)) {
+                height = Math.floor(Math.random() * 300 + 100);
+                width = Math.floor(Math.random() * 200 + 100);
+                content += '<div class="MBox"><div class="widgetBox bigBox"><div style="width:' + width + 'px;height:' + height + 'px;margin:0 auto;" class="innerBox"></div></div></div>';
+            } else {
+                content += '<div class="MBox"><div class="widgetBox"></div></div>';
+            }
+        };
+        myWidget.innerHTML = content;
+        window.onload = function () {
+            box.setIfr(myWidget);
+            box.init(myWidget);
+        };
+        window.onresize = function () {
+            box.init(myWidget);
+        };
+    </script>
+</body>
+</html>
