@@ -925,6 +925,7 @@
     <Content Include="JsLib\support.htm" />
     <Content Include="JsLib\throttle.htm" />
     <Content Include="JsLib\UI\default\SLDialog.css" />
+    <Content Include="JsLib\UI\default\waterfall.css" />
     <Content Include="JsLib\UI\demisionWindow.htm" />
     <Content Include="JsLib\UI\dialog.htm" />
     <Content Include="JsLib\UI\dialogElement.htm" />
@@ -946,6 +947,7 @@
     <Content Include="JsLib\UI\SL.ImageLazyLoad.js" />
     <Content Include="JsLib\UI\SL.LazyLoad.js" />
     <Content Include="JsLib\UI\SL.Mask.js" />
+    <Content Include="JsLib\UI\SL.SimpleWaterFall.js" />
     <Content Include="JsLib\UI\SL.Slider.js" />
     <Content Include="JsLib\UI\slider.htm" />
     <Content Include="JsLib\UI\sliderBar1.htm" />
