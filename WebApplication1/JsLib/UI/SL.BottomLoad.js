@@ -6,7 +6,7 @@
     var Default = {
         LoadRadius: 5, //加载范围
         onReach: function () { },
-        container: document.body
+        container: window
     };
     function SLBottomLoad(options) {
         this.opts = sl.extend({}, Default, options);
