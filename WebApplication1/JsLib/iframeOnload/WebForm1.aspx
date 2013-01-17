@@ -5,24 +5,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-      <script src="../SL.Core.js" type="text/javascript"></script>
-    <script src="../SL.ready.js" type="text/javascript"></script>
+    <%--  <script src="../SL.Core.js" type="text/javascript"></script>
+    <script src="../SL.ready.js" type="text/javascript"></script>--%>
      <script type="text/javascript">
-         ready(function () {
-             alert("load111111");
-         });
+//         ready(function () {
+//             alert("load111111");
+//         });
 
-         document.onreadystatechange = function () {
-             if (document.readyState == 'complete')
-                 alert("11");
-         }
-         function tt() {
-             try { document.documentElement.doScroll('left'); } catch (e) {
-                 setTimeout(tt, 50); return;
-             }
-             alert("doscrollaspx");
-         };
-         tt();
+//         document.onreadystatechange = function () {
+//             if (document.readyState == 'complete')
+//                 alert("11");
+//         }
+//         function tt() {
+//             try { document.documentElement.doScroll('left'); } catch (e) {
+//                 setTimeout(tt, 50); return;
+//             }
+//             alert("doscrollaspx");
+//         };
+//         tt();
     </script>
 </head>
 <body>
