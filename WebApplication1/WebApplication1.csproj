@@ -1098,6 +1098,11 @@
     <Content Include="JsLib\UI\Style\SL.UI.Tab.css" />
     <Content Include="JsLib\UI\walkfall.htm" />
     <Content Include="JsLib\UI\walterfall1.htm" />
+    <Content Include="JsLib\UI\waterfallimage\1.jpg" />
+    <Content Include="JsLib\UI\waterfallimage\2.jpg" />
+    <Content Include="JsLib\UI\waterfallimage\3.jpg" />
+    <Content Include="JsLib\UI\waterfallimage\4.jpg" />
+    <Content Include="JsLib\UI\waterfallimage\5.jpg" />
     <Content Include="JsLib\WebForm1.aspx" />
     <Content Include="JsLib\WebService1.asmx" />
     <Content Include="JsLib\XmlOp.htm" />
