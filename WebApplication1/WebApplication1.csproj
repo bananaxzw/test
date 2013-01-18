@@ -807,6 +807,15 @@
     <Content Include="JsLib\designPatten\signalTon.htm" />
     <Content Include="JsLib\dictionary.js" />
     <Content Include="JsLib\dimensions.aspx" />
+    <Content Include="JsLib\docs\css\bootstrap.css" />
+    <Content Include="JsLib\docs\css\bootstrap.min.css" />
+    <Content Include="JsLib\docs\css\style.css" />
+    <Content Include="JsLib\docs\img\glyphicons-halflings-white.png" />
+    <Content Include="JsLib\docs\img\glyphicons-halflings.png" />
+    <Content Include="JsLib\docs\img\header.png" />
+    <Content Include="JsLib\docs\index.htm" />
+    <Content Include="JsLib\docs\js\bootstrap.js" />
+    <Content Include="JsLib\docs\js\bootstrap.min.js" />
     <Content Include="JsLib\DOM.htm" />
     <Content Include="JsLib\domReady.htm" />
     <Content Include="JsLib\anim.html" />
