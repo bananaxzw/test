@@ -35,13 +35,19 @@
             }
     </style>
     <script type="text/javascript">
-//        var mm = 2;
-//        var tt = function () {
-//            var mm = 3;
-//            alert(mm);
-//        }
-//        tt();
-//        alert(mm);
+        var mm = 2;
+        var tt = function () {
+            var mm = 3;
+          
+            return function () {
+                alert(this);
+            }
+            alert(mm);
+        }
+        var tt1 = new tt();
+        tt1();
+
+        alert(mm);
     </script>
 </head>
 <body>

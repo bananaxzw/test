@@ -2,11 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-    <script src="JS/jquery.min.js" type="text/javascript"></script>
-    <script src="JS/CalvinResizable.js" type="text/javascript"></script>
+     <script src="../sl.js" type="text/javascript"></script>
+    <script src="../SL.Node.js" type="text/javascript"></script>
+    <script src="../SL.throttle.js" type="text/javascript"></script>
+    <script src="SL.Resizable.js" type="text/javascript"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
-            $("#sfs").CalvinResizable();
+        sl.ready(function () {
+
+            new SLResizble(document.getElementById("sfs"));
         });
     </script>
 </head>

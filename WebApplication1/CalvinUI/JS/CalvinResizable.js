@@ -4,8 +4,8 @@
     var defaults = {
         disabled: false,
         handles: 'n, e, s, w, ne, se, sw, nw, all',
-        minWidth: 10,
-        minHeight: 10,
+        minWidth: 30,
+        minHeight: 30,
         maxWidth: 10000, //$(document).width(),
         maxHeight: 10000, //$(document).height(),
         edge: 5,
@@ -59,16 +59,29 @@
         },
         onResize: function (event) {
             $.data(event.data.target, 'resizable').options.onResize.call(event.data.target, event);
-            var resizeData = event.data;
-            var options = $.data(resizeData.target, 'resizable').options;
+            var resizeData = event.data, options = $.data(resizeData.target, 'resizable').options, height, width;
             //拖拉后的高度
-            var width = resizeData.startWidth + event.pageX - resizeData.startX;
-            //宽度不能超过允许的最大宽度 不能小于允许的最小宽度
-            width = Math.min(Math.max(width, options.minWidth), options.maxWidth);
+
+            if (resizeData.dir.indexOf('w') != -1) {
+                //北 向右减小宽度
+                width = resizeData.startWidth -( event.pageX - resizeData.startX);
+             }
+            else {
+                width = resizeData.startWidth + event.pageX - resizeData.startX;
+            }
+
             //拖拉后的高度
-            var height = resizeData.startHeight + event.pageY - resizeData.startY;
+            if (resizeData.dir.indexOf('n') != -1) {
+                //南 向下减少高度
+                height = resizeData.startHeight - (event.pageY - resizeData.startY);
+            }
+            else {
+                height = resizeData.startHeight + event.pageY - resizeData.startY;
+            }
             //高度不能超过允许的最大高度 不能小于允许的最小高度
             height = Math.min(Math.max(height, options.minHeight), options.maxHeight);
+            //宽度不能超过允许的最大宽度 不能小于允许的最小宽度
+            width = Math.min(Math.max(width, options.minWidth), options.maxWidth);
 
             if (resizeData.dir.indexOf('e') != -1) {
                 resizeData.width = width;
@@ -78,17 +91,18 @@
             }
             if (resizeData.dir.indexOf('w') != -1) {
                 resizeData.width = width
-                if (resizeData.width >= options.minWidth && resizeData.width <= options.maxWidth) {
+                if (resizeData.width >options.minWidth && resizeData.width < options.maxWidth) {
                     resizeData.left = resizeData.startLeft + event.pageX - resizeData.startX;
                 }
             }
             if (resizeData.dir.indexOf('n') != -1) {
-                resizeData.height = height
-                if (resizeData.height >= options.minHeight && resizeData.height <= options.maxHeight) {
+                
+                if (height > options.minHeight && height < options.maxHeight) {
                     resizeData.top = resizeData.startTop + event.pageY - resizeData.startY;
+                    resizeData.height = height
                 }
             }
-         
+
             eventHelper.applySize(event);
         },
         stopResize: function (event) {
@@ -96,7 +110,7 @@
             eventHelper.onResize(event);
             eventHelper.applySize(event);
             $(document).unbind('.resizable');
-           
+
             return false;
         },
         //最后应用长宽
@@ -120,6 +134,8 @@
             }
         }
     };
+
+
     var opts;
 
     $.fn.CalvinResizable = function (options, params) {
