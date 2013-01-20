@@ -326,7 +326,19 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+a:hover 
+{
   color: #005580;
   text-decoration: underline;
+}
+
+ul.unstyled,
+ol.unstyled {
+  margin-left: 0;
+  list-style: none;
+}
+
+ul.left li {
+	 float: left;
+	 margin-right: 20px;
 }
