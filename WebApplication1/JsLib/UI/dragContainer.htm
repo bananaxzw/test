@@ -8,8 +8,8 @@
     <script src="SL.Draggable.js" type="text/javascript"></script>
     <script type="text/javascript">
         sl.ready(function () {
-            new Draggable(document.getElementById("sfs"), { proxy: "", containment: document.getElementById("Div1") });
-            new Draggable(document.getElementById("Div2"), { proxy: "clone" });
+            new sl.ui.draggable(document.getElementById("sfs"), { proxy: "", containment: document.getElementById("Div1") });
+            new sl.ui.draggable(document.getElementById("Div2"), { proxy: "clone" });
             //$("#sfs").CalvinDraggable({ containment: document.getElementById("Div1") });
             //            var left = document.getElementById("left");
             //            var top = document.getElementById("top");

@@ -1,8 +1,6 @@
 ﻿/// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
-
-(function () {
-
+sl.create(function () {
     var defaults = {
         disabled: false,
         handles: 'n, e, s, w, ne, se, sw, nw, all',
@@ -15,6 +13,7 @@
         onResize: function (e) { },
         onStopResize: function (e) { }
     };
+
     var resizableHelper = {
         /**
         * @description 获取拖拉的方向
@@ -93,7 +92,7 @@
                 resizeData.height = height;
             }
             if (resizeData.dir.indexOf('w') != -1) {
-               
+
                 if (width > options.minWidth && width < options.maxWidth) {
                     resizeData.left = resizeData.startLeft + event.pageX - resizeData.startX;
                     resizeData.width = width
@@ -139,62 +138,59 @@
             //            }
         }
     };
+    var resizeable = sl.Class(
+    {
+        init: function (elem, options) {
+            this.opts = sl.extend({}, defaults, options);
 
-    function SLResizble(elem, options) {
-        this.opts = sl.extend({}, defaults, options);
-
-        // bind mouse event using namespace resizable
-        $(elem).bind('mousemove', onMouseMove).bind('mousedown', onMouseDown);
-        sl.data(elem, 'resizable', {
-            options: this.opts
-        });
-        function onMouseMove(e) {
-            var dir = resizableHelper.getDirection(this, e);
-            if (dir == '') {
-                $(this).css('cursor', 'default');
-            } else {
-                $(this).css('cursor', dir + '-resize');
+            // bind mouse event using namespace resizable
+            $(elem).bind('mousemove', onMouseMove).bind('mousedown', onMouseDown);
+            sl.data(elem, 'resizable', {
+                options: this.opts
+            });
+            function onMouseMove(e) {
+                var dir = resizableHelper.getDirection(this, e);
+                if (dir == '') {
+                    $(this).css('cursor', 'default');
+                } else {
+                    $(this).css('cursor', dir + '-resize');
+                }
+            }
+            function onMouseDown(e) {
+                var dir = resizableHelper.getDirection(this, e), $target = $(this);
+                if (dir == '') return;
+                var data = {
+                    target: this,
+                    dir: dir,
+                    startLeft: getCssValue($target, 'left'),
+                    startTop: getCssValue($target, 'top'),
+                    left: getCssValue($target, 'left'),
+                    top: getCssValue($target, 'top'),
+                    startX: e.pageX,
+                    startY: e.pageY,
+                    startWidth: $target.outerWidth(),
+                    startHeight: $target.outerHeight(),
+                    width: $target.outerWidth(),
+                    height: $target.outerHeight(),
+                    deltaWidth: $target.outerWidth() - $target.width(),
+                    deltaHeight: $target.outerHeight() - $target.height()
+                };
+                $(document).bind('mousedown', data, eventHelper.beginResize);
+                $(document).bind('mousemove', data, eventHelper.onResize);
+                $(document).bind('mouseup', data, eventHelper.stopResize);
+            }
+            function getCssValue($target, css) {
+                var val = parseFloat($target.css(css));
+                if (isNaN(val)) {
+                    return 0;
+                } else {
+                    return val;
+                }
             }
         }
+    });
 
-        function onMouseDown(e) {
-            var dir = resizableHelper.getDirection(this, e), $target = $(this);
-            if (dir == '') return;
+    sl.ui = sl.ui || {};
+    sl.ui.resizeable = resizeable;
 
-            var data = {
-                target: this,
-                dir: dir,
-                startLeft: getCssValue($target, 'left'),
-                startTop: getCssValue($target, 'top'),
-                left: getCssValue($target, 'left'),
-                top: getCssValue($target, 'top'),
-                startX: e.pageX,
-                startY: e.pageY,
-                startWidth: $target.outerWidth(),
-                startHeight: $target.outerHeight(),
-                width: $target.outerWidth(),
-                height: $target.outerHeight(),
-                deltaWidth: $target.outerWidth() - $target.width(),
-                deltaHeight: $target.outerHeight() - $target.height()
-            };
-            $(document).bind('mousedown', data, eventHelper.beginResize);
-            $(document).bind('mousemove', data, eventHelper.onResize);
-            $(document).bind('mouseup', data, eventHelper.stopResize);
-        }
-
-
-
-        function getCssValue($target, css) {
-            var val = parseFloat($target.css(css));
-            if (isNaN(val)) {
-                return 0;
-            } else {
-                return val;
-            }
-        }
-
-
-    }
-
-    window.SLResizble = SLResizble;
-})();
+});

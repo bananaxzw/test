@@ -3,6 +3,21 @@
 <head>
     <title></title>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <script src="../sl.js" type="text/javascript"></script>
+    <script src="../SL.Node.js" type="text/javascript"></script>
+    <script src="js/hl-all.js" type="text/javascript"></script>
+    <link href="js/style.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        sl.ready(function () {
+            DlHighlight.HELPERS.highlightByName("code", "pre");
+            if (sl.Browser.ie) {
+                $("pre.DlHighlight").each(function () {
+                    var $this = $(this);
+                    $this.html("<pre>" + $this.find("pre").html() + "</pre>");
+                })
+            }
+        });
+    </script>
 </head>
 <body>
     <div class="header">
@@ -27,9 +42,10 @@
                 <div id="content">
                     <!-- ============================== class title ============================ -->
                     <h1 class="classTitle">
-                        类Date <span class='file'>define in:<a href="../symbols/src/SL.Date.js.html">SL.Date.js</a></span>
-                        <hr>
+                        类Date <div class='file'>define in:<a href="../symbols/src/SL.Date.js.html">SL.Date.js</a></div>
+                      
                     </h1>
+                      <hr>
                     <!-- ============================== class summary ========================== -->
                     <!--          <p class="description">
                         <br>
@@ -151,8 +167,9 @@
                         <span class="methodType"></span><b>add</b>(date时, part, number)
                     </div>-->
                     <div class="detailTitle fixedFont">
-                        <span class="methodType"></span>  <label class=" label label-info methodName">
-                                         <b>add</b>(date时, part, number)</label>
+                        <span class="methodType"></span>
+                        <label class=" label label-info methodName">
+                            <b>add</b>(date时, part, number)</label>
                     </div>
                     <!-- <dl class="description">
                         <dt class="heading">功能:</dt>
@@ -166,7 +183,8 @@
                             将指定的数目（月数，天数，年数等等）加到当前时间上
                         </dd>
                     </dl>
-                    <pre class="code">var tt = document.getElementById("sff");
+                    <pre name="code" class='js'>
+var tt = document.getElementById("sff");
 SL().Event.addEvent(tt, "click", function (event) {
    console.log(event.extendData.name);
 }, { "name": "xuzhiwei" });
@@ -176,7 +194,8 @@ SL().Event.addEvent(tt, "click", function (event) {
 function see() {
    alert("i see you!");
 }
-SL().Event.addEvent(tt, "click", see);</pre>
+SL().Event.addEvent(tt, "click", see);
+</pre>
                     <dl class="detailList">
                         <dt class="heading">参数:</dt>
                         <dd>

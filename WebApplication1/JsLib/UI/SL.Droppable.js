@@ -1,8 +1,7 @@
 ﻿/// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
 /// <reference path="SL.Mask.js" />
-(function () {
-
+sl.create(function () {
 
     var defaults = {
         accept: null,
@@ -12,31 +11,29 @@
         onDrop: function (e, source) { }
     };
 
-    function SLDroppable(elem, options) {
-        this.opts = sl.extend(defaults, options);
-        sl.data(elem, "droppable", { options: this.opts });
-        this.elem = elem;
-        this.init(elem);
-
-    }
-    SLDroppable.prototype = {
-        init: function (target) {
-            var options = this.opts;
-            $(target).addClass('droppable');
-            $(target).bind('_dragenter', function (e, source) {
-                options.onDragEnter.apply(target, [e, source]);
-            });
-            $(target).bind('_dragleave', function (e, source) {
-                options.onDragLeave.apply(target, [e, source]);
-            });
-            $(target).bind('_dragover', function (e, source) {
-                options.onDragOver.apply(target, [e, source]);
-            });
-            $(target).bind('_drop', function (e, source) {
-                options.onDrop.apply(target, [e, source]);
-            });
+    var droppable = sl.Class(
+    {
+        init: function (elem, options) {
+            var options = sl.extend({}, defaults, options);
+            sl.data(elem, "droppable", { options: options });
+            $(elem).addClass("droppable").bind(
+        '_dragenter', function (e, source) {
+            options.onDragEnter.apply(elem, [e, source]);
+        }).bind(
+        '_dragleave', function (e, source) {
+            options.onDragLeave.apply(elem, [e, source]);
+        }).bind(
+        '_dragover', function (e, source) {
+            options.onDragOver.apply(elem, [e, source]);
+        }).bind(
+        '_drop', function (e, source) {
+            options.onDrop.apply(elem, [e, source]);
+        });
         }
-    }
-    window.SLDroppable = SLDroppable;
+    });
 
-})();
+    sl.ui = sl.ui || {};
+    sl.ui.droppable = droppable;
+
+
+});

@@ -1,29 +1,16 @@
 ﻿/// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
+/// <reference path="../SL.throttle.js" />
 
-(function () {
-    var defaults = { min: 1, source: [], selected: function (event, item) { }, dynamicSource: false, ajaxOption: { url: "", extendData: {}} };
+sl.create(function () {
 
-    var CalvinAutoComplete = function (elem, options) {
-        var opts = {};
-        var state = sl.data(elem, 'CalvinAutoComplete.data');
-        if (state) {
-            // htmlHelper.destroy(this);
-            sl.extend(opts, state.options, options);
-            state.options = opts;
-        }
-        else {
-            sl.extend(opts, defaults, options);
-            sl.data(elem, "CalvinAutoComplete.data", { options: opts, ItemsContainer: null });
-            //移除现有的Items元素
-            MenuItemHelper.RemoveMenuItems(elem);
-            eventHelper.SetTextBoxKeyUpDownEvent(elem);
-            $(document).click(function () {
-                MenuItemHelper.RemoveMenuItems(elem);
-            });
-        }
-
-    }
+    var defaults = {
+        min: 1,
+        source: [],
+        selected: function (event, item) { },
+        dynamicSource: false,
+        ajaxOption: { url: "", extendData: {} }
+    };
     var styleHelper = {
         /**
         * @description  设置选项移动上去的样式
@@ -53,7 +40,7 @@
                 return styleInfo;
             }
             var offset = $textBox.offset();
-            styleInfo = { left: offset.left + "px", top: offset.top + "px", width: $textBox.width(), height: $textBox.outerHeight() + "px" };
+            styleInfo = { left: offset.left, top: offset.top, width: $textBox.width(), height: $textBox.outerHeight() };
 
             sl.data(textBox, "styleInfo", styleInfo);
             return styleInfo;
@@ -138,7 +125,7 @@
 
             });
             //设置只能提示选项的位置
-            $ItemsContainer.css({ "left": left, "width": width, "top": ( parseFloat(top) + parseFloat(height)) + "px" });
+            $ItemsContainer.css({ "left": left, "width": width, "top": (parseFloat(top) + parseFloat(height)) });
             $ItemsContainer.appendTo("body");
             $(textBox).data("CalvinAutoComplete.data").ItemsContainer = $ItemsContainer;
             return $ItemsContainer;
@@ -184,7 +171,7 @@
             $this.unbind("keydown");
             $this.unbind("keyup");
             //这里keydown主要是为了捕获键盘上下键选择事件
-            
+
             $this.keydown(function (event) {
                 var data = $this.data("CalvinAutoComplete.data");
                 if (data == null || data.ItemsContainer == null) return;
@@ -195,7 +182,7 @@
                 var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer.elements[0]);
                 var SelectIndex = $items.index($SelectedItem.elements[0]);
                 switch (event.keyCode) {
-                    //向上                                                                                                                           
+                    //向上                                                                                                                                
                     case 38:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
 
@@ -203,7 +190,7 @@
                             $SelectedItem.prev().addClass("ui-menu-itemHover");
                         }
                         break;
-                    //向下                                                                                                                        
+                    //向下                                                                                                                             
                     case 40:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
                         //没有选中的项
@@ -227,7 +214,7 @@
 
             });
 
-            $this.bind("keyup", function (event) {
+            $this.bind("keyup", sl.throttle(100, function (event) {
                 var StyleInfo = styleHelper.GetTextBoxStyle(textBox);
                 var data = $this.data("CalvinAutoComplete.data");
                 switch (event.keyCode) {
@@ -243,7 +230,7 @@
                         }
                         MenuItemHelper.RemoveMenuItems(textBox);
                         break;
-                    //删除键                                                              
+                    //删除键                                                                   
                     case 8:
                         var minLength = opts.min;
                         if ($this.val().length >= minLength) {
@@ -255,7 +242,6 @@
                         }
                         break;
                     default:
-
                         var minLength = opts.min;
                         if ($this.val().length >= minLength) {
                             MenuItemHelper.GenrateMenuItems(this, StyleInfo.height, StyleInfo.width, StyleInfo.top, StyleInfo.left);
@@ -263,7 +249,7 @@
                         }
                         break;
                 }
-            });
+            }, true));
 
         },
         /**
@@ -295,15 +281,14 @@
         else {
             var $LoadingHtml = $("<div id='CalvinAutoCompleteLoading' class='autoCompleteLoading'></div>");
             var styleInfo = styleHelper.GetTextBoxStyle(target);
-            $LoadingHtml.css({ "left": styleInfo.left + "px", "width": styleInfo.width + "px", "top": (styleInfo.top + styleInfo.height) + "px" });
             $LoadingHtml.appendTo("body");
+            $LoadingHtml.css({ "left": styleInfo.left, "width": styleInfo.width, "top": (styleInfo.top + styleInfo.height) });
             $(target).data("CalvinAutoCompleteLoading", $LoadingHtml);
             return $LoadingHtml;
         }
 
     }
     var otherHelper = {
-
         /**
         * @description 根据指定的key 过滤options.sources数组 以便再生成菜单
         * @param {Key} 值
@@ -351,8 +336,31 @@
             return opts.source;
         }
     };
+    var autoComplete = sl.Class(
+    {
+        init: function (elem, options) {
+            var opts = {};
+            var state = sl.data(elem, 'CalvinAutoComplete.data');
+            if (state) {
+                // htmlHelper.destroy(this);
+                sl.extend(opts, state.options, options);
+                state.options = opts;
+            }
+            else {
+                sl.extend(opts, defaults, options);
+                sl.data(elem, "CalvinAutoComplete.data", { options: opts, ItemsContainer: null });
+                //移除现有的Items元素
+                MenuItemHelper.RemoveMenuItems(elem);
+                eventHelper.SetTextBoxKeyUpDownEvent(elem);
+                $(document).click(function () {
+                    MenuItemHelper.RemoveMenuItems(elem);
+                });
+            }
 
-    window.CalvinAutoComplete = CalvinAutoComplete;
-})();
+        }
 
 
+    });
+    sl.ui = sl.ui || {};
+    sl.ui.autocomplete = autoComplete;
+});

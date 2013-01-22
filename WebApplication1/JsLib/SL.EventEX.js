@@ -48,6 +48,11 @@ sl.create(function () {
             }
             var events = sl.data(elem, "events"), ret, type, fn;
             if (events) {
+                if (!type) {
+                    for (var _type in events) {
+                        EventOperator.removeEvent(elem, _type, handler);
+                    }
+                }
                 if (events[type]) {
                     if (handler) {
                         fn = events[type][handler.guid];
@@ -87,7 +92,7 @@ sl.create(function () {
                 }
             }
         },
-        triggerEvent: function (event, data,elem, bubbling) {
+        triggerEvent: function (event, data, elem, bubbling) {
             var type = event.type || event;
 
             if (!bubbling) {
@@ -125,7 +130,7 @@ sl.create(function () {
 
             if (!event.isPropagationStopped && parent) {
                 //冒泡动作
-                EventOperator.triggerEvent(event, data, parent,true);
+                EventOperator.triggerEvent(event, data, parent, true);
 
             } else if (!event.isDefaultPrevented) {
                 //触发默认动作···

@@ -1,12 +1,8 @@
-﻿
-
-
-
-/// <reference path="../sl.js" />
+﻿/// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
 /// <reference path="../SL.throttle.js" />
+sl.create(function () {
 
-(function () {
     var defaults = {
         //值为"clone"或者是返回jq元素的function
         proxy: null,
@@ -339,94 +335,95 @@
             return isWindow;
         }
     };
-
-
-    function Draggable(elem, options, params) {
-        if (!elem || !elem.nodeType || elem.nodeType != 1) { alert("无效拖拉对象"); return; }
-        //handle代表对象拖拉的 手柄的区域 比如有个panel可以设置它的handle为header部位
-        var opts, state = sl.data(elem, 'draggable');
-        if (state) {
-            // state.handle.unbind('.draggable');
-            opts = sl.extend(state.options, options);
-        } else {
-            opts = sl.extend({}, defaults, options || {});
-        }
-        opts.containment = opts.containment || elem.ownerDocument.documentElement || elem.ownerDocument.body;
-        if (opts.disabled == true) {
-            $(this).css('cursor', 'default');
-            return;
-        }
-        //        if (opts.containment) {
-        //            $(elem).css("margin", "0px");
-        //        }
-
-        var handle = null;
-        if (typeof opts.handle == 'undefined' || opts.handle == null) {
-            handle = $(elem);
-        } else {
-            handle = (typeof opts.handle == 'string' ? $(opts.handle, elem) : handle);
-        }
-        sl.data(elem, 'draggable', {
-            options: opts,
-            handle: handle
-        });
-
-        // bind mouse event using event namespace draggable
-        handle.bind('mousedown', { target: elem }, onMouseDown);
-        handle.bind('mousemove', { target: elem }, onMouseMove);
-
-        function onMouseDown(e) {
-            if (checkArea(e) == false) return;
-            var $target = $(e.extendData.target);
-            var position = $target.position();
-            var data = {
-                startPosition: $target.css('position'),
-                startLeft: position.left,
-                startTop: position.top,
-                left: position.left,
-                top: position.top,
-                startX: e.pageX,
-                startY: e.pageY,
-                target: e.extendData.target,
-                parent: $(e.extendData.target).parent()[0],
-                targetArea: {},
-                ConstrainArea: {},
-                proxy: opts.proxy
-            };
-            computeArea(opts.containment, e.extendData.target);
-            $(document).bind('mousedown', data, eventHelper.beginDrag);
-            $(document).bind('mousemove', data, sl.throttle(50, eventHelper.onDrag, true));
-            $(document).bind('mouseup', data, eventHelper.endDrag);
-            //计算目标区划 和 限制区划
-            function computeArea(constrain, target) {
-                var areas = domHelper.getElementsArea(constrain, target), $target = $(target);
-                data.ConstrainArea = areas[0];
-
-                areas[1].under = (areas[1].under + parseFloat($target.css("border-top-width")) + parseFloat($target.css("border-bottom-width")));
-                areas[1].right = (areas[1].right + parseFloat($target.css("border-left-width")) + parseFloat($target.css("border-right-width")));
-                data.targetArea = areas[1];
-            }
-        }
-
-        function onMouseMove(e) {
-            if (checkArea(e)) {
-                $(this).css('cursor', opts.cursor);
+    var draggable = sl.Class(
+    {
+        init: function (elem, options) {
+            if (!elem || !elem.nodeType || elem.nodeType != 1) { alert("无效拖拉对象"); return; }
+            //handle代表对象拖拉的 手柄的区域 比如有个panel可以设置它的handle为header部位
+            var opts, state = sl.data(elem, 'draggable');
+            if (state) {
+                // state.handle.unbind('.draggable');
+                opts = sl.extend(state.options, options);
             } else {
-                $(this).css('cursor', 'default');
+                opts = sl.extend({}, defaults, options || {});
             }
-        }
+            opts.containment = opts.containment || elem.ownerDocument.documentElement || elem.ownerDocument.body;
+            if (opts.disabled == true) {
+                $(this).css('cursor', 'default');
+                return;
+            }
+            //        if (opts.containment) {
+            //            $(elem).css("margin", "0px");
+            //        }
 
-        // 鼠标是不是在手柄的可拖动区域
-        function checkArea(e) {
-            var offset = $(handle).offset();
-            var width = $(handle).outerWidth();
-            var height = $(handle).outerHeight();
-            var edge = opts.edge;
-            if (e.pageY - offset.top > edge) {
-                if (offset.left + width - e.pageX > edge) {
-                    if (offset.top + height - e.pageY > edge) {
-                        if (e.pageX - offset.left > edge) {
-                            return true;
+            var handle = null;
+            if (typeof opts.handle == 'undefined' || opts.handle == null) {
+                handle = $(elem);
+            } else {
+                handle = (typeof opts.handle == 'string' ? $(opts.handle, elem) : handle);
+            }
+            sl.data(elem, 'draggable', {
+                options: opts,
+                handle: handle
+            });
+
+            // bind mouse event using event namespace draggable
+            handle.bind('mousedown', { target: elem }, onMouseDown);
+            handle.bind('mousemove', { target: elem }, onMouseMove);
+
+            function onMouseDown(e) {
+                if (checkArea(e) == false) return;
+                var $target = $(e.extendData.target);
+                var position = $target.position();
+                var data = {
+                    startPosition: $target.css('position'),
+                    startLeft: position.left,
+                    startTop: position.top,
+                    left: position.left,
+                    top: position.top,
+                    startX: e.pageX,
+                    startY: e.pageY,
+                    target: e.extendData.target,
+                    parent: $(e.extendData.target).parent()[0],
+                    targetArea: {},
+                    ConstrainArea: {},
+                    proxy: opts.proxy
+                };
+                computeArea(opts.containment, e.extendData.target);
+                $(document).bind('mousedown', data, eventHelper.beginDrag);
+                $(document).bind('mousemove', data, sl.throttle(50, eventHelper.onDrag, true));
+                $(document).bind('mouseup', data, eventHelper.endDrag);
+                //计算目标区划 和 限制区划
+                function computeArea(constrain, target) {
+                    var areas = domHelper.getElementsArea(constrain, target), $target = $(target);
+                    data.ConstrainArea = areas[0];
+                    areas[1].under = (areas[1].under + parseFloat($target.css("border-top-width")) + parseFloat($target.css("border-bottom-width")));
+                    areas[1].right = (areas[1].right + parseFloat($target.css("border-left-width")) + parseFloat($target.css("border-right-width")));
+                    data.targetArea = areas[1];
+                }
+            }
+
+            function onMouseMove(e) {
+                if (checkArea(e)) {
+                    $(this).css('cursor', opts.cursor);
+                } else {
+                    $(this).css('cursor', 'default');
+                }
+            }
+
+            // 鼠标是不是在手柄的可拖动区域
+            function checkArea(e) {
+                var offset = $(handle).offset();
+                var width = $(handle).outerWidth();
+                var height = $(handle).outerHeight();
+                var edge = opts.edge;
+                if (e.pageY - offset.top > edge) {
+                    if (offset.left + width - e.pageX > edge) {
+                        if (offset.top + height - e.pageY > edge) {
+                            if (e.pageX - offset.left > edge) {
+                                return true;
+                            }
+                            return false;
                         }
                         return false;
                     }
@@ -434,8 +431,9 @@
                 }
                 return false;
             }
-            return false;
+
         }
-    }
-    window.Draggable = Draggable;
-})();
+    });
+    sl.ui = sl.ui || {};
+    sl.ui.draggable = draggable;
+});

@@ -2,8 +2,10 @@
 	padding:0px;
 	margin:0px;
 	height:100%;
-	overflow-y:auto;
 	font:14px/24px 'microsoft yahei';
+}
+body {
+	 overflow-y:auto;
 }
 h1, h2, h3, h4, h5, h6 {
 	margin:10px 0;
@@ -220,6 +222,8 @@ font-size: 13px;
 color: #666;
 line-height: 60px;
 font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+clear: both;
+	
 }
 
 .summaryTable caption 

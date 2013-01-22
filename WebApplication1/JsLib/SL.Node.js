@@ -145,6 +145,8 @@
             });
         },
         remove: function () {
+            this.removeData();
+            this.unbind();
             return this.each(function () {
                 if (this.parentNode)
                     this.parentNode.removeChild(this);
@@ -162,7 +164,7 @@
             }
             if (sl.InstanceOf.Function(arguments[0])) {
                 var callFun = arguments[0];
-               return this.pushStack(sl.grep(this.elements, function (elem, i) {
+                return this.pushStack(sl.grep(this.elements, function (elem, i) {
                     return callFun.call(elem, elem);
                 }));
 
@@ -192,8 +194,11 @@
             return this;
         },
         clone: function () {
+            var othis = this;
             var ret = this.map(function () {
-                return sl.Dom.clone(this);
+                var n = sl.Dom.clone(this);
+                sl.attr.removeAttr(n, sl.expando);//移除data属性
+                return n;
             })
             return ret;
         },

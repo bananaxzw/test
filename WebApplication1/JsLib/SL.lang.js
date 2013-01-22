@@ -66,7 +66,6 @@ SL().create(function (SL) {
                 var expire = new Date();
                 expire.setTime(today.getTime() + 3600000 * hour);
             }
-
             var string = name + "=" + value + "; " + (hour ? ("expires=" + expire.toGMTString() + "; ") : "") + (path ? ("path=" + path + "; ") : "path=/; ") + (domain ? ("domain=" + domain + ";") : ("domain=" + window.location.host + ";")) + (secure ? " secure" : "");
             window.document.cookie = string;
             return true;

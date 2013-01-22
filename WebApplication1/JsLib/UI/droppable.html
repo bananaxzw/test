@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title></title>
   <script src="../sl.js" type="text/javascript"></script>
+    <script src="../SL.throttle.js" type="text/javascript"></script>
     <script src="../SL.Node.js" type="text/javascript"></script>
     <script src="SL.Draggable.js" type="text/javascript"></script>
     <script src="SL.Droppable.js" type="text/javascript"></script>
@@ -44,16 +45,16 @@
 		<div id="dd" class="targetarea"></div>
 	</div>
     <script type="text/javascript">
-        new Draggable(document.getElementById("d1"), { proxy: "clone",revert:true });
-        new Draggable(document.getElementById("d2"), { proxy: "clone" });
-        new Draggable(document.getElementById("d3"), { proxy: "clone" });
-        new SLDroppable(document.getElementById("dd"), {
+        new sl.ui.draggable(document.getElementById("d1"), { proxy: "clone", revert: true });
+        new sl.ui.draggable(document.getElementById("d2"), { proxy: "clone" });
+        new sl.ui.draggable(document.getElementById("d3"), { proxy: "clone" });
+        new sl.ui.droppable(document.getElementById("dd"), {
             accept: '#d1,#d3',
             onDragEnter: function (e, source) {
-                $(this).html('enter')
+                $(this).html('enter'+source.id)
             },
             onDragLeave: function (e, source) {
-                $(this).html('leave')
+                $(this).html('leave' + source.id)
             },
             onDrop: function (e, source) {
                 $(this).html($(source).html() + ' dropped');

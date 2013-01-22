@@ -179,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="google\" />
     <Folder Include="JQ\1.7\src\sizzle\" />
     <Folder Include="JsLib\anim\" />
     <Folder Include="JsLib\JsDOC\" />
@@ -821,6 +822,16 @@
     <Content Include="JsLib\docs\js\bootstrap.min.js" />
     <Content Include="JsLib\docs\js\codemirror.css" />
     <Content Include="JsLib\docs\js\codemirror.js" />
+    <Content Include="JsLib\docs\js\github.css" />
+    <Content Include="JsLib\docs\js\helpers.js" />
+    <Content Include="JsLib\docs\js\highlight.js" />
+    <Content Include="JsLib\docs\js\highlight.pack.js" />
+    <Content Include="JsLib\docs\js\hl-all.js" />
+    <Content Include="JsLib\docs\js\lang-css.js" />
+    <Content Include="JsLib\docs\js\lang-html.js" />
+    <Content Include="JsLib\docs\js\lang-js.js" />
+    <Content Include="JsLib\docs\js\lang-xml.js" />
+    <Content Include="JsLib\docs\js\style.css" />
     <Content Include="JsLib\docs\typescript.html" />
     <Content Include="JsLib\DOM.htm" />
     <Content Include="JsLib\domReady.htm" />
@@ -837,6 +848,7 @@
     <Content Include="JsLib\requirejs\my\Person.js" />
     <Content Include="JsLib\requirejs\require.htm" />
     <Content Include="JsLib\SL.CSSNew.js" />
+    <Content Include="JsLib\SL.Dom - 副本.js" />
     <Content Include="JsLib\SL.easyanim.js" />
     <Content Include="JsLib\easyanim\easyanim.js" />
     <Content Include="JsLib\easyanim\easyanim.min.js" />
