@@ -35,11 +35,13 @@ function SLDialog(elem, options) {
         if (sl.css(this.elem, 'position') == 'static')
             this.elem.style.position = 'relative';
     }
+    //sl.data(elem, "sldialog", {options:});
     this.ie6 = sl.Browser.ie == 6.0, this.boxModel = sl.Support.boxModel;
     this.options = sl.extend(Defaults, options);
     this.mask = DialogHelper.createMask(this);
     this.$dialog = DialogHelper.wrapDialog(this);
     DialogHelper.setDialogStyle(this);
+    
 
 }
 
@@ -119,13 +121,13 @@ var DialogHelper = {
             $dialog.addClass('Dialogfull');
         }
         else {
-            styleHelper.center($dialog.elements[0], opts.centerX, opts.centerY);
+            StyleHelper.center($dialog.elements[0], opts.centerX, opts.centerY);
         }
 
 
     }
 }
-var styleHelper = {
+var StyleHelper = {
     /*
     *@description 让对象在父元素中居中
     *@param  {el} 要居中的对象
