@@ -257,6 +257,10 @@ sl.create(function () {
             }
 
             return event.result;
+        },
+        hover: function (element, enterfn, leavefn) {
+            EventOperator.addEvent(element, "mouseover", enterfn);
+            EventOperator.addEvent(element, "mouseout", leavefn);
         }
     }
 

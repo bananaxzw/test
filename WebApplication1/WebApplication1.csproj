@@ -969,6 +969,7 @@
     <Content Include="JsLib\UI\resizeableDemo.htm" />
     <Content Include="JsLib\UI\scrollBottom.htm" />
     <Content Include="JsLib\UI\SL.BottomLoad.js" />
+    <Content Include="JsLib\UI\SL.ContextMenu.js" />
     <Content Include="JsLib\UI\SL.Dialog.js" />
     <Content Include="JsLib\UI\SL.Draggable.js" />
     <Content Include="JsLib\UI\SL.Droppable.js" />
