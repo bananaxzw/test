@@ -39,7 +39,6 @@
             $target.appendTo("body");
             data.onShow.call(target);
         };
-
         function bindSubMenu(menuData, target) {
 
             var $subMenu = $("<div class='menu'></div>");
@@ -57,9 +56,7 @@
             $subMenu.appendTo("body");
             return $subMenu;
         };
-
         function bindMenuItem($menu, itemData, target) {
-
             if (itemData.line) {
                 $menu.append("<div class='menu-sep'>&nbsp;</div>");
                 return null;
@@ -157,8 +154,6 @@
 
             }
         };
-
-
         function showMenu($menu, pos) {
             if (!$menu) return;
             if (pos) {
@@ -168,7 +163,6 @@
 
         };
         function hideMenu($menu) {
-
             if (!$menu) return;
             $menu.hide();
             $menu.find('div.menu-item').each(function () {
@@ -186,7 +180,7 @@
             //  $(document).unbind('.menu');
             return false;
         };
-        if (typeof options === "string") {
+        if(typeof options === "string") {
             if (!$.data(this[0], "menu")) {
                 alert("请先创建菜单！");
                 return;
@@ -200,7 +194,6 @@
 
             }
         };
-
         return this.each(function () {
             var _this = this;
             var $this = $(this);

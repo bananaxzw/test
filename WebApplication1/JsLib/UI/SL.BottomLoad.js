@@ -1,6 +1,33 @@
 ﻿/// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
 
+sl.create("sl.ui", function () {
+
+    var defaults = {
+        LoadRadius: 5, //加载范围
+        onReach: function () { },
+        container: window
+    };
+    this.bottomload = sl.Class(
+    {
+        init: function (options) {
+            this.opts = sl.extend({}, Default, options);
+            this.page = 1;
+            var othis = this;
+            sl.data(
+            $(sl.InstanceOf.BodyOrHtmlOrWindow(this.opts.container) ? window : this.opts.container).scroll(sl.throttle(100, function () {
+                othis.onScroll.apply(othis);
+            }, true));
+
+        }
+
+
+    });
+
+    var ScrollHelper = {};
+
+});
+
 (function () {
 
     var Default = {

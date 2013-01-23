@@ -2,39 +2,67 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-     <link href="default/SLDialog.css" rel="stylesheet" type="text/css" />
-      <script src="../sl.js" type="text/javascript"></script>
+    <link href="default/SLDialog.css" rel="stylesheet" type="text/css" />
+    <script src="../sl.js" type="text/javascript"></script>
     <script src="../SL.Node.js" type="text/javascript"></script>
     <script src="SL.Mask.js" type="text/javascript"></script>
     <script src="SL.Dialog.js" type="text/javascript"></script>
     <script type="text/javascript">
         sl.ready(function () {
-            new SLDialog(document.getElementById("safs"), { message: "ssa", title: "dialog", footer: "底部" });
+            var tt = new sl.ui.dialog(document.getElementById("safs"), { message: "ssa", title: "dialog", footer: "底部", zIndex: 10002 });
+            $("#Button1").click(function () {
+                tt.open();
+            })
+            $("#Button2").click(function () {
+                tt.close();
+            })
         })
     </script>
 </head>
 <body>
-<div id="safs" style=" height:300px; width:300px; overflow:auto;">
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-<p>saf</p>
-</div>
+    <input id="Button2" type="button" value="button" />
+    <input id="Button1" type="button" value="button" />
+    <div id="safs" style="height: 800px; width: 800px; overflow: auto; border:1px solid red;">
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+        <p>
+            saf</p>
+    </div>
 </body>
 </html>
