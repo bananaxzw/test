@@ -86,7 +86,8 @@
                     if (!ns) {
                         ns = rootObject[currentPart] = {};
                     }
-                    else {
+                    /* 暂时去掉限制else {
+                   
                         if (i == l - 1) {
                             // alert("你所注册的名称空间已经被占用;");
                             throw new Error("namespace is AlreadyExist!");
@@ -94,7 +95,7 @@
                         if (!SL().InstanceOf.PlainObject(ns)) {
                             throw new Error("exist namespace is not PlainObject");
                         }
-                    }
+                    }*/
 
                     if (!ns.__namespace && SL().InstanceOf.PlainObject({})) {
 

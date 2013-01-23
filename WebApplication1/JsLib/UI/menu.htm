@@ -7,6 +7,7 @@
     <script src="../SL.Node.js" type="text/javascript"></script>
     <link href="default/menu.css" rel="stylesheet" type="text/css" />
     <link href="css/icon.css" rel="stylesheet" type="text/css" />
+    <script src="SL.ContextMenu.js" type="text/javascript"></script>
     <script type="text/javascript">
         var deskTop = [
 	{ text: 'asff', ico: 'icon-add', sub: [
@@ -55,17 +56,10 @@
 	},
 	{ text: 'asfsaf', click: function () { alert('怎么这么多要求!') } }
 ];
-        sl.ready(function () {
-            var ss = new menu(document.getElementById("safsa"), { menuData: deskTop, autoOpen: true });
-            $(document).bind('contextmenu', function (e) {
+	sl.ready(function () {
+	    var ss = new sl.ui.contextmenu(document.getElementById("safsa"), { menuData: deskTop });
 
-                ss.manualFunction("show", {
-                    left: e.pageX+"px",
-                    top: e.pageY+"px"
-                });
-                return false;
-            });
-        });
+	});
 
         //	    $(document).bind('contextmenu', function (e) {
         //	        var ss = new menu(document.getElementById("safsa"), { menuData: deskTop });

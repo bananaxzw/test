@@ -1,6 +1,5 @@
 ﻿/// <reference path="../sl.js" />
-
-(function () {
+sl.create("sl.ui", function () {
     var defaults = {
         zIndex: 110000,
         left: 0,
@@ -9,43 +8,46 @@
         onHide: function () { },
         menuData: [],
         width: 140,
-        autoOpen: false
+        autoOpen: false,
+        click: function () { }
     };
 
-    function menu(elem, options, param) {
-        this.elem = elem;
-        var $elem = $(elem), state = $elem.data("menu"), _this = this;
-        if (state) {
-            opts = sl.extend(state.options, options);
-            state.options = opts;
-        }
-        else {
+    this.menu = sl.Class(
+    {
+        init: function (elem, options) {
+            this.elem = elem;
+            var opts = sl.extend({}, defaults, options);
+            sl.data(elem, "slmenu", { options: opts });
 
-            opts = sl.extend(defaults, options);
-            $elem.data("menu", { options: opts });
+            menuHelper.InitMenu(elem);
+            //点击文档别的位置按钮消失
+            $(document).bind('click', function () { menuHelper.hideAllMenu($(elem)); });
+        },
+        /*为contextMenu提供的接口*/
+        _showMenu: function ($menu, pos) {
+            menuHelper.showMenu($menu, pos);
+        },
+        hide: function () {
+            menuHelper.hideAllMenu($(this.elem));
         }
-        this.InitMenu(elem);
-        //点击文档别的位置按钮消失
-
-        $(document).bind('click', function () { _this.hideAllMenu($(elem)); });
-    }
-    menu.prototype = {
+    });
+    var menuHelper = {
         InitMenu: function (elem) {
             var $target = $(elem);
-            var data = sl.data(elem, "menu").options;
-            this.buildTopMenu(elem, data);
+            var data = sl.data(elem, "slmenu").options;
+            menuHelper.buildTopMenu(elem, data);
             if (!data.autoOpen) {
                 $target.hide();
             }
         },
         bindSubMenu: function (menuData, target) {
-            var $subMenu = $("<div class='menu'></div>");
+            var $subMenu = $("<div class='menu'></div>"), opts = sl.data(target, "slmenu").options;
             $subMenu.css("z-index", opts.zIndex++);
             for (var i = 0, j = menuData.length; i < j; i++) {
                 var itemData = menuData[i];
-                var MenuItem = this.bindMenuItem($subMenu, itemData, target);
+                var MenuItem = menuHelper.bindMenuItem($subMenu, itemData, target);
                 if (itemData.sub) {
-                    var $newSubMenu = arguments.callee.call(this, itemData.sub, target);
+                    var $newSubMenu = arguments.callee.call(menuHelper, itemData.sub, target);
                     MenuItem.$subMenu = $newSubMenu;
                 }
             }
@@ -61,9 +63,9 @@
             $target.css({ "z-index": data.zIndex++, "left": data.left, "top": data.top });
             for (var i = 0, j = menuData.length; i < j; i++) {
                 var itemData = menuData[i];
-                var MenuItem = this.bindMenuItem($target, itemData, target);
+                var MenuItem = menuHelper.bindMenuItem($target, itemData, target);
                 if (itemData.sub) {
-                    var $subMenu = this.bindSubMenu(itemData.sub, target);
+                    var $subMenu = menuHelper.bindSubMenu(itemData.sub, target);
                     MenuItem.$subMenu = $subMenu;
                 }
             }
@@ -92,7 +94,7 @@
 
                 }
                 $menu.append($item);
-                this.bindMenuItemEvent($item.elements[0], target);
+                eventHelper.bindMenuItemEvent($item.elements[0], target);
                 //console.log("菜单项宽度"+$item.width());
                 return $item.elements[0];
             }
@@ -119,7 +121,7 @@
             });
         },
         hideAllMenu: function ($target) {
-            var data = $target.data("menu");
+            var data = $target.data("slmenu");
             // var pts = $.data(target, 'menu').options;
             this.hideMenu($target);
             if (data.onHide) {
@@ -127,21 +129,23 @@
             }
             //  $(document).unbind('.menu');
             return false;
-        },
+        }
+
+    };
+    var eventHelper = {
         bindMenuItemEvent: function (menuItem, target) {
-            this.howerEvent(menuItem, target);
-            this.clickEvent(menuItem, target);
+            eventHelper.howerEvent(menuItem, target);
+            eventHelper.clickEvent(menuItem, target);
 
         },
         howerEvent: function (menuItem, target) {
-            var _this = this;
             var $menuItem = $(menuItem);
             $menuItem.hover(
              function () {
                  //隐藏同级元素的菜单
                  $menuItem.siblings().each(function () {
                      if (this.$subMenu) {
-                         _this.hideMenu(this.$subMenu);
+                         menuHelper.hideMenu(this.$subMenu);
                      }
                      $(this).removeClass('menu-active');
                  });
@@ -157,8 +161,8 @@
                          left = itemPos.left - $subMenu.outerWidth() + 2;
                      }
 
-                     var pos = { left: left + "px", top: itemPos.top + 3 + "px" };
-                     _this.showMenu(menuItem.$subMenu, pos);
+                     var pos = { left: left, top: itemPos.top + 3 };
+                     menuHelper.showMenu(menuItem.$subMenu, pos);
 
                  }
              },
@@ -170,7 +174,7 @@
                          $menuItem.addClass('menu-active');
                      } else {
                          //hideAllMenu(target);
-                         _this.hideMenu($submenu);
+                         menuHelper.hideMenu($submenu);
                      }
 
                  } else {
@@ -182,14 +186,14 @@
 
         },
         clickEvent: function (menuItem, target) {
-            var _this = this;
+
             var $menuItem = $(menuItem);
             $menuItem.click(function (e) {
                 var itemData = $menuItem.data("itemData");
                 if (itemData.selected && itemData.click) {
                     itemData.click.call(menuItem, itemData.text, itemData.value);
                 };
-                _this.hideAllMenu($(target));
+                menuHelper.hideAllMenu($(target));
                 e.stopPropagation();
 
             });
@@ -198,24 +202,5 @@
         bindMenuEvent: function (menu, target) {
 
         }
-
     };
-    menu.prototype.manualFunction = function (options, param) {
-        if (typeof options === "string") {
-            if (!sl.data(this.elem, "menu")) {
-                alert("请先创建菜单！");
-                return;
-            }
-            switch (options.toUpperCase()) {
-                case "SHOW":
-                    this.hideAllMenu($(this.elem));
-                    return this.showMenu($(this.elem), param);
-                default:
-                    return;
-
-            }
-        }
-    };
-
-    window.menu = menu;
-})();
+});

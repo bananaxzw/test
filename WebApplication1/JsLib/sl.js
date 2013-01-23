@@ -13,7 +13,6 @@
 */
 
 
-
 (function () {
 
     var version = "1.0", topNamespace = this;
@@ -88,15 +87,16 @@
                     if (!ns) {
                         ns = rootObject[currentPart] = {};
                     }
-                    else {
-                        if (i == l - 1) {
-                            // alert("你所注册的名称空间已经被占用;");
-                            throw new Error("namespace is AlreadyExist!");
-                        }
-                        if (!SL().InstanceOf.PlainObject(ns)) {
-                            throw new Error("exist namespace is not PlainObject");
-                        }
+                    /* 暂时去掉限制else {
+                   
+                    if (i == l - 1) {
+                    // alert("你所注册的名称空间已经被占用;");
+                    throw new Error("namespace is AlreadyExist!");
                     }
+                    if (!SL().InstanceOf.PlainObject(ns)) {
+                    throw new Error("exist namespace is not PlainObject");
+                    }
+                    }*/
 
                     if (!ns.__namespace && SL().InstanceOf.PlainObject({})) {
 
@@ -3197,6 +3197,11 @@ sl.create(function () {
             }
             var events = sl.data(elem, "events"), ret, type, fn;
             if (events) {
+                if (!type) {
+                    for (var _type in events) {
+                        EventOperator.removeEvent(elem, _type, handler);
+                    }
+                }
                 if (events[type]) {
                     if (handler) {
                         fn = events[type][handler.guid];
@@ -3401,6 +3406,10 @@ sl.create(function () {
             }
 
             return event.result;
+        },
+        hover: function (element, enterfn, leavefn) {
+            EventOperator.addEvent(element, "mouseover", enterfn);
+            EventOperator.addEvent(element, "mouseout", leavefn);
         }
     }
 
