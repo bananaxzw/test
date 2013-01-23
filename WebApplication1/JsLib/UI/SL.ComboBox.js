@@ -3,9 +3,9 @@
 var yyyyyy = sl;
 (function () {
     var defaults = { min: 1, url: "", height: 200, source: [], selected: function (event, item) { } };
-    function CalvinComboBox(elem,options,param) {
+    function CalvinComboBox(elem, options, param) {
         this.options = sl.extend(defaults, options);
-        var $this = $(elem),_this=this;
+        var $this = $(elem), _this = this;
         if (data = $this.data("CalvinAutoComplete.data")) {
             this.clearAll(elem);
             data.ItemsContainer = null, data.TextBoxContainer = null, data.dropdownIcon = null;
@@ -14,18 +14,18 @@ var yyyyyy = sl;
         else {
             $this.data("CalvinAutoComplete.data", {});
         }
-    
-       this.WrapTextBox(elem);
+
+        this.WrapTextBox(elem);
         this.RemoveMenuItems(elem);
         //移除现有的Items元素
         this.SetTextBoxKeyUpDownEvent(elem);
-        
+
         $(document).click(function (event) {
             _this.RemoveMenuItems(elem);
         });
     };
-   
-    
+
+
     var EventHelper = {
         /**
         * @description  设置item（li元素）的点击事件
@@ -33,8 +33,8 @@ var yyyyyy = sl;
         *@param {$textBox} textbox元素
         */
         SetMenuItemClickEvent: function ($MenuItem, $textBox) {
- 
-            var ItemData = $MenuItem.data("MenuItem.Data"),_this=this;
+
+            var ItemData = $MenuItem.data("MenuItem.Data"), _this = this;
             $MenuItem.bind("selected", this.options.selected);
             //设置item点击的事件 默认事件自动填写text框
             $MenuItem.bind("click", function () {
@@ -44,8 +44,8 @@ var yyyyyy = sl;
                 ItemData.Selected = true;
                 _this.RemoveMenuItems($textBox.elements[0]);
             });
-       
-           
+
+
         },
 
         /**
@@ -53,7 +53,7 @@ var yyyyyy = sl;
         * @param {textBox} textbox元素
         */
         SetTextBoxKeyUpDownEvent: function (textBox) {
-            var $this = $(textBox),_this=this;
+            var $this = $(textBox), _this = this;
 
             $this.unbind("keydown");
             $this.unbind("keyup");
@@ -69,7 +69,7 @@ var yyyyyy = sl;
                 var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer.elements[0]);
                 var SelectIndex = $items.index($SelectedItem.elements[0]);
                 switch (event.keyCode) {
-                    //向上                                                                                                                                                                        
+                    //向上                                                                                                                                                                         
                     case 38:
                         _this.RemoveItemHoverStyle($itemContainer);
 
@@ -78,7 +78,7 @@ var yyyyyy = sl;
                         }
                         _this.ScrollToSelectedItem($itemContainer, _this.options);
                         break;
-                    //向下                                                                                                                                                                     
+                    //向下                                                                                                                                                                      
                     case 40:
                         _this.RemoveItemHoverStyle($itemContainer);
                         //没有选中的项
@@ -156,7 +156,7 @@ var yyyyyy = sl;
             if (!SouceArray.length) return;
             var $ItemsContainer = $("<ul class='ui-autocomplete ui-menu'></ul>");
             //遍历产生item源数组
-            var _this=this;
+            var _this = this;
             sl.each(SouceArray, function (i, d) {
                 var $MenuItem = $("<li class='ui-menu-item'></li>");
 
@@ -184,10 +184,10 @@ var yyyyyy = sl;
             $ItemsContainer.appendTo("body");
             if ($ItemsContainer.height() <= this.options.height) {
                 //设置只能提示选项的位置
-                $ItemsContainer.css({ "left": left, "width": width - 4, "top":top + height});
+                $ItemsContainer.css({ "left": left, "width": width - 4, "top": top + height });
             }
             else {
-                $ItemsContainer.css({ "height": this.options.height, "left": left, "width": width - 4, "top":top + height});
+                $ItemsContainer.css({ "height": this.options.height, "left": left, "width": width - 4, "top": top + height });
             }
             return $ItemsContainer
         },
@@ -219,7 +219,7 @@ var yyyyyy = sl;
 
             var hasMatched = false;
             var height = 0;
-            var _this=this;
+            var _this = this;
             $(">li", $itemContainer).each(function (i, d) {
                 height += $(d).height();
                 if (key === $(d).data("MenuItem.Data").text) {
@@ -238,7 +238,7 @@ var yyyyyy = sl;
         * @description移动键盘上下键的时候 滚动到选中的项目
         */
         ScrollToSelectedItem: function ($itemContainer, options) {
-            var hasMatched = false,height = 0, _this=this;
+            var hasMatched = false, height = 0, _this = this;
             $(">li", $itemContainer).each(function (i, d) {
                 height += $(d).height();
                 if ($(d).is(".ui-menu-itemHover")) {
@@ -334,15 +334,12 @@ var yyyyyy = sl;
             return fileterArray;
         }
     };
-
-  
-
     /**
     * @description 生成下拉菜单按钮并和textbox包裹
     * @param {textBox} textBox元素
     */
     function WrapTextBox(textbox) {
-        var $textbox = $(textbox),_this=this;
+        var $textbox = $(textbox), _this = this;
         $textbox.wrap("<span class='combo'></span>");
         var $ContainerSpan = $textbox.parent();
         $textbox.addClass("combo-text");
@@ -385,6 +382,6 @@ var yyyyyy = sl;
         return { left: offset.left, top: offset.top, width: $ele.width(), height: $ele.outerHeight() };
     }
 
-    yyyyyy.extend(CalvinComboBox.prototype,EventHelper,MenuItemHelper,OtherHelper,{WrapTextBox:WrapTextBox,GetElementStyle:GetElementStyle});
+    yyyyyy.extend(CalvinComboBox.prototype, EventHelper, MenuItemHelper, OtherHelper, { WrapTextBox: WrapTextBox, GetElementStyle: GetElementStyle });
     window.CalvinComboBox = CalvinComboBox;
 })();
