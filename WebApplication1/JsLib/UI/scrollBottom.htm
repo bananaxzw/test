@@ -1,4 +1,6 @@
-﻿<html xmlns="http://www.w3.org/1999/xhtml">
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
     <style>
@@ -206,13 +208,14 @@
     <script type="text/javascript">
         // 可视区域
         //怪异模式document.body.clientHeight
-        //标准模式IE document.documentElement.clientHeight
-        //标准模式其他  document.body.clientHeight
+        //标准模式 document.documentElement.clientHeight
+        //标准模式其他  document.documentElement.clientHeight
+
 
         //+滚动高度
         //怪异模式  document.body.scrollHeight
         //标准模式IE document.body.clientHeight
-        //标准其他 //标准模式其他  document.documentElement.clientHeight
+        //标准其他 //标准模式其他  document.body.clientHeight
         var mm = new sl.ui.bottomload({ container: document.getElementById("Ul1"), onReach: function () {
             $("#Ul1").append("<li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li> <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>");
         }
