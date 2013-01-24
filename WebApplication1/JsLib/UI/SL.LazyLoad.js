@@ -8,7 +8,9 @@ sl.create("sl.ui", function () {
 
 
 });
-
+//正交加载只会加载指定视窗范围内的元素      垂直正交-一排一排加载  水平正交-一列一列加载
+//水平方向  满足水平坐标的元素都加载 一列一列
+//垂直方向 满足垂直坐标的元素都加载 一行一行
 (function () {
     window.CalvinLazyLoad = function (elems, options) {
         if (!elems || elems.length == 0) {
@@ -19,11 +21,10 @@ sl.create("sl.ui", function () {
         //如果没有元素就退出
         if (this.isFinish()) return;
         //进行第一次触发
-        if (this.isTop) {
-           //  $(window).trigger("scroll");
-        } else {
-            this.load();
-        }
+   
+        setTimeout(function(){
+        if(!this.initializeLoaded)
+        { $(this.isTop ? window : this.container).trigger("scroll"); }},50); 
     };
 
     CalvinLazyLoad.prototype = {
@@ -41,7 +42,7 @@ sl.create("sl.ui", function () {
                 container: window, //容器
                 mode: "cross", //模式
                 threshold: 0, //加载范围阈值
-                delay: 100, //延时时间
+                delay: 50, //延时时间
                 beforeLoad: function () { }, //加载前执行
                 onLoadData: function () { } //显示加载数据
             };
@@ -60,12 +61,12 @@ sl.create("sl.ui", function () {
             //绑定事件 滚动时候和relize时候触发
             $(isTop ? window : container).bind("scroll", sl.throttle(oThis.delay, function () {
                 oThis.load.call(oThis);
-                this.initializeLoaded=true;
+                 this.initializeLoaded=true;
             }, true));
             isTop && $(window).bind("resize", sl.throttle(oThis.delay, function () {
                 //是否已经改变了 宽度
                 var clientWidth = container.clientWidth, clientHeight = container.clientHeight;
-                if ((clientWidth != width || clientHeight != height)&&this.initializeLoaded) {
+                if (clientWidth != width || clientHeight != height) {
                     width = clientWidth; height = clientHeight;
                     this.initializeLoaded=true;
                     oThis.load.call(oThis)
