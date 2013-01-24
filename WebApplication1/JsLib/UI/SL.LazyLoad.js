@@ -3,43 +3,13 @@
 /// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
 /// <reference path="../SL.throttle.js" />
+
+sl.create("sl.ui", function () { 
+
+
+});
+
 (function () {
-
-    /*
-    window.onscroll=function(){  
-    var a = document.documentElement.scrollTop==0? document.body.clientHeight : document.documentElement.clientHeight;  
-    var b = document.documentElement.scrollTop==0? document.body.scrollTop : document.documentElement.scrollTop;  
-    var c = document.documentElement.scrollTop==0? document.body.scrollHeight : document.documentElement.scrollHeight;  
-  
-    if(a+b==c){  
-    alert("new message");  
-    }  
-    }
-    
-    */
-    /*_initMode->_initStatic主要是对_loadData属性进行绑定 当是动态加载的时候就绑定到_loadDynamic 
-    当静态加载的时候先调用_initStatic初始化方向参数和把 _loadData绑定到 _loadStatic
-    
-    加载数据 触发this.lazyload和this.lazyresize(这2者其实是为了防止_load和_resize)方法拖动滚动条
-    或者改变窗口大小的时候重复触发 影响性能 实际加载数据都在_load和_resize中执行
-
-    _load和_resize都调用_loadData所绑定的方法
-
-    _loadData中调用 _insiderange 如果元素在范围内 就会触发用户设置的onLoadData事件
-    */
-    //正交加载只会加载指定视窗范围内的元素      垂直正交-一排一排加载  水平正交-一列一列加载
-    //水平方向  满足水平坐标的元素都加载 一列一列
-    //垂直方向 满足垂直坐标的元素都加载 一行一行
-
-    var defaults = {
-        container: window, //容器
-        mode: "cross", //模式
-        threshold: 0, //加载范围阈值
-        delay: 100, //延时时间
-        beforeLoad: function () { }, //加载前执行
-        onLoadData: function () { } //显示加载数据
-    };
-
     window.CalvinLazyLoad = function (elems, options) {
         if (!elems || elems.length == 0) {
             return;
@@ -50,7 +20,7 @@
         if (this.isFinish()) return;
         //进行第一次触发
         if (this.isTop) {
-            //  $(window).trigger("scroll");
+           //  $(window).trigger("scroll");
         } else {
             this.load();
         }
@@ -87,17 +57,17 @@
             var $container = $(container);
             //定义执行方法
             var oThis = this, width = 0, height = 0;
-            $(container).data("lazyLoad", { context: this });
-
             //绑定事件 滚动时候和relize时候触发
             $(isTop ? window : container).bind("scroll", sl.throttle(oThis.delay, function () {
                 oThis.load.call(oThis);
+                this.initializeLoaded=true;
             }, true));
             isTop && $(window).bind("resize", sl.throttle(oThis.delay, function () {
                 //是否已经改变了 宽度
                 var clientWidth = container.clientWidth, clientHeight = container.clientHeight;
-                if (clientWidth != width || clientHeight != height) {
+                if ((clientWidth != width || clientHeight != height)&&this.initializeLoaded) {
                     width = clientWidth; height = clientHeight;
+                    this.initializeLoaded=true;
                     oThis.load.call(oThis)
                 }
             }, true));
@@ -198,9 +168,5 @@
             bottom = top + borderTopWidth + innerHeight + borderBottomWidth, right = left + borderLeftWidth + innerWidth + borderRightWidth;
         }
         return { top: top, bottom: bottom, left: left, right: right };
-    }
-
-    function getScroll() {
-        return { scrollTop: $(document).scrollTop(), scrollLeft: $(document).scrollLeft() };
     }
 })();
