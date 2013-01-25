@@ -40,7 +40,9 @@
         <tr>
             <td>
                 <div>
-                    <textarea><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/07/06/SlideTrans.html">图片滑动切换效果</a></b></textarea>
+                    <textarea><script type="text/javascript">
+                                  alert("sffsa");
+                </script><b><a href="http://www.cnblogs.com/cloudgamer/archive/2008/07/06/SlideTrans.html">图片滑动切换效果</a></b></textarea>
                 </div>
             </td>
             <td>
@@ -790,7 +792,21 @@
         });
     }
 
-    Lazy2()
-       
+       Lazy2()
+
+    sl.ready(function () {
+        console.log("ready");
+        console.log($(document).scrollTop());
+    })
+    window.onresize = function () {
+        console.log("resize");
+        console.log($(document).scrollTop());
+
+    }
+    window.onscroll = function () {
+        console.log("onscroll");
+        console.log($(document).scrollTop());
+
+    }
 </script>
 </html>
