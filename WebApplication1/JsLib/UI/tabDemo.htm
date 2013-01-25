@@ -10,7 +10,8 @@
         var tt;
         sl.ready(function () {
 
-             tt = new tab(document.getElementById("tt"));
+            tt = new sl.ui.tab(document.getElementById("tt"));
+             tt.se
            // $("#tt").CalvinTabs();
          
         })
@@ -31,11 +32,11 @@
             alert('Selected: ' + tab.index);
         }
         function SelectedByIndex3() {
-            var tab = $('#tt').CalvinTabs("select",2);
+            tt.selectAt(3);
 
         }
         function SelectedByIndex4() {
-            var tab = $('#tt').CalvinTabs("select", 3);
+            tt.selectAt(4);
 
         }
     

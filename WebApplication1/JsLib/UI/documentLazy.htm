@@ -782,7 +782,7 @@
     var i = 0;
     function Lazy2() {
         var elems = sl.map($("textarea").elements, function (area) { return area.parentNode; }),
-            lazy = new CalvinLazyLoad(elems, { mode: "cross",
+            lazy = new sl.ui.lazyload(elems, { mode: "cross",
                 onLoadData: function (elem) {
                     elem.innerHTML = elem.getElementsByTagName("textarea")[0].value + (i++);
                 }
@@ -793,7 +793,7 @@
     }
 
        Lazy2()
-
+       /*
     sl.ready(function () {
         console.log("ready");
         console.log($(document).scrollTop());
@@ -807,6 +807,6 @@
         console.log("onscroll");
         console.log($(document).scrollTop());
 
-    }
+    }*/
 </script>
 </html>

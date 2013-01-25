@@ -259,7 +259,7 @@
                         this.init.apply(this, arguments);
                     }
                     // 指定原型
-                    subClass.prototype = new superClass();
+                    sl.extend( subClass.prototype,new superClass());
                     // 重新指定构造函数
                     subClass.prototype.constructor = subClass;
                     //扩展子类
@@ -272,7 +272,7 @@
                     var newClass = function () {
                         this.init.apply(this, arguments);
                     }
-                    newClass.prototype = members;
+                    sl.extend(newClass.prototype, members);
                     return newClass;
                 }
 

@@ -12,21 +12,23 @@ border 	布尔 	如果为true则显示标签容器的边框 	true
 scrollIncrement 数字 	滚动按钮每次被按下时滚动的像素值 	100
 scrollDuration 	数字 	每次滚动持续的毫秒数 	400
 */
-var defaults = {
-    width: 'auto',
-    height: 'auto',
-    idSeed: 0,
-    plain: false,
-    fit: false,
-    border: true,
-    scrollIncrement: 100,
-    scrollDuration: 400,
-    onLoad: function () { },
-    onSelect: function (title) { },
-    onClose: function (title) { }
-};
 
-var tabsPanelsHelper =
+sl.create("sl.ui", function () {
+    var defaults = {
+        width: 'auto',
+        height: 'auto',
+        idSeed: 0,
+        plain: false,
+        fit: false,
+        border: true,
+        scrollIncrement: 100,
+        scrollDuration: 400,
+        onLoad: function () { },
+        onSelect: function (title) { },
+        onClose: function (title) { }
+    };
+
+    var tabsPanelsHelper =
             {
                 //包裹pannel
                 wrapTabPanels: function (target) {
@@ -50,7 +52,7 @@ var tabsPanelsHelper =
 
             };
 
-var tabsHeaderHelper =
+    var tabsHeaderHelper =
             {
                 //创建tabs头 注意调用次方法前要先调用wrapTabPanels
                 createTabHeaders: function (target) {
@@ -184,6 +186,7 @@ var tabsHeaderHelper =
                         return;
                     }
                     var tabs = sl.data(target, "tabs").tabs;
+                    if (index >= tabs.length) index = tabs.length - 1;
                     tabs[index].trigger("click");
 
                 }
@@ -191,382 +194,384 @@ var tabsHeaderHelper =
 
             };
 
-var tabsStyleHelper = {
+    var tabsStyleHelper = {
 
-    /*
-    *@description  设置头 和 panel的大小
-    */
-    setSize: function (target) {
+        /*
+        *@description  设置头 和 panel的大小
+        */
+        setSize: function (target) {
 
-        var opts = getOption(target), cc = $(target);
-        //是否停靠父元素
-        if (opts.fit == true) {
-            var p = cc.parent();
-            opts.width = p.width();
-            opts.height = p.height();
-        }
-        cc.width(opts.width); cc.height(opts.height);
+            var opts = getOption(target), cc = $(target);
+            //是否停靠父元素
+            if (opts.fit == true) {
+                var p = cc.parent();
+                opts.width = p.width();
+                opts.height = p.height();
+            }
+            cc.width(opts.width); cc.height(opts.height);
 
-        var header = $('>div.tabs-header', target);
-        //如果是盒子模型的话 要减去边框和padding
-        //                if (sl.boxModel == true) {
-        var delta = header.outerWidth() - header.width();
-        //			var delta = header.outerWidth(true) - header.width();
-        header.width(cc.width() - delta);
-        //                } else {
-        //                    header.width(cc.width());
-        //                }
+            var header = $('>div.tabs-header', target);
+            //如果是盒子模型的话 要减去边框和padding
+            //                if (sl.boxModel == true) {
+            var delta = header.outerWidth() - header.width();
+            //			var delta = header.outerWidth(true) - header.width();
+            header.width(cc.width() - delta);
+            //                } else {
+            //                    header.width(cc.width());
+            //                }
 
-        tabsStyleHelper.setScrollers(target);
+            tabsStyleHelper.setScrollers(target);
 
-        tabsStyleHelper.setPanelSize(target);
+            tabsStyleHelper.setPanelSize(target);
 
 
-    },
-    //设置panel样式
-    setPanelSize: function (target) {
-        var panels = $('>div.tabs-panels', target), header = sl.data(target, "tabs").header,
+        },
+        //设置panel样式
+        setPanelSize: function (target) {
+            var panels = $('>div.tabs-panels', target), header = sl.data(target, "tabs").header,
         opts = getOption(target), height = opts.height;
-        //如果是盒子模型的话 要减去边框和padding
-        if (!isNaN(height)) {
-            //                    if (sl.boxModel == true) {
-            var delta = panels.outerHeight() - panels.height();
-            panels.css('height', (height - header.outerHeight() - delta) || 'auto');
-            //                    } else {
-            //                        panels.css('height', height - header.outerHeight());
-            //                    }
-        } else {
-            panels.height('auto');
-        }
-        var width = opts.width;
-        if (!isNaN(width)) {
-            //                    if (sl.boxModel == true) {
-            var delta = panels.outerWidth() - panels.width();
+            //如果是盒子模型的话 要减去边框和padding
+            if (!isNaN(height)) {
+                //                    if (sl.boxModel == true) {
+                var delta = panels.outerHeight() - panels.height();
+                panels.css('height', (height - header.outerHeight() - delta) || 'auto');
+                //                    } else {
+                //                        panels.css('height', height - header.outerHeight());
+                //                    }
+            } else {
+                panels.height('auto');
+            }
+            var width = opts.width;
+            if (!isNaN(width)) {
+                //                    if (sl.boxModel == true) {
+                var delta = panels.outerWidth() - panels.width();
 
-            panels.width(width - delta);
-            //                    } else {
-            //                        panels.width(width);
-            //                    }
-        } else {
-            panels.width('auto');
-        }
+                panels.width(width - delta);
+                //                    } else {
+                //                        panels.width(width);
+                //                    }
+            } else {
+                panels.width('auto');
+            }
 
-    },
+        },
 
-    /**
-    * @description 当tab的数量超过宽度时候 显示左右滚动
-    * @param {DOM element}
-    */
-    setScrollers: function (container) {
-        var header = $('>div.tabs-header', container);
-        var tabsWidth = 0;
-        $('ul.tabs li', header).each(function () {
-            tabsWidth += $(this).outerWidth();
-        });
+        /**
+        * @description 当tab的数量超过宽度时候 显示左右滚动
+        * @param {DOM element}
+        */
+        setScrollers: function (container) {
+            var header = $('>div.tabs-header', container);
+            var tabsWidth = 0;
+            $('ul.tabs li', header).each(function () {
+                tabsWidth += $(this).outerWidth();
+            });
 
-        if (tabsWidth > header.width()) {
-            $('.tabs-scroller-left', header).css('display', 'block');
-            $('.tabs-scroller-right', header).css('display', 'block');
-            $('.tabs-wrap', header).addClass('tabs-scrolling');
+            if (tabsWidth > header.width()) {
+                $('.tabs-scroller-left', header).css('display', 'block');
+                $('.tabs-scroller-right', header).css('display', 'block');
+                $('.tabs-wrap', header).addClass('tabs-scrolling');
 
-           // if (sl.boxModel == true) {
+                // if (sl.boxModel == true) {
                 $('.tabs-wrap', header).css('left', 2);
-//            } else {
-//                $('.tabs-wrap', header).css('left', 0);
-//            }
-            var width = header.width()
+                //            } else {
+                //                $('.tabs-wrap', header).css('left', 0);
+                //            }
+                var width = header.width()
 				- $('.tabs-scroller-left', header).outerWidth()
 				- $('.tabs-scroller-right', header).outerWidth();
-            $('.tabs-wrap', header).width(width);
+                $('.tabs-wrap', header).width(width);
 
-        } else {
-            $('.tabs-scroller-left', header).css('display', 'none');
-            $('.tabs-scroller-right', header).css('display', 'none');
-            $('.tabs-wrap', header).removeClass('tabs-scrolling').scrollLeft(0);
-            $('.tabs-wrap', header).width(header.width());
-            $('.tabs-wrap', header).css('left', 0);
-
-        }
-    },
-
-    /*
-    *@description 获取当前tab离左端的距离
-    */
-    getTabLeftPosition: function (target, tab) {
-        var w = 0;
-        var b = true;
-        $('>div.tabs-header ul.tabs li', target).each(function () {
-            if (this == tab) {
-                return false;
-            }
-            w += $(this).outerWidth();
-
-        });
-        return w;
-    },
-
-    /*
-    *@description 获取最大的左滚距离
-    */
-    getMaxScrollWidth: function (target) {
-        var header = $('>div.tabs-header', target);
-        var tabsWidth = 16; // all tabs width 右间距margin-right先加一个
-        $('ul.tabs li', header).each(function () {
-            tabsWidth += ($(this).outerWidth()+4);//右间距margin-right
-        });
-        var wrapWidth = $('div.tabs-wrap', header).width();
-        var padding = parseInt($('ul.tabs', header).css('padding-left'));
-
-        return tabsWidth - wrapWidth + padding;
-    },
-
-    /*
-    *@description 让panel的宽高适合
-    */
-    fitContent: function (target) {
-        var tab = $('>div.tabs-header ul.tabs li.tabs-selected', target);
-        if (tab.length) {
-            var panelId = sl.data(tab.elements[0], 'tabs.tab').id;
-            var panel = $('#' + panelId);
-            var panels = $('>div.tabs-panels', target);
-            if (panels.css('height') != 'auto') {
-                //                        if (sl.boxModel == true) {
-                panel.height(panels.height() - (panel.outerHeight() - panel.height()));
-                panel.width(panels.width() - (panel.outerWidth() - panel.width()));
-                //                        } else {
-                //                            panel.height(panels.height());
-                //                            panel.width(panels.width());
-                //                        }
-            }
-        }
-
-    }
-
-};
-
-var eventHelper = {
-
-
-    /**
-    * @description 点击选中tab事件
-    * @param options  创建的tab的参数选项
-    * @param tab 要选中的tab头
-    */
-    selectTab: function (event) {
-        var $this = event.extendData.tab, target = event.extendData.target;
-        var data = sl.data(target, "tabs"), tabs = $('ul.tabs', header);
-        var header = data.header, TabOpt = sl.data($this.elements[0], "tabs.tab");
-        $('.tabs-selected', tabs).removeClass('tabs-selected');
-        //添加tabs-selected属性
-        $this.addClass('tabs-selected');
-        $this.blur();
-
-        $('>div.tabs-panels>div', target).css('display', 'none');
-
-        var wrap = $('.tabs-wrap', header);
-        //获取所选的tab离左端的距离（包括滚动条左滚的）
-        var leftPos = tabsStyleHelper.getTabLeftPosition(target, $this.elements[0]);
-        //获取所选的tab的左端离div.tabs-wrap左端的距离
-        var left = leftPos - wrap.scrollLeft();
-        //获取所选的tab的右端离div.tabs-wrap左端的距离
-        var right = left + $this.outerWidth();
-        //如果tabs左端小于0或者右端大于宽度说明需要滚动
-        if (left < 0 || right > wrap.innerWidth()) {
-            var pos = Math.min(leftPos - (wrap.width() - $this.width()) / 2, tabsStyleHelper.getMaxScrollWidth(target));
-            //wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
-            wrap.scrollLeft(pos);
-        }
-
-        var tabAttr = sl.data($this.elements[0], 'tabs.tab'), panel = $('#' + tabAttr.id);
-        panel.css('display', 'block');
-        //重置头的选中状态
-        dataCacheHelper.setAllTabsDataUnSelected(target);
-        //设置该头部信息的isSelect=true
-        TabOpt.isSelect = true;
-        tabsStyleHelper.fitContent(target);
-    },
-
-    /*
-    *@description 默认或者根据title初始化选中
-    */
-    DefalutSelectTab: function (target, title) {
-        if (title) {
-            var elem = $('>div.tabs-header li:has(a span:contains("' + title + '"))', target).elements[0];
-            if (elem) {
-                $(elem).trigger('click');
-            }
-        } else {
-
-            var tabs = $('>div.tabs-header ul.tabs', target);
-            if ($('.tabs-selected', tabs).length == 0) {
-                $('li:first', tabs).trigger('click');
             } else {
-                $('.tabs-selected', tabs).trigger('click');
+                $('.tabs-scroller-left', header).css('display', 'none');
+                $('.tabs-scroller-right', header).css('display', 'none');
+                $('.tabs-wrap', header).removeClass('tabs-scrolling').scrollLeft(0);
+                $('.tabs-wrap', header).width(header.width());
+                $('.tabs-wrap', header).css('left', 0);
+
             }
+        },
+
+        /*
+        *@description 获取当前tab离左端的距离
+        */
+        getTabLeftPosition: function (target, tab) {
+            var w = 0;
+            var b = true;
+            $('>div.tabs-header ul.tabs li', target).each(function () {
+                if (this == tab) {
+                    return false;
+                }
+                w += $(this).outerWidth();
+
+            });
+            return w;
+        },
+
+        /*
+        *@description 获取最大的左滚距离
+        */
+        getMaxScrollWidth: function (target) {
+            var header = $('>div.tabs-header', target);
+            var tabsWidth = 16; // all tabs width 右间距margin-right先加一个
+            $('ul.tabs li', header).each(function () {
+                tabsWidth += ($(this).outerWidth() + 4); //右间距margin-right
+            });
+            var wrapWidth = $('div.tabs-wrap', header).width();
+            var padding = parseInt($('ul.tabs', header).css('padding-left'));
+
+            return tabsWidth - wrapWidth + padding;
+        },
+
+        /*
+        *@description 让panel的宽高适合
+        */
+        fitContent: function (target) {
+            var tab = $('>div.tabs-header ul.tabs li.tabs-selected', target);
+            if (tab.length) {
+                var panelId = sl.data(tab.elements[0], 'tabs.tab').id;
+                var panel = $('#' + panelId);
+                var panels = $('>div.tabs-panels', target);
+                if (panels.css('height') != 'auto') {
+                    //                        if (sl.boxModel == true) {
+                    panel.height(panels.height() - (panel.outerHeight() - panel.height()));
+                    panel.width(panels.width() - (panel.outerWidth() - panel.width()));
+                    //                        } else {
+                    //                            panel.height(panels.height());
+                    //                            panel.width(panels.width());
+                    //                        }
+                }
+            }
+
         }
-    },
-    /*
-    *@description 关闭tab事件
-    */
-    onClose: function (event) {
-        event.preventDefault();
-        var target = event.extendData.target;
-        var eventTab = event.target.parentNode;
-        eventHelper.closeTab(target, eventTab);
-        event.stopPropagation();
-    },
 
-    /*
-    * @description 关闭某个指定的 tab
-    */
-    closeTab: function (target, tab) {
+    };
 
-        if (!tab) return;
-        var $tab = $(tab), tabAttr = sl.data(tab, 'tabs.tab'), panel = $('#' + tabAttr.id), opts = getOption(target);
-        if (opts.onClose.call(panel, tabAttr.title) == false) return;
+    var eventHelper = {
 
-        //如果是移除选中的tab 要移除后重新选中一个tab
-        var selected = $(tab).hasClass('tabs-selected');
-        sl.removeData(tab, 'tabs.tab');
 
-        $(tab).remove();
-        panel.remove();
-        dataCacheHelper.RemoveTabFromCache(tab, target);
+        /**
+        * @description 点击选中tab事件
+        * @param options  创建的tab的参数选项
+        * @param tab 要选中的tab头
+        */
+        selectTab: function (event) {
+            var $this = event.extendData.tab, target = event.extendData.target;
+            var data = sl.data(target, "tabs"), tabs = $('ul.tabs', header);
+            var header = data.header, TabOpt = sl.data($this.elements[0], "tabs.tab");
+            $('.tabs-selected', tabs).removeClass('tabs-selected');
+            //添加tabs-selected属性
+            $this.addClass('tabs-selected');
+            $this.blur();
 
-        tabsStyleHelper.setSize(target);
-        if (selected) {
-            eventHelper.DefalutSelectTab(target);
-        } else {
-            var wrap = $('>div.tabs-header .tabs-wrap', target);
-            var pos = Math.min(
+            $('>div.tabs-panels>div', target).css('display', 'none');
+
+            var wrap = $('.tabs-wrap', header);
+            //获取所选的tab离左端的距离（包括滚动条左滚的）
+            var leftPos = tabsStyleHelper.getTabLeftPosition(target, $this.elements[0]);
+            //获取所选的tab的左端离div.tabs-wrap左端的距离
+            var left = leftPos - wrap.scrollLeft();
+            //获取所选的tab的右端离div.tabs-wrap左端的距离
+            var right = left + $this.outerWidth();
+            //如果tabs左端小于0或者右端大于宽度说明需要滚动
+            if (left < 0 || right > wrap.innerWidth()) {
+                var pos = Math.min(leftPos - (wrap.width() - $this.width()) / 2, tabsStyleHelper.getMaxScrollWidth(target));
+                //wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
+                wrap.scrollLeft(pos);
+            }
+
+            var tabAttr = sl.data($this.elements[0], 'tabs.tab'), panel = $('#' + tabAttr.id);
+            panel.css('display', 'block');
+            //重置头的选中状态
+            dataCacheHelper.setAllTabsDataUnSelected(target);
+            //设置该头部信息的isSelect=true
+            TabOpt.isSelect = true;
+            tabsStyleHelper.fitContent(target);
+        },
+
+        /*
+        *@description 默认或者根据title初始化选中
+        */
+        DefalutSelectTab: function (target, title) {
+            if (title) {
+                var elem = $('>div.tabs-header li:has(a span:contains("' + title + '"))', target).elements[0];
+                if (elem) {
+                    $(elem).trigger('click');
+                }
+            } else {
+
+                var tabs = $('>div.tabs-header ul.tabs', target);
+                if ($('.tabs-selected', tabs).length == 0) {
+                    $('li:first', tabs).trigger('click');
+                } else {
+                    $('.tabs-selected', tabs).trigger('click');
+                }
+            }
+        },
+        /*
+        *@description 关闭tab事件
+        */
+        onClose: function (event) {
+            event.preventDefault();
+            var target = event.extendData.target;
+            var eventTab = event.target.parentNode;
+            eventHelper.closeTab(target, eventTab);
+            event.stopPropagation();
+        },
+
+        /*
+        * @description 关闭某个指定的 tab
+        */
+        closeTab: function (target, tab) {
+
+            if (!tab) return;
+            var $tab = $(tab), tabAttr = sl.data(tab, 'tabs.tab'), panel = $('#' + tabAttr.id), opts = getOption(target);
+            if (opts.onClose.call(panel, tabAttr.title) == false) return;
+
+            //如果是移除选中的tab 要移除后重新选中一个tab
+            var selected = $(tab).hasClass('tabs-selected');
+            sl.removeData(tab, 'tabs.tab');
+
+            $(tab).remove();
+            panel.remove();
+            dataCacheHelper.RemoveTabFromCache(tab, target);
+
+            tabsStyleHelper.setSize(target);
+            if (selected) {
+                eventHelper.DefalutSelectTab(target);
+            } else {
+                var wrap = $('>div.tabs-header .tabs-wrap', target);
+                var pos = Math.min(
 					wrap.scrollLeft(),
 					tabsStyleHelper.getMaxScrollWidth(target)
 			);
-            //wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
+                //wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
+                wrap.scrollLeft(pos);
+            }
+        },
+
+        onScrollLeft: function (event) {
+            var target = event.extendData.target;
+            eventHelper.scrollLeft(target);
+            event.stopPropagation();
+        },
+
+        /*
+        *@description 向左滚动
+        */
+        scrollLeft: function (target) {
+            var data = sl.data(target, "tabs"), header = data.header, wrap = $('.tabs-wrap', header), opts = getOption(target);
+            if (opts == undefined) {
+                opts = data.options;
+            }
+            var pos = Math.max(0, wrap.scrollLeft() - opts.scrollIncrement);
+
+            // wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
             wrap.scrollLeft(pos);
-        }
-    },
-
-    onScrollLeft: function (event) {
-        var target = event.extendData.target;
-        eventHelper.scrollLeft(target);
-        event.stopPropagation();
-    },
-
-    /*
-    *@description 向左滚动
-    */
-    scrollLeft: function (target) {
-        var data = sl.data(target, "tabs"), header = data.header, wrap = $('.tabs-wrap', header), opts = getOption(target);
-        if (opts == undefined) {
-            opts = data.options;
-        }
-        var pos = Math.max(0, wrap.scrollLeft() - opts.scrollIncrement);
-
-        // wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
-        wrap.scrollLeft(pos);
-    },
-    onScrollRight: function (event) {
-        var target = event.extendData.target;
-        eventHelper.scrollRight(target);
-        event.stopPropagation();
-    },
-    /*
-    * @description 向左滚动
-    */
-    scrollRight: function (target) {
-        var data = sl.data(target, "tabs"), header = data.header, container = data.container;
-        var wrap = $('.tabs-wrap', header), opts = getOption(target);
-        if (opts == undefined) {
-            opts = data.options;
-        }
-        var pos = Math.min(
+        },
+        onScrollRight: function (event) {
+            var target = event.extendData.target;
+            eventHelper.scrollRight(target);
+            event.stopPropagation();
+        },
+        /*
+        * @description 向左滚动
+        */
+        scrollRight: function (target) {
+            var data = sl.data(target, "tabs"), header = data.header, container = data.container;
+            var wrap = $('.tabs-wrap', header), opts = getOption(target);
+            if (opts == undefined) {
+                opts = data.options;
+            }
+            var pos = Math.min(
 					wrap.scrollLeft() + opts.scrollIncrement,
 					tabsStyleHelper.getMaxScrollWidth(container)
 			);
-        //wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
-        wrap.scrollLeft(pos);
-    }
-};
+            //wrap.animate({ scrollLeft: pos }, opts.scrollDuration);
+            wrap.scrollLeft(pos);
+        }
+    };
 
-var dataCacheHelper = {
-    /**
-    * @description 1、移除  sl.data(this, 'tabs', { options: opts, tabs: wrapTabs(this) }); 的tabs中的一个元素
-    @param {DOMElement} e 要移除的tab头部对象
-    @param {DOMElement} container 设置成tab的元素
-    */
-    RemoveTabFromCache: function (e, container) {
-        var tabs = sl.data(container, 'tabs').tabs;
-        for (var i = 0, m = tabs.length; i < m; i++) {
-            if (e == tabs[i].elements[0]) {
-                sl.Array.removeAt(tabs, i);
-                break;
+    var dataCacheHelper = {
+        /**
+        * @description 1、移除  sl.data(this, 'tabs', { options: opts, tabs: wrapTabs(this) }); 的tabs中的一个元素
+        @param {DOMElement} e 要移除的tab头部对象
+        @param {DOMElement} container 设置成tab的元素
+        */
+        RemoveTabFromCache: function (e, container) {
+            var tabs = sl.data(container, 'tabs').tabs;
+            for (var i = 0, m = tabs.length; i < m; i++) {
+                if (e == tabs[i].elements[0]) {
+                    sl.Array.removeAt(tabs, i);
+                    break;
+                }
             }
+            dataCacheHelper.ResetTabsIndex(container);
+        },
+        /**
+        * @description 由于移除删除或者增加元素 要重置每个tab头 的index信息
+        @param {DOMElement} e 要移除的tab头部对象
+        @param {DOMElement} container 设置成tab的元素
+        */
+        ResetTabsIndex: function (container) {
+            var tabs = sl.data(container, 'tabs').tabs;
+            for (var i = 0, m = tabs.length; i < m; i++) {
+                sl.data(tabs[i].elements[0], "tabs.tab").index = i;
+            }
+        },
+
+
+        /*
+        * @description 把所有的tab中的缓存数据isSelect设置为false
+        */
+        setAllTabsDataUnSelected: function (target) {
+            var opts = sl.data(target, 'tabs');
+            var tabs = opts.tabs;
+            sl.each(tabs, function (i, n) {
+                sl.data(n.elements[0], "tabs.tab").isSelect = false;
+            });
+
         }
-        dataCacheHelper.ResetTabsIndex(container);
-    },
-    /**
-    * @description 由于移除删除或者增加元素 要重置每个tab头 的index信息
-    @param {DOMElement} e 要移除的tab头部对象
-    @param {DOMElement} container 设置成tab的元素
-    */
-    ResetTabsIndex: function (container) {
-        var tabs = sl.data(container, 'tabs').tabs;
-        for (var i = 0, m = tabs.length; i < m; i++) {
-            sl.data(tabs[i].elements[0], "tabs.tab").index = i;
+
+    };
+    this.tab = sl.Class(
+    {
+        init: function (elem, options) {
+            this.elem = elem;
+            var $this = $(elem), opts, state = sl.data(elem, 'tabs');
+            if (state) {
+                opts = sl.extend(true, state.options, options);
+            }
+            else {
+                var htmlAttr = {
+                    width: (parseInt(sl.css(elem, "width")) || undefined),
+                    height: (parseInt(sl.css(elem, "height")) || undefined),
+                    fit: ($this.attr('fit') ? $this.attr('fit') == 'true' : undefined),
+                    border: ($this.attr('border') ? $this.attr('border') == 'true' : undefined),
+                    plain: ($this.attr('plain') ? $this.attr('plain') == 'true' : undefined)
+                };
+                opts = sl.extend(true, defaults, htmlAttr, options);
+                $this.data("tabs", { options: opts, container: null, header: null, panels: [], tabs: [] });
+
+            }
+            tabsPanelsHelper.wrapTabPanels(elem);
+            tabsHeaderHelper.createTabHeaders(elem);
+            tabsStyleHelper.setSize(elem);
+            eventHelper.DefalutSelectTab(elem);
+        },
+        selectAt: function (Index) {
+            tabsHeaderHelper.selectTabByIndex(this.elem, Index);
+        },
+        add: function (param) {
+            tabsHeaderHelper.addOneTab(this.elem, param);
+        },
+        getSelected: function () {
+            return tabsHeaderHelper.getSelectedTab(this.elem);
         }
-    },
+    });
 
-
-    /*
-    * @description 把所有的tab中的缓存数据isSelect设置为false
-    */
-    setAllTabsDataUnSelected: function (target) {
-        var opts = sl.data(target, 'tabs');
-        var tabs = opts.tabs;
-        sl.each(tabs, function (i, n) {
-            sl.data(n.elements[0], "tabs.tab").isSelect = false;
-        });
-
+    function getOption(elem) {
+        return sl.data(elem, "tabs").options;
     }
 
-};
-function tab(elem, options, param) {
-    this.elem = elem;
-    var $this = $(elem), opts, state = sl.data(elem, 'tabs');
-    if (state) {
-        opts = sl.extend(true, state.options, options);
-    }
-    else {
-        var htmlAttr = {
-            width: (parseInt(sl.css(elem, "width")) || undefined),
-            height: (parseInt(sl.css(elem, "height")) || undefined),
-            fit: ($this.attr('fit') ? $this.attr('fit') == 'true' : undefined),
-            border: ($this.attr('border') ? $this.attr('border') == 'true' : undefined),
-            plain: ($this.attr('plain') ? $this.attr('plain') == 'true' : undefined)
-        };
-        opts = sl.extend(true, defaults, htmlAttr, options);
-        $this.data("tabs", { options: opts, container: null, header: null, panels: [], tabs: [] });
-
-    }
-    tabsPanelsHelper.wrapTabPanels(elem);
-    tabsHeaderHelper.createTabHeaders(elem);
-    tabsStyleHelper.setSize(elem);
-    eventHelper.DefalutSelectTab(elem);
-
-}
-tab.prototype = {
-    selectAt: function (Index) {
-        tabsHeaderHelper.selectTabByIndex(this.elem, Index);
-    },
-    add: function (param) {
-        tabsHeaderHelper.addOneTab(this.elem, param);
-    },
-    getSelected: function () {
-        return tabsHeaderHelper.getSelectedTab(this.elem);
-    }
-
-}
-function getOption(elem) {
-    return sl.data(elem, "tabs").options;
-}
+});

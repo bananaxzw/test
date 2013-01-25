@@ -288,8 +288,8 @@
             sl.each(images, function () {
                 this.setAttribute("_lazysrc", this.getAttribute("_lazysrc") + "?" + Math.random());
             });
-          
-            var lazy = new CalvinImagesLazyLoad(images, {
+
+            var lazy = new sl.ui.imagelazyload(images, {
                 container: $("#idLazyContainer").elements[0], mode: "cross",
                 holder: "http://www.cnblogs.com/images/cnblogs_com/cloudgamer/169629/o_dot.gif",
                 onLoad: function (img) {
