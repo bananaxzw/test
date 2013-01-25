@@ -88,13 +88,13 @@
                     }
                     /* 暂时去掉限制else {
                    
-                        if (i == l - 1) {
-                            // alert("你所注册的名称空间已经被占用;");
-                            throw new Error("namespace is AlreadyExist!");
-                        }
-                        if (!SL().InstanceOf.PlainObject(ns)) {
-                            throw new Error("exist namespace is not PlainObject");
-                        }
+                    if (i == l - 1) {
+                    // alert("你所注册的名称空间已经被占用;");
+                    throw new Error("namespace is AlreadyExist!");
+                    }
+                    if (!SL().InstanceOf.PlainObject(ns)) {
+                    throw new Error("exist namespace is not PlainObject");
+                    }
                     }*/
 
                     if (!ns.__namespace && SL().InstanceOf.PlainObject({})) {
@@ -192,7 +192,7 @@
             *@ignore
             */
             /*事件句柄唯一键*/
-            guid:1,
+            guid: 1,
             /**
             *@ignore
             */
@@ -271,7 +271,8 @@
                     var newClass = function () {
                         this.init.apply(this, arguments);
                     }
-                    newClass.prototype = members;
+                    //修正 改为扩展 废除newClass.prototype = members;
+                    sl.extend(newClass.prototype, members);
                     return newClass;
                 }
 

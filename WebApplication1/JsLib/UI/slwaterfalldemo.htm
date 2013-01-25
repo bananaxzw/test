@@ -52,7 +52,7 @@
             /* 随机创建Pin */
 
             $("#wrap").html(random());
-            var tt = new SLWaterFall({ colWidth: 228, container: document.getElementById("wrap"), dynamicLoad: true, onReach: function () {
+            var tt = new sl.ui.waterfall({ colWidth: 228, container: document.getElementById("wrap"), dynamicLoad: true, onReach: function () {
                 this.putElements($(random()).elements, true);
             }
             });
