@@ -2,7 +2,7 @@
 /// <reference path="../SL.Node.js" />
 /// <reference path="../SL.throttle.js" />
 
-sl.create(function () {
+sl.create("sl.ui",function () {
 
     var defaults = {
         min: 1,
@@ -336,7 +336,7 @@ sl.create(function () {
             return opts.source;
         }
     };
-    var autoComplete = sl.Class(
+    this.autoComplete = sl.Class(
     {
         init: function (elem, options) {
             var opts = {};
@@ -361,6 +361,4 @@ sl.create(function () {
 
 
     });
-    sl.ui = sl.ui || {};
-    sl.ui.autocomplete = autoComplete;
 });

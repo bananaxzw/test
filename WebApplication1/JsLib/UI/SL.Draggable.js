@@ -1,7 +1,7 @@
 ﻿/// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
 /// <reference path="../SL.throttle.js" />
-sl.create(function () {
+sl.create("sl.ui",function () {
 
     var defaults = {
         //值为"clone"或者是返回jq元素的function
@@ -335,7 +335,7 @@ sl.create(function () {
             return isWindow;
         }
     };
-    var draggable = sl.Class(
+    this.draggable = sl.Class(
     {
         init: function (elem, options) {
             if (!elem || !elem.nodeType || elem.nodeType != 1) { alert("无效拖拉对象"); return; }
@@ -434,6 +434,4 @@ sl.create(function () {
 
         }
     });
-    sl.ui = sl.ui || {};
-    sl.ui.draggable = draggable;
 });

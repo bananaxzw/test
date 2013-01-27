@@ -1,6 +1,6 @@
 ﻿/// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
-sl.create(function () {
+sl.create("sl.ui",function () {
     var defaults = {
         disabled: false,
         handles: 'n, e, s, w, ne, se, sw, nw, all',
@@ -138,7 +138,7 @@ sl.create(function () {
             //            }
         }
     };
-    var resizeable = sl.Class(
+    this.resizeable = sl.Class(
     {
         init: function (elem, options) {
             this.opts = sl.extend({}, defaults, options);
@@ -190,7 +190,6 @@ sl.create(function () {
         }
     });
 
-    sl.ui = sl.ui || {};
-    sl.ui.resizeable = resizeable;
+  
 
 });

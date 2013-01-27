@@ -1,31 +1,38 @@
 ﻿/// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
-var yyyyyy = sl;
-(function () {
-    var defaults = { min: 1, url: "", height: 200, source: [], selected: function (event, item) { } };
-    function CalvinComboBox(elem, options, param) {
-        this.options = sl.extend(defaults, options);
-        var $this = $(elem), _this = this;
-        if (data = $this.data("CalvinAutoComplete.data")) {
-            this.clearAll(elem);
-            data.ItemsContainer = null, data.TextBoxContainer = null, data.dropdownIcon = null;
-
-        }
-        else {
-            $this.data("CalvinAutoComplete.data", {});
-        }
-
-        this.WrapTextBox(elem);
-        this.RemoveMenuItems(elem);
-        //移除现有的Items元素
-        this.SetTextBoxKeyUpDownEvent(elem);
-
-        $(document).click(function (event) {
-            _this.RemoveMenuItems(elem);
-        });
+sl.create("sl.ui", function () {
+    var defaults = {
+        min: 1,
+        url: "",
+        height: 200,
+        source: [],
+        selected: function (event, item) { }
     };
+    this.combobox = sl.Class(
+    {
+        init: function (elem, options) {
+            var options = sl.extend({}, defaults, options), $this = $(elem);
+            if (data = $this.data("CalvinAutoComplete.data")) {
+                this.clearAll(elem);
+                data.ItemsContainer = null, data.TextBoxContainer = null, data.dropdownIcon = null;
 
+            }
+            else {
+                $this.data("CalvinAutoComplete.data", { options: options });
+            }
 
+            this.WrapTextBox(elem);
+            this.RemoveMenuItems(elem);
+            //移除现有的Items元素
+            this.SetTextBoxKeyUpDownEvent(elem);
+
+            $(document).click(function (event) {
+                MenuItemHelper.RemoveMenuItems(elem);
+            });
+
+        }
+
+    });
     var EventHelper = {
         /**
         * @description  设置item（li元素）的点击事件
@@ -34,7 +41,7 @@ var yyyyyy = sl;
         */
         SetMenuItemClickEvent: function ($MenuItem, $textBox) {
 
-            var ItemData = $MenuItem.data("MenuItem.Data"), _this = this;
+            var ItemData = $MenuItem.data("MenuItem.Data");
             $MenuItem.bind("selected", this.options.selected);
             //设置item点击的事件 默认事件自动填写text框
             $MenuItem.bind("click", function () {
@@ -42,7 +49,7 @@ var yyyyyy = sl;
                 $MenuItem.trigger("selected", [ItemData]);
                 $MenuItem.parent().hide();
                 ItemData.Selected = true;
-                _this.RemoveMenuItems($textBox.elements[0]);
+                MenuItemHelper.RemoveMenuItems($textBox.elements[0]);
             });
 
 
@@ -53,7 +60,8 @@ var yyyyyy = sl;
         * @param {textBox} textbox元素
         */
         SetTextBoxKeyUpDownEvent: function (textBox) {
-            var $this = $(textBox), _this = this;
+            var $this = $(textBox),
+            options = $this.data("CalvinAutoComplete.data").options;
 
             $this.unbind("keydown");
             $this.unbind("keyup");
@@ -69,18 +77,18 @@ var yyyyyy = sl;
                 var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer.elements[0]);
                 var SelectIndex = $items.index($SelectedItem.elements[0]);
                 switch (event.keyCode) {
-                    //向上                                                                                                                                                                         
+                    //向上                                                                                                                                                                                  
                     case 38:
-                        _this.RemoveItemHoverStyle($itemContainer);
+                        MenuItemHelper.RemoveItemHoverStyle($itemContainer);
 
                         if (SelectIndex != 0) {
                             $SelectedItem.prev().addClass("ui-menu-itemHover");
                         }
-                        _this.ScrollToSelectedItem($itemContainer, _this.options);
+                        MenuItemHelper.ScrollToSelectedItem($itemContainer, options);
                         break;
-                    //向下                                                                                                                                                                      
+                    //向下                                                                                                                                                                               
                     case 40:
-                        _this.RemoveItemHoverStyle($itemContainer);
+                        MenuItemHelper.RemoveItemHoverStyle($itemContainer);
                         //没有选中的项
                         if ($SelectedItem.length == 0) {
                             $items.eq(0).addClass("ui-menu-itemHover");
@@ -91,7 +99,7 @@ var yyyyyy = sl;
                         else {
                             $SelectedItem.next().addClass("ui-menu-itemHover");
                         }
-                        _this.ScrollToSelectedItem($itemContainer, _this.options);
+                        MenuItemHelper.ScrollToSelectedItem($itemContainer, options);
                         break;
                     default:
                         break;
@@ -104,34 +112,36 @@ var yyyyyy = sl;
             });
 
             $this.bind("keyup", function (event) {
-                var $textBoxContainer = $this.data("CalvinAutoComplete.data").TextBoxContainer;
-                var StyleInfo = GetElementStyle($textBoxContainer.elements[0]);
-                var data = $this.data("CalvinAutoComplete.data");
-                var $dropdownIcon = data.dropdownIcon;
-                var dropdownIconData = $dropdownIcon.data("AllMenusItems");
+                var data = $this.data("CalvinAutoComplete.data"),
+                 $dropdownIcon = data.dropdownIcon,
+                 dropdownIconData = $dropdownIcon.data("AllMenusItems"),
+                 $textBoxContainer = data.TextBoxContainer,
+                 StyleInfo = GetElementStyle($textBoxContainer.elements[0]),
+                 options = data.options;
+
                 switch (event.keyCode) {
                     case 38:
                         break;
                     case 40:
                         break;
                     case 13: //回车键
-                        var $SelectedItem = _this.getSelectedItem(data.ItemsContainer || dropdownIconData.AllMenusItems);
+                        var $SelectedItem = MenuItemHelper.getSelectedItem(data.ItemsContainer || dropdownIconData.AllMenusItems);
                         if ($SelectedItem != null) {
                             var ItemData = $SelectedItem.data("MenuItem.Data");
                             $SelectedItem.trigger("selected", [ItemData]);
                         }
-                        _this.RemoveMenuItems(textBox);
+                        MenuItemHelper.RemoveMenuItems(textBox);
 
 
                         break;
                     default:
-                        _this.RemoveMenuItems(textBox);
+                        MenuItemHelper.RemoveMenuItems(textBox);
                         if ($dropdownIcon) {
                             $dropdownIcon.data("AllMenusItems").AllMenusItems.hide();
                         }
-                        var minLength = _this.options.min;
+                        var minLength = options.min;
                         if ($this.val().length >= minLength) {
-                            var $MenuItems = _this.GenrateMenuItems(this, _this.FilterOptionSouces($this.val()), StyleInfo.height, StyleInfo.width, StyleInfo.top, StyleInfo.left);
+                            var $MenuItems = MenuItemHelper.GenrateMenuItems(this, OtherHelper.FilterOptionSouces($this.val()), StyleInfo.height, StyleInfo.width, StyleInfo.top, StyleInfo.left);
                             $this.data("CalvinAutoComplete.data").ItemsContainer = $MenuItems;
                         }
                         break;
@@ -156,7 +166,6 @@ var yyyyyy = sl;
             if (!SouceArray.length) return;
             var $ItemsContainer = $("<ul class='ui-autocomplete ui-menu'></ul>");
             //遍历产生item源数组
-            var _this = this;
             sl.each(SouceArray, function (i, d) {
                 var $MenuItem = $("<li class='ui-menu-item'></li>");
 
@@ -173,11 +182,11 @@ var yyyyyy = sl;
                 $ItemsContainer.append($MenuItem);
                 //设置item属性移动上去的样式
                 $MenuItem.mouseover(function () {
-                    _this.RemoveItemHoverStyle($ItemsContainer);
-                    _this.SetItemHover($MenuItem);
+                    MenuItemHelper.RemoveItemHoverStyle($ItemsContainer);
+                    MenuItemHelper.SetItemHover($MenuItem);
                 });
                 //绑定点击事件
-                _this.SetMenuItemClickEvent($MenuItem, $(textBox));
+                EventHelper.SetMenuItemClickEvent($MenuItem, $(textBox));
 
             });
 
@@ -215,22 +224,22 @@ var yyyyyy = sl;
         /*
         * @description输入框有值时候 打开下拉按钮时候 匹配到第一项选中的
         */
-        ScrollToMarchedItem: function (key, $itemContainer, options) {
+        ScrollToMarchedItem: function (textbox, key, $itemContainer, options) {
 
-            var hasMatched = false;
-            var height = 0;
-            var _this = this;
+            var hasMatched = false,
+             height = 0,
+      options = $(textbox).data("CalvinAutoComplete.data").options;
             $(">li", $itemContainer).each(function (i, d) {
                 height += $(d).height();
                 if (key === $(d).data("MenuItem.Data").text) {
                     hasMatched = true;
-                    _this.SetItemHover($(d));
+                    MenuItemHelper.SetItemHover($(d));
                     return false;
                 }
             });
             if (hasMatched) {
-                if (height > _this.options.height) {
-                    $itemContainer.scrollTop(height - _this.options.height);
+                if (height > options.height) {
+                    $itemContainer.scrollTop(height - options.height);
                 }
             }
         },
@@ -238,12 +247,12 @@ var yyyyyy = sl;
         * @description移动键盘上下键的时候 滚动到选中的项目
         */
         ScrollToSelectedItem: function ($itemContainer, options) {
-            var hasMatched = false, height = 0, _this = this;
+            var hasMatched = false, height = 0;
             $(">li", $itemContainer).each(function (i, d) {
                 height += $(d).height();
                 if ($(d).is(".ui-menu-itemHover")) {
                     hasMatched = true;
-                    _this.SetItemHover($(d));
+                    MenuItemHelper.SetItemHover($(d));
                     return false;
                 }
             });
@@ -339,7 +348,7 @@ var yyyyyy = sl;
     * @param {textBox} textBox元素
     */
     function WrapTextBox(textbox) {
-        var $textbox = $(textbox), _this = this;
+        var $textbox = $(textbox), options = $textbox.data("CalvinAutoComplete.data").options;
         $textbox.wrap("<span class='combo'></span>");
         var $ContainerSpan = $textbox.parent();
         $textbox.addClass("combo-text");
@@ -350,16 +359,16 @@ var yyyyyy = sl;
         $textbox.data("CalvinAutoComplete.data").TextBoxContainer = $ContainerSpan;
         $textbox.data("CalvinAutoComplete.data").dropdownIcon = $dropdownIcon;
         var StyleInfo = GetElementStyle($ContainerSpan.elements[0]);
-        var $ItemsContainerAll = this.GenrateMenuItems(textbox, this.options.source, StyleInfo.height, StyleInfo.width, StyleInfo.top, StyleInfo.left);
+        var $ItemsContainerAll = this.GenrateMenuItems(textbox, options.source, StyleInfo.height, StyleInfo.width, StyleInfo.top, StyleInfo.left);
         $dropdownIcon.data("AllMenusItems").AllMenusItems = $ItemsContainerAll;
         $ItemsContainerAll.toggle();
         $dropdownIcon.bind("click", function (event) {
             event.cancelBubble = true;
             event.stopPropagation();
-            _this.RemoveItemHoverStyle($ItemsContainerAll);
+            MenuItemHelper.RemoveItemHoverStyle($ItemsContainerAll);
             if ($ItemsContainerAll.is(":hidden")) {
                 $ItemsContainerAll.show();
-                _this.ScrollToMarchedItem($textbox.val(), $ItemsContainerAll, _this.options);
+                MenuItemHelper.ScrollToMarchedItem(textbox, $textbox.val(), $ItemsContainerAll, options);
                 textbox.focus();
             }
             else {
@@ -384,4 +393,5 @@ var yyyyyy = sl;
 
     yyyyyy.extend(CalvinComboBox.prototype, EventHelper, MenuItemHelper, OtherHelper, { WrapTextBox: WrapTextBox, GetElementStyle: GetElementStyle });
     window.CalvinComboBox = CalvinComboBox;
-})();
+
+});
