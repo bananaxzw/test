@@ -1124,7 +1124,6 @@
     <Content Include="JsLib\UI\SL.Menu.js" />
     <Content Include="JsLib\UI\SL.TAB.js" />
     <Content Include="JsLib\UI\SL.UI.Dropdown.js" />
-    <Content Include="JsLib\UI\SL.UI.Tab.js" />
     <Content Include="JsLib\UI\Style\SL.UI.Tab.css" />
     <Content Include="JsLib\UI\walkfall.htm" />
     <Content Include="JsLib\UI\walterfall1.htm" />
