@@ -1,7 +1,7 @@
 ﻿/// <reference path="../sl.js" />
 /// <reference path="../SL.Node.js" />
 /// <reference path="SL.Mask.js" />
-sl.create(function () {
+sl.create("sl.ui", function () {
 
     var defaults = {
         accept: null,
@@ -11,7 +11,7 @@ sl.create(function () {
         onDrop: function (e, source) { }
     };
 
-    var droppable = sl.Class(
+    this.droppable = sl.Class(
     {
         init: function (elem, options) {
             var options = sl.extend({}, defaults, options);
@@ -31,9 +31,4 @@ sl.create(function () {
         });
         }
     });
-
-    sl.ui = sl.ui || {};
-    sl.ui.droppable = droppable;
-
-
 });
