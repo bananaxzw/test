@@ -8,12 +8,12 @@
     <script type="text/javascript">
 
         $(function () {
-            $("#safsa").delegate("li", "click", function (e) {
+            $("body").delegate("li", "click", function (e) {
                 alert(this.nodeName);
                 //e.stopPropagation();
 
             });
-            $("#safsa").click(tt);
+            $("body").click(tt);
             $("#safsa").click(tt);
             $("#safsa").unbind("click",tt);
             function tt() {

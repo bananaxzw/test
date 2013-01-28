@@ -2,20 +2,35 @@
 /// <reference path="SL.Data.js" />
 sl.create(function () {
 
+    var rquickIs = /^(\w*)(?:#([\w\-]+))?(?:\.([\w\-]+))?$/,
+	quickParse = function (selector) {
+	    var quick = rquickIs.exec(selector);
+	    if (quick) {
+	        //   0  1    2   3
+	        // [ _, tag, id, class ]
+	        quick[1] = (quick[1] || "").toLowerCase();
+	        quick[3] = quick[3] && new RegExp("(?:^|\\s)" + quick[3] + "(?:\\s|$)");
+	    }
+	    return quick;
+	},
+	quickIs = function (elem, m) {
+	    var attrs = elem.attributes || {};
+	    return (
+			(!m[1] || elem.nodeName.toLowerCase() === m[1]) &&
+			(!m[2] || (attrs.id || {}).value === m[2]) &&
+			(!m[3] || m[3].test((attrs["class"] || {}).value))
+		);
+	};
     EventOperator = {
         triggered: false,
-        addEvent: function (elem, type, handler, data) {
+        addEvent: function (elem, types, handler, data, selector) {
             if (elem.nodeType == 3 || elem.nodeType == 8) {
                 return;
             }
+
+            var handlers, handlerObj, tns, type, namespaces;
             if (!handler.guid) {
                 handler.guid = sl.guid++;
-            }
-            if (data !== undefined) {
-                var fn = handler;
-                // 创建一个代理的handler 来保存data 保障data的唯一性
-                handler = sl.proxy(fn);
-                handler.extendData = data;
             }
             var events = sl.data(elem, "events") || sl.data(elem, "events", {}),
 			handle = sl.data(elem, "handle"), eventHandle;
@@ -27,19 +42,45 @@ sl.create(function () {
                 handle = sl.data(elem, "handle", eventHandle);
             }
             handle.elem = elem;
-            var handlers = events[type];
-            //防止重复绑定事件
-            if (!handlers) {
-                handlers = events[type] = {};
-                // Bind the global event handler to the element
-                if (elem.addEventListener) {
-                    elem.addEventListener(type, handle, false);
-                } else if (elem.attachEvent) {
-                    elem.attachEvent("on" + type, handle);
-                }
 
+
+            //事件绑定开始
+            types = types.split(" ");
+            for (t = 0; t < types.length; t++) {
+                tns = rtypenamespace.exec(types[t]) || [];
+                type = tns[1];
+                namespaces = (tns[2] || "").split(".").sort();
+
+                handlers = events[type], handlerObj = {
+                    type: type,
+                    data: data,
+                    handler: handler,
+                    guid: handler.guid,
+                    selector: selector,
+                    quick: selector && quickParse(selector),
+                    namespace: namespaces.join(".")
+
+                };
+                //防止重复绑定事件
+                if (!handlers) {
+                    handlers = events[type] = [];
+                    handlers.delegateCount = 0;
+                    // Bind the global event handler to the element
+                    if (elem.addEventListener) {
+                        elem.addEventListener(type, handle, false);
+                    } else if (elem.attachEvent) {
+                        elem.attachEvent("on" + type, handle);
+                    }
+
+                }
+                if (selector) {
+                    handlers.splice(handlers.delegateCount++, 0, handleObj);
+                } else {
+                    handlers.push(handleObj);
+                }
+                //handlers[handler.guid] = handler;
             }
-            handlers[handler.guid] = handler;
+            elem = null;
 
         },
         removeEvent: function (elem, type, handler) {
@@ -231,14 +272,13 @@ sl.create(function () {
             return event;
         },
         handle: function (event) {
-            // returned undefined or false
-            var handlers;
             event = arguments[0] = EventOperator.fixEvent(event || window.event);
             event.currentTarget = this;
-            handlers = (sl.data(this, "events") || {})[event.type];
+            var handlers = (sl.data(this, "events") || {})[event.type],
+            delegateCount = handlers.delegateCount;
 
             for (var j in handlers) {
-                var handler = handlers[j];
+                var handler = handlers[j].handler;
                 event.handler = handler;
                 event.extendData = handler.extendData;
 
