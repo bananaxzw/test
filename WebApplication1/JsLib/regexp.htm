@@ -5,20 +5,23 @@
     <script type="text/javascript">
         var reg = /^(\w+)/;
         var reg1 = /^(\w+)/g;
-        var str = "1 plus 2 equal 3"
+        var str = "Visit W3School!w3School"
+        console.log(str.match(/(w3school)/gi));
+        console.log(/^([^\.]*)?(?:\.(.+))?$/gi.exec("fff.fsa.gs"));
+       
 
-    var ss = reg.test(str);
-    var ss1 = reg1.exec(str, function (a, b) {
+//    var ss = reg.test(str);
+//    var ss1 = reg1.exec(str, function (a, b) {
 
-        console.dir(a);
-    });
-    console.dir(ss1);
+//        console.dir(a);
+//    });
+//    console.dir(ss1);
 
 
-    str.replace(reg1, function (a, b) {
-        console.dir(a);
-        console.dir(b);
-    });
+//    str.replace(reg1, function (a, b) {
+//        console.dir(a);
+//        console.dir(b);
+//    });
 
 
 //    while ((result = /(\d+)/g.exec(str)) != null) {
@@ -36,21 +39,21 @@
 //        document.write("<br />");
 //    }
 
-    var str = "Visit W3School, W3School is a place to study web technology.";
-    var patt =/(W3School)/g;
-    var result;
+//    var str = "Visit W3School, W3School is a place to study web technology.";
+//    var patt =/(W3School)/g;
+//    var result;
 
-    while ((result = patt.exec(str)) != null) {
-        document.write(result);
-        document.write("<br />");
-        document.write(patt.lastIndex);
-        document.write("<br />");
-    }
+//    while ((result = patt.exec(str)) != null) {
+//        document.write(result);
+//        document.write("<br />");
+//        document.write(patt.lastIndex);
+//        document.write("<br />");
+//    }
 
-    var patt = /(W3School)/;
-    var ss = patt.exec(str)
+//    var patt = /(W3School)/;
+//    var ss = patt.exec(str)
 
-   console.dir(ss);
+//   console.dir(ss);
   
 </script>
 

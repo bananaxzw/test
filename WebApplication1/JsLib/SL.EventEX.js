@@ -24,65 +24,88 @@ sl.create(function () {
     EventOperator = {
         triggered: false,
         addEvent: function (elem, types, handler, data, selector) {
-            if (elem.nodeType == 3 || elem.nodeType == 8) {
+            var elemData, eventHandle, events,
+			t, tns, type, namespaces, handleObj,
+			handleObjIn, quick, handlers, special;
+
+            if (elem.nodeType === 3 || elem.nodeType === 8 || !types || !handler || !(elemData = sl.data(elem))) {
                 return;
             }
 
-            var handlers, handlerObj, tns, type, namespaces;
+            //可以传object的处理类型
+            if (handler.handler) {
+                handleObjIn = handler;
+                handler = handleObjIn.handler;
+                selector = handleObjIn.selector;
+            }
+
+            // 
             if (!handler.guid) {
                 handler.guid = sl.guid++;
             }
-            var events = sl.data(elem, "events") || sl.data(elem, "events", {}),
-			handle = sl.data(elem, "handle"), eventHandle;
-            if (!handle) {
-                eventHandle = function () {
-                    return !EventOperator.triggered ?
+
+            //初始化events
+            events = elemData.events;
+            if (!events) {
+                elemData.events = events = {};
+            }
+            eventHandle = elemData.handle;
+            if (!eventHandle) {
+                elemData.handle = eventHandle = function (e) {
+                    return !e || EventOperator.triggered !== e.type ?
                     EventOperator.handle.apply(eventHandle.elem, arguments) : undefined;
                 };
-                handle = sl.data(elem, "handle", eventHandle);
+                eventHandle.elem = elem;
             }
-            handle.elem = elem;
 
-
-            //事件绑定开始
             types = types.split(" ");
             for (t = 0; t < types.length; t++) {
+
                 tns = rtypenamespace.exec(types[t]) || [];
                 type = tns[1];
                 namespaces = (tns[2] || "").split(".").sort();
 
-                handlers = events[type], handlerObj = {
+                handleObj = sl.extend({
                     type: type,
+                    origType: tns[1],
                     data: data,
                     handler: handler,
                     guid: handler.guid,
                     selector: selector,
                     quick: selector && quickParse(selector),
                     namespace: namespaces.join(".")
+                }, handleObjIn);
 
-                };
+
+                handlers = events[type];
                 //防止重复绑定事件
                 if (!handlers) {
                     handlers = events[type] = [];
                     handlers.delegateCount = 0;
-                    // Bind the global event handler to the element
                     if (elem.addEventListener) {
-                        elem.addEventListener(type, handle, false);
-                    } else if (elem.attachEvent) {
-                        elem.attachEvent("on" + type, handle);
-                    }
+                        elem.addEventListener(type, eventHandle, false);
 
+                    } else if (elem.attachEvent) {
+                        elem.attachEvent("on" + type, eventHandle);
+                    }
                 }
+
+
                 if (selector) {
                     handlers.splice(handlers.delegateCount++, 0, handleObj);
                 } else {
                     handlers.push(handleObj);
                 }
-                //handlers[handler.guid] = handler;
+
+                // Keep track of which events have ever been used, for event optimization
+                EventOperator.global[type] = true;
             }
+
+            // 防止内存泄露
             elem = null;
 
         },
+        global: {},
         removeEvent: function (elem, type, handler) {
             if (elem.nodeType === 3 || elem.nodeType === 8) {
                 return;
@@ -272,28 +295,81 @@ sl.create(function () {
             return event;
         },
         handle: function (event) {
-            event = arguments[0] = EventOperator.fixEvent(event || window.event);
-            event.currentTarget = this;
-            var handlers = (sl.data(this, "events") || {})[event.type],
-            delegateCount = handlers.delegateCount;
+            event =EventOperator.fixEvent (event || window.event);
+            var handlers = ((sl.data(this, "events") || {})[event.type] || []),
+			delegateCount = handlers.delegateCount,
+			args = [].slice.call(arguments),
+			run_all = !event.exclusive && !event.namespace,
+			handlerQueue = [],
+			i, j, cur, ret, selMatch, matched, matches, handleObj, sel, related;
+            args[0] = event;
+            event.delegateTarget = this;
 
-            for (var j in handlers) {
-                var handler = handlers[j].handler;
-                event.handler = handler;
-                event.extendData = handler.extendData;
 
-                var ret = handler.apply(this, arguments);
 
-                if (ret !== undefined) {
-                    event.result = ret;
-                    if (ret === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
+            //如果使用了事件代理，则先执行事件代理的回调, FF的右键会触发点击事件，与标签不符
+            if (delegateCount && !(event.button && event.type === "click")) {
+                for (cur = event.target; cur != this; cur = cur.parentNode || this) {
+                    if (cur.disabled !== true) {
+                        selMatch = {};
+                        matches = [];
+                        jqcur[0] = cur;
+                        for (i = 0; i < delegateCount; i++) {
+                            handleObj = handlers[i];
+                            sel = handleObj.selector;
+
+                            if (selMatch[sel] === undefined) {
+                            //目前只支持简单的判断 不支持复杂的选择器 后面待添加
+                                selMatch[sel] = (
+								handleObj.quick ? quickIs(cur, handleObj.quick) : false
+							);
+                            }
+                            if (selMatch[sel]) {
+                                matches.push(handleObj);
+                            }
+                        }
+                        if (matches.length) {
+                            handlerQueue.push({ elem: cur, matches: matches });
+                        }
                     }
                 }
-                if (event.isImmediatePropagationStopped) {
-                    break;
+            }
+            if (handlers.length > delegateCount) {
+                handlerQueue.push({ elem: this, matches: handlers.slice(delegateCount) });
+            }
+
+            // Run delegates first; they may want to stop propagation beneath us
+            for (i = 0; i < handlerQueue.length && !event.isPropagationStopped(); i++) {
+                matched = handlerQueue[i];
+                event.currentTarget = matched.elem;
+
+                for (j = 0; j < matched.matches.length && !event.isImmediatePropagationStopped(); j++) {
+                    handleObj = matched.matches[j];
+
+                    // Triggered event must either 1) be non-exclusive and have no namespace, or
+                    // 2) have namespace(s) a subset or equal to those in the bound event (both can have no namespace).
+                    if (run_all || (!event.namespace && !handleObj.namespace) || event.namespace_re && event.namespace_re.test(handleObj.namespace)) {
+
+                        event.data = handleObj.data;
+                        event.handleObj = handleObj;
+
+                        ret = ((jQuery.event.special[handleObj.origType] || {}).handle || handleObj.handler)
+							.apply(matched.elem, args);
+
+                        if (ret !== undefined) {
+                            event.result = ret;
+                            if (ret === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                        }
+                    }
                 }
+            }
+
+            // Call the postDispatch hook for the mapped type
+            if (special.postDispatch) {
+                special.postDispatch.call(this, event);
             }
 
             return event.result;
