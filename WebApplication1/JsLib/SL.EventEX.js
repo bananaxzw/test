@@ -304,9 +304,6 @@ sl.create(function () {
 			i, j, cur, ret, selMatch, matched, matches, handleObj, sel, related;
             args[0] = event;
             event.delegateTarget = this;
-
-
-
             //如果使用了事件代理，则先执行事件代理的回调, FF的右键会触发点击事件，与标签不符
             if (delegateCount && !(event.button && event.type === "click")) {
                 for (cur = event.target; cur != this; cur = cur.parentNode || this) {
@@ -339,7 +336,7 @@ sl.create(function () {
             }
 
             // Run delegates first; they may want to stop propagation beneath us
-            for (i = 0; i < handlerQueue.length && !event.isPropagationStopped(); i++) {
+            for (i = 0; i < handlerQueue.length && !event.isPropagationStopped; i++) {
                 matched = handlerQueue[i];
                 event.currentTarget = matched.elem;
 
