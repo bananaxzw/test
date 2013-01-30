@@ -13,8 +13,17 @@
 //                //e.stopPropagation();
 
 //            });
-//            $("body").click(tt);
-//            $("#safsa").click(tt);
+        //            $("body").click(tt);
+        $(function () {
+            $("#safsa").bind("click.me", function () {
+                alert("click");
+            });
+            $("#safsa").bind("click", function () {
+                alert("click1");
+            });
+            $("#safsa").trigger("click!");
+        })
+       
 //            $("#safsa").unbind("click", tt);
 //            var mm = document.getElementById("safsa");
 //            var yy = 1
@@ -71,13 +80,13 @@
 //        tt1();
 
         //        alert(mm);
-        $(function () {
-            document.getElementById("safsa").onclick = function (e) {
-                alert(e.srcElement.nodeName);
-            }
-        
-         })
-       
+//        $(function () {
+//            document.getElementById("safsa").onclick = function (e) {
+//                alert(e.srcElement.nodeName);
+//            }
+//        
+//         })
+//       
     </script>
 </head>
 <body>
