@@ -328,7 +328,7 @@ define("event", top.dispatchEvent ? ["$node"] : ["$event_fix"], function($) {
                 if(handle) {
                     handle.apply(cur, data);
                 }
-                //处理直接写在标签中的内联事件或DOM0事件
+                //处理直接写在标签中的内联事件或DOM 0事件
                 handle = ontype && cur[ontype];
                 if(handle && handle.apply && handle.apply(cur, data) === false) {
                     event.preventDefault();
