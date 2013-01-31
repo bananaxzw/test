@@ -14,7 +14,7 @@
 <input id="Text3" type="text" name='sffs' />
 </form>
     
-<div id="sff" onclick="console.log('me')">sfsa</div>
+<div id="sff" style=" background:red; width:200px; height:100px" onclick="console.log('me')">sfsa</div>
 <div  style=" background:red; width:200px; height:100px" id="hoverdiv">safsa</div>
 <script type="text/javascript">
     var tt = document.getElementById("sff");
@@ -31,14 +31,29 @@
         console.log(1);
        // console.log(event.extendData.name);
     });
-    SL().Event.addEvent(tt, "click11", function (event) {
-        console.log(event.extendData.name);
-    }, { "name": "xuzhiwei1" });
+    SL().Event.addEvent(tt, "click.name", function (event) {
+        console.log(2);
+        // console.log(event.extendData.name);
+    });
+    SL().Event.addEvent(tt, "click.name", function (event) {
+        console.log("3");
+        // console.log(event.extendData.name);
+    });
+    SL().Event.addEvent(tt, "mouseover.name1", function (event) {
+        console.log("over");
+        // console.log(event.extendData.name);
+    });
+    SL().Event.addEvent(tt, "click.name1", see);
+    sl.Event.removeEvent(tt, ".name1");
+    sl.Event.removeEvent(tt, "click");
+//    SL().Event.addEvent(tt, "click11", function (event) {
+//        console.log(event.extendData.name);
+//    }, { "name": "xuzhiwei1" });
     function see() {
         alert("i see you!");
     }
-//    SL().Event.addEvent(tt, "click", see);
-    sl.Event.removeEvent(tt);
+////    SL().Event.addEvent(tt, "click", see);
+//    sl.Event.removeEvent(tt);
 //   SL().Event.removeEvent(tt, "click");
 //   SL().Event.removeEvent(tt, "click11");
    // SL().Event.triggerEvent("click", [], tt);

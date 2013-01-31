@@ -21,9 +21,14 @@
             $("#safsa").bind("click", function () {
                 alert("click1");
             });
-            $("#safsa").trigger("click!");
+            $("#safsa").unbind(".me");
+//            $("#safsa").trigger("click!");
         })
-       
+
+
+//        function tt() { 
+//        
+//        }
 //            $("#safsa").unbind("click", tt);
 //            var mm = document.getElementById("safsa");
 //            var yy = 1
@@ -80,18 +85,21 @@
 //        tt1();
 
         //        alert(mm);
-//        $(function () {
-//            document.getElementById("safsa").onclick = function (e) {
-//                alert(e.srcElement.nodeName);
-//            }
-//        
-//         })
-//       
+        $(function () {
+            document.getElementById("safsa").onclick = function (e) {
+                alert(e.srcElement.nodeName);
+            }
+            document.getElementById("sf").onclick = function (e) {
+                alert(e.srcElement.nodeName+"safsaf");
+            }
+        
+         })
+       
     </script>
 </head>
 <body>
     <ul id="safsa">
-      <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
+      <li id="sf">fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
