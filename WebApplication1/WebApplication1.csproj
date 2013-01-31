@@ -793,6 +793,7 @@
     <Content Include="JQ\1.7\src\traversing.js" />
     <Content Include="JsLib\%24SL.js" />
     <Content Include="JsLib\ajax.aspx" />
+    <Content Include="JsLib\Arbiter.js" />
     <Content Include="JsLib\Array.htm" />
     <Content Include="JsLib\chainDemo\chainEvent.htm" />
     <Content Include="JsLib\class.htm" />

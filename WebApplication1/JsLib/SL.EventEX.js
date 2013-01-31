@@ -3,6 +3,8 @@
 sl.create(function () {
 
     var rquickIs = /^(\w*)(?:#([\w\-]+))?(?:\.([\w\-]+))?$/,
+    rtypenamespace = /^([^\.]*)?(?:\.(.+))?$/,
+    rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
 	quickParse = function (selector) {
 	    var quick = rquickIs.exec(selector);
 	    if (quick) {
@@ -20,7 +22,14 @@ sl.create(function () {
 			(!m[2] || (attrs.id || {}).value === m[2]) &&
 			(!m[3] || m[3].test((attrs["class"] || {}).value))
 		);
-	};
+	},
+    detachEvent = function (elem, type, handle) {
+        if (elem.removeEventListener) {
+            elem.removeEventListener(type, handle, false);
+        } else if (elem.detachEvent) {
+            elem.detachEvent("on" + type, handle);
+        }
+    };
     EventOperator = {
         triggered: false,
         addEvent: function (elem, types, handler, data, selector) {
@@ -62,7 +71,7 @@ sl.create(function () {
             for (t = 0; t < types.length; t++) {
 
                 tns = rtypenamespace.exec(types[t]) || [];
-                type = tns[1];
+                type = tns[1]; //预留接口
                 namespaces = (tns[2] || "").split(".").sort();
 
                 handleObj = sl.extend({
@@ -106,134 +115,190 @@ sl.create(function () {
 
         },
         global: {},
-        removeEvent: function (elem, type, handler) {
-            if (elem.nodeType === 3 || elem.nodeType === 8) {
+        removeEvent: function (elem, types, handler, selector, mappedTypes) {
+            var elemData = sl.data(elem),
+            t, tns, type, origType, namespaces, origCount,
+			j, events, special, eventType, handleObj;
+
+            if (!elemData || !(events = elemData.events)) {
                 return;
             }
-            var events = sl.data(elem, "events"), ret, type, fn;
-            if (events) {
+            types = types.split(" ");
+            for (t = 0; t < types.length; t++) {
+                tns = rtypenamespace.exec(types[t]) || [];
+                type = origType = tns[1];
+                namespaces = tns[2];
+
+                //采用命名空间移除  .namespace=>[.namespace,'',namespace]
                 if (!type) {
-                    for (var _type in events) {
-                        EventOperator.removeEvent(elem, _type, handler);
+                    //遍历events下所有类型
+                    for (type in events) {
+                        EventOperator.removeEvent(elem, type + types[t], handler, selector, true);
                     }
+                    continue;
                 }
-                if (events[type]) {
-                    if (handler) {
-                        fn = events[type][handler.guid];
-                        delete events[type][handler.guid];
-                    } else {
-                        for (var handle in events[type]) {
-                            delete events[type][handle];
+                eventType = events[type] || [];
+                origCount = eventType.length;
+                namespaces = namespaces ? new RegExp("(^|\\.)" + namespaces.split(".").sort().join("\\.(?:.*\\.)?") + "(\\.|$)") : null;
+                for (j = 0; j < eventType.length; j++) {
+                    handleObj = eventType[j];
 
+                    if ((mappedTypes || origType === handleObj.origType) &&
+					 (!handler || handler.guid === handleObj.guid) &&
+					 (!namespaces || namespaces.test(handleObj.namespace)) &&
+					 (!selector || selector === handleObj.selector || selector === "**" && handleObj.selector)) {
+                        eventType.splice(j--, 1);
+
+                        if (handleObj.selector) {
+                            eventType.delegateCount--;
                         }
                     }
-                    // remove generic event handler if no more handlers exist
-                    for (ret in events[type]) {
-                        break;
-                    }
-                    if (!ret) {
-                        if (elem.removeEventListener) {
-                            elem.removeEventListener(type, sl.data(elem, "handle"), false);
-                        } else if (elem.detachEvent) {
-                            elem.detachEvent("on" + type, sl.data(elem, "handle"));
-                        }
-
-                        ret = null;
-                        delete events[type];
-                    }
                 }
-                // event没任何东西
-                for (ret in events) {
-                    break;
+                //如果该类型没有任何绑定事件 就removeEventlistener
+                if (eventType.length === 0 && origCount !== eventType.length) {
+                    detachEvent(elem, type, elemData.handle);
+                    delete events[type];
                 }
-                if (!ret) {
-                    var handle = sl.data(elem, "handle");
-                    if (handle) {
-                        handle.elem = null;
-                    }
-                    sl.removeData(elem, "events");
-                    sl.removeData(elem, "handle");
-                }
+            }
+            // event没任何东西
+            if (sl.InstanceOf.EmptyObject(events)) {
+                delete elemData.handle;
+                sl.removeData(elem, "events");
             }
         },
-        triggerEvent: function (event, data, elem, bubbling) {
-            var type = event.type || event;
+        triggerEvent: function (event, data, elem, onlyHandlers) {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="event"></param>
+            /// <param name="data"></param>
+            /// <param name="elem"></param>
+            /// <param name="onlyHandlers">只在 .triggerHandler用到了，即不触发元素的默认行为，且停止冒泡。</param>
+            /// <returns type=""></returns>
+            if (elem && (elem.nodeType === 3 || elem.nodeType === 8)) {
+                return;
+            }
+            var type = event.type || event,
+			namespaces = [],
+			cache, exclusive, i, cur, old, ontype, special, handle, eventPath, bubbleType;
 
-            if (!bubbling) {
-                event = typeof event === "object" ?
-				event[sl.expando] ? event :
-				sl.extend(SL.Event(type), event) :
-                //(string)
-				SL.Event(type);
+            // 仅对focus/blur事件变种成focusin/out进行处理
+            // 如果浏览器原生支持focusin/out，则确保当前不触发他们
+            //预留判断 目前特殊事件没实现
+            if (rfocusMorph.test(type + EventOperator.triggered)) {
+                return;
+            }
 
-                if (!elem || elem.nodeType === 3 || elem.nodeType === 8) {
-                    return undefined;
-                }
+            if (type.indexOf("!") >= 0) {
+                //如果类型中包含！表示触发没有包含命名空间的事件
+                type = type.slice(0, -1);
+                exclusive = true;
+            }
+            //包含命名空间
+            if (type.indexOf(".") >= 0) {
+                namespaces = type.split(".");
+                type = namespaces.shift();
+                namespaces.sort();
+            }
+            //如果从来没有绑定过此种事件，也不用继续执行了
+            if (!elem && !EventOperator.global[type]) {
+                return;
+            }
 
-                event.result = undefined;
+            // Caller can pass in an Event, Object, or just an event type string
+            event = typeof event === "object" ?
+			event[sl.expando] ? event :
+			new SL.Event(type, event) :
+			new SL.Event(type);
+
+            //判断命名空间
+            event.type = type;
+            event.isTrigger = true;
+            event.exclusive = exclusive;
+            event.namespace = namespaces.join(".");
+            event.namespace_re = event.namespace ? new RegExp("(^|\\.)" + namespaces.join("\\.(?:.*\\.)?") + "(\\.|$)") : null;
+            ontype = type.indexOf(":") < 0 ? "on" + type : "";
+
+            event.result = undefined;
+            if (!event.target) {
                 event.target = elem;
-                data = sl.Convert.convertToArray(data);
-                data.unshift(event);
             }
+            data = data != null ? sl.Convert.convertToArray(data) : [];
+            data.unshift(event);
 
-            event.currentTarget = elem;
-            var handle = sl.data(elem, "handle");
-            if (handle) {
-                handle.apply(elem, data);
-            }
 
-            var parent = elem.parentNode || elem.ownerDocument;
-            //处理通过onType属性添加的事件处理器（如：elem.onClick = function(){...};）
-            try {
-                if (!(elem && elem.nodeName)) {
-                    if (elem["on" + type] && elem["on" + type].apply(elem, data) === false) {
-                        event.result = false;
-                    }
+
+            //铺设往上冒泡的路径，每小段都包括处理对象与事件类型
+            eventPath = [[elem, type]];
+            if (!onlyHandlers && !sl.InstanceOf.Window(elem)) {
+                // 冒泡时是否需要转成别的事件(用于事件模拟)
+                // 如果不是变形来的foucusin/out事件
+                bubbleType = type; //预留接口
+                cur = rfocusMorph.test(bubbleType + type) ? elem : elem.parentNode;
+                for (old = elem; cur; cur = cur.parentNode) {
+                    eventPath.push([cur, bubbleType]);
+                    old = cur;
                 }
-            } catch (e) { }
 
-            if (!event.isPropagationStopped && parent) {
-                //冒泡动作
-                EventOperator.triggerEvent(event, data, parent, true);
+                //一直冒泡到window
+                if (old === (elem.ownerDocument || document)) {
+                    eventPath.push([old.defaultView || old.parentWindow || window, bubbleType]);
+                }
+            }
 
-            } else if (!event.isDefaultPrevented) {
-                //触发默认动作···
-                var target = event.target, old,
-				isClick = target.nodeName == "A" && type === "click";
+            //沿着之前铺好的路触发事件
+            for (i = 0; i < eventPath.length && !event.isPropagationStopped(); i++) {
 
-                if (!isClick && !(target && target.nodeName)) {
-                    try {
-                        if (target[type]) {
-                            /* 假设type为click
-                            因为下面想通过click()来触发默认操作，
-                            但是又不想执行对应的事件处理器（re-trigger），
-                            所以需要做两方面工作：
-                            首先将elem.onclick = null；
-                            然后将jQuery.event.triggered = 'click'; 
-                            将在入口handle（第62行）不再dispatch了
-                            之后再将它们还原*/
-                            old = target["on" + type];
+                cur = eventPath[i][0];
+                event.type = eventPath[i][1];
 
-                            if (old) {
-                                target["on" + type] = null;
-                            }
+                handle = (sl.data(cur, "events") || {})[event.type] && sl.data(cur, "handle");
+                if (handle) {
+                    handle.apply(cur, data);
+                }
+                //一直冒泡到window
+                handle = ontype && cur[ontype];
+                if (handle && handle.apply(cur, data) === false) {
+                    event.preventDefault();
+                }
+            }
+            event.type = type;
 
-                            this.triggered = true;
-                            target[type]();
+            //不触发元素默认行为
+            if (!onlyHandlers && !event.isDefaultPrevented) {
+
+                var isClick = elem.nodeName == "A" && type === "click";
+                if (!isClick) {
+                    // window不触发默认工作
+                    //<ie9 focus blur对隐藏元素不触发默认动作
+                    if (ontype && elem[type] && ((type !== "focus" && type !== "blur") || event.target.offsetWidth !== 0) && !sl.InstanceOf.Window(elem)) {
+                        /* 假设type为click
+                        因为下面想通过click()来触发默认操作，
+                        但是又不想执行对应的事件处理器（re-trigger），
+                        所以需要做两方面工作：
+                        首先将elem.onclick = null；
+                        然后将EventOperator.triggered = 'click'; 
+                        将在入口handle（第62行）不再触发了
+                        之后再将它们还原*/
+                        old = elem[ontype];
+
+                        if (old) {
+                            elem[ontype] = null;
                         }
 
-                        // prevent IE from throwing an error for some elements with some event types, see #3533
-                    } catch (e) { }
 
-                    if (old) {
-                        target["on" + type] = old;
+                        EventOperator.triggered = type;
+                        elem[type]();
+                        EventOperator.triggered = undefined;
+
+                        if (old) {
+                            elem[ontype] = old;
+                        }
                     }
-
-                    this.triggered = false;
                 }
+
             }
-
-
+            return event.result;
 
         },
         props: "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode layerX layerY metaKey newValue offsetX offsetY originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which".split(" "),
@@ -295,10 +360,14 @@ sl.create(function () {
             return event;
         },
         handle: function (event) {
-            event =EventOperator.fixEvent (event || window.event);
+            event = EventOperator.fixEvent(event || window.event);
             var handlers = ((sl.data(this, "events") || {})[event.type] || []),
 			delegateCount = handlers.delegateCount,
 			args = [].slice.call(arguments),
+            //exclusive表示trigger的事件包含!也就是只触发没有命名空间的
+            //exclusive只会在trigger中发生
+            //namespace也只会在trigger中发生 
+            //所以不是通过trigger模拟的事件run_all一直会是true
 			run_all = !event.exclusive && !event.namespace,
 			handlerQueue = [],
 			i, j, cur, ret, selMatch, matched, matches, handleObj, sel, related;
@@ -316,7 +385,7 @@ sl.create(function () {
                             sel = handleObj.selector;
 
                             if (selMatch[sel] === undefined) {
-                            //目前只支持简单的判断 不支持复杂的选择器 后面待添加
+                                //目前只支持简单的判断 不支持复杂的选择器 后面待添加
                                 selMatch[sel] = (
 								handleObj.quick ? quickIs(cur, handleObj.quick) : false
 							);
@@ -335,23 +404,23 @@ sl.create(function () {
                 handlerQueue.push({ elem: this, matches: handlers.slice(delegateCount) });
             }
 
-            // Run delegates first; they may want to stop propagation beneath us
+            //先运行代理的 如果有停止冒泡马上停止
             for (i = 0; i < handlerQueue.length && !event.isPropagationStopped; i++) {
                 matched = handlerQueue[i];
                 event.currentTarget = matched.elem;
 
-                for (j = 0; j < matched.matches.length && !event.isImmediatePropagationStopped(); j++) {
+                for (j = 0; j < matched.matches.length && !event.isImmediatePropagationStopped; j++) {
                     handleObj = matched.matches[j];
 
-                    // Triggered event must either 1) be non-exclusive and have no namespace, or
-                    // 2) have namespace(s) a subset or equal to those in the bound event (both can have no namespace).
+                    //触发的条件 1.run_all(见上面的解释)
+                    //2.没有名称空间
+                    //3.命名空间和触发的命名空间一致
                     if (run_all || (!event.namespace && !handleObj.namespace) || event.namespace_re && event.namespace_re.test(handleObj.namespace)) {
 
-                        event.data = handleObj.data;
+                        event.extendData = handleObj.data;
                         event.handleObj = handleObj;
 
-                        ret = ((jQuery.event.special[handleObj.origType] || {}).handle || handleObj.handler)
-							.apply(matched.elem, args);
+                        ret = handleObj.handler.apply(this, arguments);
 
                         if (ret !== undefined) {
                             event.result = ret;
@@ -363,12 +432,6 @@ sl.create(function () {
                     }
                 }
             }
-
-            // Call the postDispatch hook for the mapped type
-            if (special.postDispatch) {
-                special.postDispatch.call(this, event);
-            }
-
             return event.result;
         },
         hover: function (element, enterfn, leavefn) {
@@ -379,7 +442,7 @@ sl.create(function () {
 
     SL.Event = function (src) {
         //是否已经经过初始化的event
-        if (!this.preventDefault) {
+        if (!(this instanceof SL.Event)) {
             return new SL.Event(src);
         }
         if (src && src.type) {
