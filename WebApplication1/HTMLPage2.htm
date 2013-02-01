@@ -15,14 +15,19 @@
 //            });
         //            $("body").click(tt);
         $(function () {
-            $("#safsa").bind("click.me", function () {
-                alert("click");
-            });
-            $("#safsa").bind("click", function () {
-                alert("click1");
-            });
-            $("#safsa").unbind(".me");
-//            $("#safsa").trigger("click!");
+            $("#Checkbox1").bind("change", function () {
+                alert(this.checked);
+            })
+//            $(document).bind("keypress", function (e) {
+//                alert(e.char);
+//            });
+//            $("#safsa").bind("click", function () {
+//                alert("click1");
+//            });
+//            $("#safsa").unbind(".me");
+            //            $("#safsa").trigger("click!");
+
+
         })
 
 
@@ -98,6 +103,7 @@
     </script>
 </head>
 <body>
+    <input id="Checkbox1" type="checkbox" />
     <ul id="safsa">
       <li id="sf">fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>

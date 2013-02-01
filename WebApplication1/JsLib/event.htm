@@ -24,28 +24,29 @@
 //        console.log("out");
 //    });
     var mm = new SL();
-    SL().Event.addEvent(tt, "click", function (event) {
-        console.log(event.extendData.name);
-    }, { "name": "xuzhiwei" });
-    SL().Event.addEvent(tt, "click", function (event) {
-        console.log(1);
-       // console.log(event.extendData.name);
-    });
+//    SL().Event.addEvent(tt, "click", function (event) {
+//        console.log(event.extendData.name);
+//    }, { "name": "xuzhiwei" });
+//    SL().Event.addEvent(tt, "click", function (event) {
+//        console.log(1);
+//       // console.log(event.extendData.name);
+//    });
+//    SL().Event.addEvent(tt, "click.name", function (event) {
+//        console.log(2);
+//        // console.log(event.extendData.name);
+    //    });
+    var i = 0;
     SL().Event.addEvent(tt, "click.name", function (event) {
-        console.log(2);
+        console.log(i++);
         // console.log(event.extendData.name);
     });
-    SL().Event.addEvent(tt, "click.name", function (event) {
-        console.log("3");
-        // console.log(event.extendData.name);
-    });
-    SL().Event.addEvent(tt, "mouseover.name1", function (event) {
-        console.log("over");
-        // console.log(event.extendData.name);
-    });
-    SL().Event.addEvent(tt, "click.name1", see);
-    sl.Event.removeEvent(tt, ".name1");
-    sl.Event.removeEvent(tt, "click");
+//    SL().Event.addEvent(tt, "mouseover.name1", function (event) {
+//        console.log("over");
+//        // console.log(event.extendData.name);
+//    });
+   // SL().Event.addEvent(tt, "click.name1", see);
+//    sl.Event.removeEvent(tt, ".name1");
+//    sl.Event.removeEvent(tt, "click");
 //    SL().Event.addEvent(tt, "click11", function (event) {
 //        console.log(event.extendData.name);
 //    }, { "name": "xuzhiwei1" });
