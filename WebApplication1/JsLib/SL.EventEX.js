@@ -1,10 +1,11 @@
 ﻿/// <reference path="SL.Core.js" />
 /// <reference path="SL.Data.js" />
 sl.create(function () {
-
     var rquickIs = /^(\w*)(?:#([\w\-]+))?(?:\.([\w\-]+))?$/,
     rtypenamespace = /^([^\.]*)?(?:\.(.+))?$/,
     rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
+    rkeyEvent = /^key/,
+	rmouseEvent = /^(?:mouse|contextmenu)|click/,
 	quickParse = function (selector) {
 	    var quick = rquickIs.exec(selector);
 	    if (quick) {
@@ -30,6 +31,71 @@ sl.create(function () {
             elem.detachEvent("on" + type, handle);
         }
     };
+
+    HooksHelper = {
+        fixHooks: {},
+        keyHooks: {
+            props: "char charCode key keyCode".split(" "),
+            filter: function (event, original) {
+                if (event.which == null) {
+                    event.which = original.charCode != null ? original.charCode : original.keyCode;
+                }
+
+                return event;
+            }
+        },
+        mouseHooks: {
+            props: "button buttons clientX clientY fromElement offsetX offsetY pageX pageY screenX screenY toElement".split(" "),
+            filter: function (event, original) {
+                var eventDoc, doc, body,
+				button = original.button,
+				fromElement = original.fromElement;
+                if (event.pageX == null && original.clientX != null) {
+                    eventDoc = event.target.ownerDocument || document;
+                    doc = eventDoc.documentElement;
+                    body = eventDoc.body;
+
+                    event.pageX = original.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
+                    event.pageY = original.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc && doc.clientTop || body && body.clientTop || 0);
+                }
+                if (!event.relatedTarget && fromElement) {
+                    event.relatedTarget = fromElement === event.target ? original.toElement : fromElement;
+                }
+
+                // 为 click 事件添加 which 属性，左1 中2 右3
+                // IE button的含义：
+                // 0：没有键被按下 
+                // 1：按下左键 
+                // 2：按下右键 
+                // 3：左键与右键同时被按下 
+                // 4：按下中键 
+                // 5：左键与中键同时被按下 
+                // 6：中键与右键同时被按下 
+                // 7：三个键同时被按下
+                if (!event.which && button !== undefined) {
+                    event.which = [0, 1, 3, 0, 2, 0, 0, 0][button];
+                }
+                eventDoc = doc = body = null;
+                return event;
+            }
+        },
+        GetHooks: function (type) {
+            if (HooksHelper.fixHooks[type]) {
+                return HooksHelper.fixHooks[type];
+            }
+            else {
+                if (rkeyEvent.test(event.type)) {
+                    HooksHelper.fixHooks[event.type] = HooksHelper.keyHooks;
+                    return HooksHelper.keyHooks;
+                } else if (rmouseEvent.test(event.type)) {
+                    HooksHelper.fixHooks[event.type] = HooksHelper.mouseHooks;
+                    return HooksHelper.mouseHooks;
+                }
+                return {};
+            }
+        }
+    }
+
     EventOperator = {
         triggered: false,
         addEvent: function (elem, types, handler, data, selector) {
@@ -301,17 +367,22 @@ sl.create(function () {
             return event.result;
 
         },
-        props: "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode layerX layerY metaKey newValue offsetX offsetY originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which".split(" "),
+        props: "attrChange attrName relatedNode srcElement altKey bubbles cancelable ctrlKey currentTarget eventPhase metaKey relatedTarget shiftKey target timeStamp view which".split(" "),
         //处理实际的event 忽略其差异性 实际的trigger中的event切勿fix
         fixEvent: function (event) {
 
             if (event[sl.expando]) {
                 return event;
             }
-            var originalEvent = event;
+
+            var i, prop,
+			originalEvent = event,
+			fixHook = HooksHelper.GetHooks(event.type),
+			copy = fixHook.props ? EventOperator.props.concat(fixHook.props) : EventOperator.props;
+
             event = SL.Event(originalEvent);
-            for (var i = EventOperator.props.length, prop; i; ) {
-                prop = EventOperator.props[--i];
+            for (i = copy.length; i; ) {
+                prop = copy[--i];
                 event[prop] = originalEvent[prop];
             }
             if (!event.target) {
@@ -322,42 +393,12 @@ sl.create(function () {
             if (event.target.nodeType === 3) {
                 event.target = event.target.parentNode;
             }
-            if (!event.relatedTarget && event.fromElement) {
-                event.relatedTarget = event.fromElement === event.target ? event.toElement : event.fromElement;
+            event.metaKey = !!event.metaKey;
+            if (!event.eventPhase) {
+                event.eventPhase = 2;
             }
-
-            if (event.pageX == null && event.clientX != null) {
-                var doc = document.documentElement, body = document.body;
-                event.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
-                event.pageY = event.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc && doc.clientTop || body && body.clientTop || 0);
-            }
-            // Netscape/Firefox/Opera
-            if (!event.which && ((event.charCode || event.charCode === 0) ? event.charCode : event.keyCode)) {
-                event.which = event.charCode || event.keyCode;
-            }
-
-            // Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
-            if (!event.metaKey && event.ctrlKey) {
-                event.metaKey = event.ctrlKey;
-            }
-
-            // 为 click 事件添加 which 属性，左1 中2 右3
-            // IE button的含义：
-            // 0：没有键被按下 
-            // 1：按下左键 
-            // 2：按下右键 
-            // 3：左键与右键同时被按下 
-            // 4：按下中键 
-            // 5：左键与中键同时被按下 
-            // 6：中键与右键同时被按下 
-            // 7：三个键同时被按下
-            if (!event.which && event.button !== undefined) {
-                event.which = [0, 1, 3, 0, 2, 0, 0, 0][event.button];
-            }
-            event.charCode = (event.type == "keypress") ? oEvent.keyCode : 0;
-            event.eventPhase = 2;
             event.isChar = (event.charCode > 0);
-            return event;
+            return fixHook.filter ? fixHook.filter(event, originalEvent) : event;
         },
         handle: function (event) {
             event = EventOperator.fixEvent(event || window.event);
