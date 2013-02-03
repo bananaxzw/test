@@ -17,14 +17,18 @@
         $(function () {
             $("#Checkbox1").bind("change", function () {
                 alert(this.checked);
-            })
-//            $(document).bind("keypress", function (e) {
-//                alert(e.char);
-//            });
-//            $("#safsa").bind("click", function () {
-//                alert("click1");
-//            });
-//            $("#safsa").unbind(".me");
+            });
+            $("#Checkbox1").unbind("change");
+            $("#Select1").bind("change", function () {
+                alert(this.value);
+            });
+            //            $(document).bind("keypress", function (e) {
+            //                alert(e.char);
+            //            });
+            //            $("#safsa").bind("click", function () {
+            //                alert("click1");
+            //            });
+            //            $("#safsa").unbind(".me");
             //            $("#safsa").trigger("click!");
 
 
@@ -99,11 +103,17 @@
             }
         
          })
-       
+         function mm(value) {
+             window.event;
+         }
     </script>
 </head>
-<body>
-    <input id="Checkbox1" type="checkbox" />
+<body><select id="Select1" >
+<option>safs</option>
+<option>safs</option>
+</select>
+    <input id="Text1" type="text" onpropertychange="mm(this.checked);" />
+    <input id="Checkbox1" type="checkbox"/>
     <ul id="safsa">
       <li id="sf">fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
