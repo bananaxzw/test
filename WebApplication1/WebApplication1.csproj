@@ -180,6 +180,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="google\" />
+    <Folder Include="JQ\1.6\sizzle\" />
     <Folder Include="JQ\1.7\src\sizzle\" />
     <Folder Include="JsLib\anim\" />
     <Folder Include="JsLib\JsDOC\" />
@@ -769,6 +770,26 @@
     <Content Include="JQ\1.4\test\unit\queue.js" />
     <Content Include="JQ\1.4\test\unit\selector.js" />
     <Content Include="JQ\1.4\test\unit\traversing.js" />
+    <Content Include="JQ\1.6\ajax.js" />
+    <Content Include="JQ\1.6\ajax\jsonp.js" />
+    <Content Include="JQ\1.6\ajax\script.js" />
+    <Content Include="JQ\1.6\ajax\xhr.js" />
+    <Content Include="JQ\1.6\attributes.js" />
+    <Content Include="JQ\1.6\core.js" />
+    <Content Include="JQ\1.6\css.js" />
+    <Content Include="JQ\1.6\data.js" />
+    <Content Include="JQ\1.6\deferred.js" />
+    <Content Include="JQ\1.6\dimensions.js" />
+    <Content Include="JQ\1.6\effects.js" />
+    <Content Include="JQ\1.6\event.js" />
+    <Content Include="JQ\1.6\intro.js" />
+    <Content Include="JQ\1.6\manipulation.js" />
+    <Content Include="JQ\1.6\offset.js" />
+    <Content Include="JQ\1.6\outro.js" />
+    <Content Include="JQ\1.6\queue.js" />
+    <Content Include="JQ\1.6\sizzle-jquery.js" />
+    <Content Include="JQ\1.6\support.js" />
+    <Content Include="JQ\1.6\traversing.js" />
     <Content Include="JQ\1.7\src\ajax.js" />
     <Content Include="JQ\1.7\src\ajax\jsonp.js" />
     <Content Include="JQ\1.7\src\ajax\script.js" />
