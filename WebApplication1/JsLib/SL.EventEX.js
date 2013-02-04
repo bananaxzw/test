@@ -1,5 +1,7 @@
 ﻿/// <reference path="SL.Core.js" />
 /// <reference path="SL.Data.js" />
+/// <reference path="SL.Selector.js" />
+
 sl.create(function () {
     var rquickIs = /^(\w*)(?:#([\w\-]+))?(?:\.([\w\-]+))?$/,
     rtypenamespace = /^([^\.]*)?(?:\.(.+))?$/,
@@ -8,6 +10,7 @@ sl.create(function () {
     rFormElems = /^(?:textarea|input|select)$/i,
 	rInputCheck = /^(?:radio|checkbox|)$/,
 	rmouseEvent = /^(?:mouse|contextmenu)|click/,
+    isECMAEvent = !!document.addEventListener,
 	quickParse = function (selector) {
 	    var quick = rquickIs.exec(selector);
 	    if (quick) {
@@ -140,10 +143,11 @@ sl.create(function () {
             for (t = 0; t < types.length; t++) {
 
                 tns = rtypenamespace.exec(types[t]) || [];
+                type = tns[1];
                 special = specialEvent[type] || {};
-                type = tns[1]; //预留接口
+                type = (selector ? special.delegateType : special.bindType) || type;//事件模拟中会用到
                 namespaces = (tns[2] || "").split(".").sort();
-
+                special = specialEvent[type] || {};
                 handleObj = sl.extend({
                     type: type,
                     origType: tns[1],
@@ -210,7 +214,7 @@ sl.create(function () {
                     }
                     continue;
                 }
-                special = specialEvent.special[type] || {};
+                special = specialEvent[type] || {};
                 eventType = events[type] || [];
                 origCount = eventType.length;
                 namespaces = namespaces ? new RegExp("(^|\\.)" + namespaces.split(".").sort().join("\\.(?:.*\\.)?") + "(\\.|$)") : null;
@@ -323,7 +327,7 @@ sl.create(function () {
             }
 
             //沿着之前铺好的路触发事件
-            for (i = 0; i < eventPath.length && !event.isPropagationStopped(); i++) {
+            for (i = 0; i < eventPath.length && !event.isPropagationStopped; i++) {
 
                 cur = eventPath[i][0];
                 event.type = eventPath[i][1];
@@ -415,7 +419,7 @@ sl.create(function () {
             var handlers = ((sl.data(this, "events") || {})[event.type] || []),
 			delegateCount = handlers.delegateCount,
 			args = [].slice.call(arguments),
-            special = specialEvent[event.type];
+            special = specialEvent[event.type],
             //exclusive表示trigger的事件包含!也就是只触发没有命名空间的
             //exclusive只会在trigger中发生
             //namespace也只会在trigger中发生 
@@ -439,7 +443,7 @@ sl.create(function () {
                             if (selMatch[sel] === undefined) {
                                 //目前只支持简单的判断 不支持复杂的选择器 后面待添加
                                 selMatch[sel] = (
-								handleObj.quick ? quickIs(cur, handleObj.quick) : false
+								handleObj.quick ? quickIs(cur, handleObj.quick):sl.selector.matchesSelector(cur,sel)
 							);
                             }
                             if (selMatch[sel]) {
@@ -472,7 +476,7 @@ sl.create(function () {
                         event.extendData = handleObj.data;
                         event.handleObj = handleObj;
 
-                        ret = ((jQuery.event.special[handleObj.origType] || {}).handle || handleObj.handler)
+                        ret = ((specialEvent[handleObj.origType] || {}).handle || handleObj.handler)
 							.apply(matched.elem, args);
 
                         if (ret !== undefined) {
@@ -513,62 +517,86 @@ sl.create(function () {
             }
         }
     };
-
-    specialEvent.change = {
-        setup: function () {
-            // IE6-8不支持radio、checkbox的change事件，要实现代理也得模拟
-            if (rFormElems.test(this.nodeName)) {
-                if (rInputCheck.test(this.type)) {
-                    EventOperator.addEvent(this, "propertychange._change", function (event) {
-                        if (event.originalEvent.propertyName === "checked") {
-                            this._just_changed = true;
-                        }
-                    });
-                    EventOperator.addEven(this, "click._change", function (event) {
-                        if (this._just_changed && !event.isTrigger) {
-                            this._just_changed = false;
-                        }
-                        // Allow triggered, simulated change events (#11500)
-                        SpecialHelper.simulate("change", this, event, true);
-                    });
+    if (!isECMAEvent) {
+        specialEvent.change = {
+            setup: function () {
+                // IE6-8不支持radio、checkbox的change事件，要实现代理也得模拟
+                if (rFormElems.test(this.nodeName)) {
+                    if (rInputCheck.test(this.type)) {
+                        EventOperator.addEvent(this, "propertychange._change", function (event) {
+                            if (event.originalEvent.propertyName === "checked") {
+                                this._just_changed = true;
+                            }
+                        });
+                        EventOperator.addEvent(this, "click._change", function (event) {
+                            if (this._just_changed && !event.isTrigger) {
+                                this._just_changed = false;
+                            }
+                            //通过click模拟
+                            SpecialHelper.simulate("change", this, event, true);
+                        });
+                    }
+                    return false;
                 }
-                return false;
-            }
-            /*
-            就是延迟绑定啊     
-            此事件就是触发在focus之前, 这时就可以确定现在页面已经动态添加了多少个新节点
-            */
-            EventOperator.add(this, "beforeactivate._change", function (e) {
-                var elem = e.target;
+                /*
+                就是延迟绑定啊     
+                此事件就是触发在focus之前, 这时就可以确定现在页面已经动态添加了多少个新节点
+                */
+                EventOperator.add(this, "beforeactivate._change", function (e) {
+                    var elem = e.target;
 
-                if (rFormElems.test(elem.nodeName) && !sl.data(elem, "_change_attached")) {
-                    EventOperator.addEvent(elem, "change._change", function (event) {
-                        if (this.parentNode && !event.isSimulated && !event.isTrigger) {
-                            jQuery.event.simulate("change", this.parentNode, event, true);
-                        }
-                    });
-                    sl.data(elem, "_change_attached", true);
+                    if (rFormElems.test(elem.nodeName) && !sl.data(elem, "_change_attached")) {
+                        EventOperator.addEvent(elem, "change._change", function (event) {
+                            if (this.parentNode && !event.isSimulated && !event.isTrigger) {
+                                SpecialHelper.simulate("change", this.parentNode, event, true);
+                            }
+                        });
+                        sl.data(elem, "_change_attached", true);
+                    }
+                });
+            },
+
+            handle: function (event) {
+                var elem = event.target;
+
+                // Swallow native change events from checkbox/radio, we already triggered them above
+                if (this !== elem || event.isSimulated || event.isTrigger || (elem.type !== "radio" && elem.type !== "checkbox")) {
+                    return event.handleObj.handler.apply(this, arguments);
                 }
-            });
-        },
+            },
 
-        handle: function (event) {
-            var elem = event.target;
+            teardown: function () {
+                EventOperator.removeEvent(this, "._change");
 
-            // Swallow native change events from checkbox/radio, we already triggered them above
-            if (this !== elem || event.isSimulated || event.isTrigger || (elem.type !== "radio" && elem.type !== "checkbox")) {
-                return event.handleObj.handler.apply(this, arguments);
+                return rFormElems.test(this.nodeName);
             }
-        },
 
-        teardown: function () {
-            EventOperator.removeEvent(this, "._change");
-
-            return rFormElems.test(this.nodeName);
         }
-
-    }
-
+    };
+    //mouseenter、mouseleave某些浏览器不支持
+    //可以用mouseover和mouseout来模拟
+    sl.each({
+        mouseenter: "mouseover",
+        mouseleave: "mouseout"
+    }, function (orig, fix) {
+        specialEvent[orig] = {
+            delegateType: fix,
+            bindType: fix,
+            handle: function (event) {
+                var target = this,
+				related = event.relatedTarget,
+				handleObj = event.handleObj,
+				selector = handleObj.selector,
+				ret;
+                if (!related || (related !== target && !sl.selector.contains(target, related))) {
+                    event.type = handleObj.origType;
+                    ret = handleObj.handler.apply(this, arguments);
+                    event.type = fix;
+                }
+                return ret;
+            }
+        };
+    });
     SL.Event = function (src) {
         //是否已经经过初始化的event
         if (!(this instanceof SL.Event)) {

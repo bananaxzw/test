@@ -1272,6 +1272,7 @@ SL().create(function (SL) {
         }
         this.expr = Sizzle.selectors;
         this.matches = Sizzle.matches;
+        this.expr[":"] = Sizzle.selectors.filters;
         this.matchesSelector = Sizzle.matchesSelector;
         this.filter = Sizzle.filter;
         this.contains = Sizzle.contains;

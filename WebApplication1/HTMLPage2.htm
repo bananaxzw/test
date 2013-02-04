@@ -15,13 +15,16 @@
 //            });
         //            $("body").click(tt);
         $(function () {
-            $("#Checkbox1").bind("change", function () {
-                alert(this.checked);
-            });
-            $("#Checkbox1").unbind("change");
-            $("#Select1").bind("change", function () {
-                alert(this.value);
-            });
+//            $("#Checkbox1").bind("change", function () {
+//                alert(this.checked);
+//            });
+//            $("#Checkbox1").unbind("change");
+//            $("#Select1").bind("change", function () {
+//                alert(this.value);
+//            });
+            $("#safsa").mouseenter(function () {
+                alert(1);
+            })
             //            $(document).bind("keypress", function (e) {
             //                alert(e.char);
             //            });
@@ -100,6 +103,9 @@
             }
             document.getElementById("sf").onclick = function (e) {
                 alert(e.srcElement.nodeName+"safsaf");
+            }
+            document.getElementById("Text1").onmouseover = function () {
+                alert(window.event.srcElement.nodeName + "safsaf");
             }
         
          })
