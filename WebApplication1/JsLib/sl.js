@@ -3148,799 +3148,6 @@ SL().create(function (SL) {
     SL.extend({ data: data.AddData, removeData: data.removeData });
 
 });
-//event
-sl.create(function () {
-
-    EventOperator = {
-        triggered: false,
-        addEvent: function (elem, type, handler, data) {
-            if (elem.nodeType == 3 || elem.nodeType == 8) {
-                return;
-            }
-            if (!handler.guid) {
-                handler.guid = sl.guid++;
-            }
-            if (data !== undefined) {
-                var fn = handler;
-                // 创建一个代理的handler 来保存data 保障data的唯一性
-                handler = sl.proxy(fn);
-                handler.extendData = data;
-            }
-            var events = sl.data(elem, "events") || sl.data(elem, "events", {}),
-			handle = sl.data(elem, "handle"), eventHandle;
-            if (!handle) {
-                eventHandle = function () {
-                    return !EventOperator.triggered ?
-                    EventOperator.handle.apply(eventHandle.elem, arguments) : undefined;
-                };
-                handle = sl.data(elem, "handle", eventHandle);
-            }
-            handle.elem = elem;
-            var handlers = events[type];
-            //防止重复绑定事件
-            if (!handlers) {
-                handlers = events[type] = {};
-                // Bind the global event handler to the element
-                if (elem.addEventListener) {
-                    elem.addEventListener(type, handle, false);
-                } else if (elem.attachEvent) {
-                    elem.attachEvent("on" + type, handle);
-                }
-
-            }
-            handlers[handler.guid] = handler;
-
-        },
-        removeEvent: function (elem, type, handler) {
-            if (elem.nodeType === 3 || elem.nodeType === 8) {
-                return;
-            }
-            var events = sl.data(elem, "events"), ret, type, fn;
-            if (events) {
-                if (!type) {
-                    for (var _type in events) {
-                        EventOperator.removeEvent(elem, _type, handler);
-                    }
-                }
-                if (events[type]) {
-                    if (handler) {
-                        fn = events[type][handler.guid];
-                        delete events[type][handler.guid];
-                    } else {
-                        for (var handle in events[type]) {
-                            delete events[type][handle];
-
-                        }
-                    }
-                    // remove generic event handler if no more handlers exist
-                    for (ret in events[type]) {
-                        break;
-                    }
-                    if (!ret) {
-                        if (elem.removeEventListener) {
-                            elem.removeEventListener(type, sl.data(elem, "handle"), false);
-                        } else if (elem.detachEvent) {
-                            elem.detachEvent("on" + type, sl.data(elem, "handle"));
-                        }
-
-                        ret = null;
-                        delete events[type];
-                    }
-                }
-                // event没任何东西
-                for (ret in events) {
-                    break;
-                }
-                if (!ret) {
-                    var handle = sl.data(elem, "handle");
-                    if (handle) {
-                        handle.elem = null;
-                    }
-                    sl.removeData(elem, "events");
-                    sl.removeData(elem, "handle");
-                }
-            }
-        },
-        triggerEvent: function (event, data, elem, bubbling) {
-            var type = event.type || event;
-
-            if (!bubbling) {
-                event = typeof event === "object" ?
-				event[sl.expando] ? event :
-				sl.extend(SL.Event(type), event) :
-                //(string)
-				SL.Event(type);
-
-                if (!elem || elem.nodeType === 3 || elem.nodeType === 8) {
-                    return undefined;
-                }
-
-                event.result = undefined;
-                event.target = elem;
-                data = sl.Convert.convertToArray(data);
-                data.unshift(event);
-            }
-
-            event.currentTarget = elem;
-            var handle = sl.data(elem, "handle");
-            if (handle) {
-                handle.apply(elem, data);
-            }
-
-            var parent = elem.parentNode || elem.ownerDocument;
-            //处理通过onType属性添加的事件处理器（如：elem.onClick = function(){...};）
-            try {
-                if (!(elem && elem.nodeName)) {
-                    if (elem["on" + type] && elem["on" + type].apply(elem, data) === false) {
-                        event.result = false;
-                    }
-                }
-            } catch (e) { }
-
-            if (!event.isPropagationStopped && parent) {
-                //冒泡动作
-                EventOperator.triggerEvent(event, data, parent, true);
-
-            } else if (!event.isDefaultPrevented) {
-                //触发默认动作···
-                var target = event.target, old,
-				isClick = target.nodeName == "A" && type === "click";
-
-                if (!isClick && !(target && target.nodeName)) {
-                    try {
-                        if (target[type]) {
-                            /* 假设type为click
-                            因为下面想通过click()来触发默认操作，
-                            但是又不想执行对应的事件处理器（re-trigger），
-                            所以需要做两方面工作：
-                            首先将elem.onclick = null；
-                            然后将jQuery.event.triggered = 'click'; 
-                            将在入口handle（第62行）不再dispatch了
-                            之后再将它们还原*/
-                            old = target["on" + type];
-
-                            if (old) {
-                                target["on" + type] = null;
-                            }
-
-                            this.triggered = true;
-                            target[type]();
-                        }
-
-                        // prevent IE from throwing an error for some elements with some event types, see #3533
-                    } catch (e) { }
-
-                    if (old) {
-                        target["on" + type] = old;
-                    }
-
-                    this.triggered = false;
-                }
-            }
-
-
-
-        },
-        props: "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode layerX layerY metaKey newValue offsetX offsetY originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which".split(" "),
-        //处理实际的event 忽略其差异性 实际的trigger中的event切勿fix
-        fixEvent: function (event) {
-
-            if (event[sl.expando]) {
-                return event;
-            }
-            var originalEvent = event;
-            event = SL.Event(originalEvent);
-            for (var i = EventOperator.props.length, prop; i; ) {
-                prop = EventOperator.props[--i];
-                event[prop] = originalEvent[prop];
-            }
-            if (!event.target) {
-                event.target = event.srcElement || document;
-            }
-
-            //(safari)
-            if (event.target.nodeType === 3) {
-                event.target = event.target.parentNode;
-            }
-            if (!event.relatedTarget && event.fromElement) {
-                event.relatedTarget = event.fromElement === event.target ? event.toElement : event.fromElement;
-            }
-
-            if (event.pageX == null && event.clientX != null) {
-                var doc = document.documentElement, body = document.body;
-                event.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
-                event.pageY = event.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc && doc.clientTop || body && body.clientTop || 0);
-            }
-            // Netscape/Firefox/Opera
-            if (!event.which && ((event.charCode || event.charCode === 0) ? event.charCode : event.keyCode)) {
-                event.which = event.charCode || event.keyCode;
-            }
-
-            // Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
-            if (!event.metaKey && event.ctrlKey) {
-                event.metaKey = event.ctrlKey;
-            }
-
-            // 为 click 事件添加 which 属性，左1 中2 右3
-            // IE button的含义：
-            // 0：没有键被按下 
-            // 1：按下左键 
-            // 2：按下右键 
-            // 3：左键与右键同时被按下 
-            // 4：按下中键 
-            // 5：左键与中键同时被按下 
-            // 6：中键与右键同时被按下 
-            // 7：三个键同时被按下
-            if (!event.which && event.button !== undefined) {
-                event.which = [0, 1, 3, 0, 2, 0, 0, 0][event.button];
-            }
-            event.charCode = (event.type == "keypress") ? oEvent.keyCode : 0;
-            event.eventPhase = 2;
-            event.isChar = (event.charCode > 0);
-            return event;
-        },
-        handle: function (event) {
-            // returned undefined or false
-            var handlers;
-            event = arguments[0] = EventOperator.fixEvent(event || window.event);
-            event.currentTarget = this;
-            handlers = (sl.data(this, "events") || {})[event.type];
-
-            for (var j in handlers) {
-                var handler = handlers[j];
-                event.handler = handler;
-                event.extendData = handler.extendData;
-
-                var ret = handler.apply(this, arguments);
-
-                if (ret !== undefined) {
-                    event.result = ret;
-                    if (ret === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                }
-                if (event.isImmediatePropagationStopped) {
-                    break;
-                }
-            }
-
-            return event.result;
-        },
-        hover: function (element, enterfn, leavefn) {
-            EventOperator.addEvent(element, "mouseover", enterfn);
-            EventOperator.addEvent(element, "mouseout", leavefn);
-        }
-    }
-
-    SL.Event = function (src) {
-        //是否已经经过初始化的event
-        if (!this.preventDefault) {
-            return new SL.Event(src);
-        }
-        if (src && src.type) {
-            this.originalEvent = src;
-            this.type = src.type;
-        } else {
-            this.type = src;
-        }
-        this.timeStamp = new Date();
-
-        //用来标注已经初始化
-        this[sl.expando] = true;
-    };
-    SL.Event.prototype = {
-        preventDefault: function () {
-            // DOM LV3
-            this.isDefaultPrevented = true;
-            var e = this.originalEvent;
-
-            if (!e) {
-                return;
-            }
-
-            // DOM LV2
-            if (e.preventDefault) {
-                e.preventDefault();
-            }
-            // IE6-8
-            else {
-                e.returnValue = false;
-            }
-        },
-        stopPropagation: function () {
-            // DOM LV3
-            this.isPropagationStopped = true;
-            var e = this.originalEvent;
-
-            if (!e) {
-                return;
-            }
-
-            // DOM LV2
-            if (e.stopPropagation) {
-                e.stopPropagation();
-            }
-            else {
-                // IE6-8
-                e.cancelBubble = true;
-            }
-        },
-        stopImmediatePropagation: function () {
-            this.isImmediatePropagationStopped = true;
-            this.stopPropagation();
-        },
-        isDefaultPrevented: false,
-        isPropagationStopped: false,
-        isImmediatePropagationStopped: false
-    };
-
-    sl.Event = EventOperator;
-});
-//attr
-SL().create(function () {
-    function attribute() { }
-    attribute.prototype = {
-        getAttr: function (ele, name) {
-            if (/href|src|width|height|colSpan|rowSpan/.test(name)) {
-                /**IE的getAttribute支持第二个参数，可以为 0,1,2,4
-                0 是默认；1 区分属性的大小写；2取出源代码中的原字符串值(注，IE67对动态创建的节点没效)。
-                IE 在取 href 的时候默认拿出来的是绝对路径，加参数2得到我们所需要的相对路径。*/
-                return ele.getAttribute(name, 2);
-            } else if ("style" === name) {
-                return ele.style.cssText;
-            } else if (name == "tabIndex") {
-                var attributeNode = ele.getAttributeNode("tabIndex");
-                return attributeNode && attributeNode.specified
-						? attributeNode.value
-						: ele.nodeName.match(/^(a|area|button|input|object|select|textarea)$/i)
-							? 0
-							: undefined;
-            } else {
-                return ele.getAttribute(name);
-            }
-        },
-        setAttr: function (ele, name, value) {
-            //设置属性
-            if (value == null) {
-                ele.removeAttribute(name);
-            } else {
-                if ("style" === name) {
-                    ele.style.cssText ? ele.style.cssText = value : ele.setAttribute("style", value);
-                } else {
-                    ele.setAttribute(name, value);
-                }
-            }
-
-        },
-        removeAttr: function (ele, name) {
-            this.setAttr(ele, name, "");
-            if (ele.nodeType === 1) {
-                if (ele.removeAttribute) {
-                    ele.removeAttribute(name);
-                }
-                else if (ele.attributes && ele.attributes.removeNamedItem) {
-                    ele.attributes.removeNamedItem(name);
-                }
-            }
-
-        },
-        addClass: function (ele, value) {
-            if (value && typeof value === "string") {
-                //分割
-                var classNames = (value || "").split(/\s+/);
-                if (ele.nodeType === 1) {
-                    if (!ele.className && classNames.length === 1) {
-                        ele.className = value;
-
-                    } else {
-                        var className = " " + ele.className + " ";
-                        for (var c = 0, cl = classNames.length; c < cl; c++) {
-                            if (className.indexOf(" " + classNames[c] + " ") < 0) {
-                                ele.className += " " + classNames[c];
-                            }
-                        }
-                    }
-                }
-            }
-
-        },
-        hasClass: function (ele, value) {
-            var re = new RegExp('(\\s|^)' + value + '(\\s|$)');
-            return re.test(ele.className.replace(/[\n\t]/, " "));
-
-        },
-        removeClass: function (ele, value) {
-            if ((value && typeof value === "string") || value === undefined) {
-                var classNames = (value || "").split(/\s+/);
-
-                if (ele.nodeType === 1 && ele.className) {
-                    if (value) {
-                        var className = (" " + ele.className + " ").replace(/[\n\t]/g, " ");
-                        for (var c = 0, cl = classNames.length; c < cl; c++) {
-                            className = className.replace(" " + classNames[c] + " ", " ");
-                        }
-                        ele.className = className.substring(1, className.length - 1);
-
-                    } else {
-                        ele.className = "";
-                    }
-                }
-            }
-        },
-        toggleClass: function (ele, value) {
-            if (this.hasClass(ele, value)) {
-                this.removeClass(ele, value);
-            } else {
-                this.addClass(ele, value);
-            }
-        },
-        //select-multiple 还未考虑
-        getValue: function (ele) {
-            if (sl.InstanceOf.DOMElement(ele) && "value" in ele) {
-                return ele.value;
-            }
-            return "";
-        },
-        setValue: function (ele, value) {
-            if (sl.InstanceOf.DOMElement(ele) && "value" in ele) {
-                ele.value = value;
-            }
-        }
-    }
-    sl.attr = new attribute();
-});
-//DOM
-SL().create(function (SL) {
-    //var xuzhiweiSL = new SL();
-    /**
-    *@class
-    *@name Dom
-    */
-    var Dom = function () { };
-    Dom.prototype = {
-        toString: "SL框架DOM模块",
-        boxModel: document.compatMode === "CSS1Compat",
-        getDocumentElement: function () {
-
-            return document.documentElement || document.body;
-        },
-
-
-        prevSibling: function (elem) {
-            do {
-                elem = elem.previousSibling;
-            } while (elem && elem.nodeType != 1);
-            return elem;
-        },
-        nextSibling: function (elem) {
-            do {
-                elem = elem.nextSibling;
-            } while (elem && elem.nodeType != 1);
-            return elem;
-        },
-        siblings: function (elem) {
-            if (!elem.nodeType) return [];
-            if (elem === document) return [];
-            var n = elem.parentNode.firstChild;
-            var r = [];
-
-            for (; n; n = n.nextSibling) {
-                if (n.nodeType == 1 && n != elem)
-                    r.push(n);
-            }
-
-            return r;
-        },
-        /**
-        *按照某个规则 逐级展开 不包括本身
-        *@param {Element} elem
-        *@param {String} dir 条件比如nextSibling
-        */
-        dir: function (elem, dir) {
-            var matched = [], cur = elem[dir];
-            while (cur && cur != document) {
-                if (cur.nodeType == 1)
-                    matched.push(cur);
-                cur = cur[dir];
-            }
-            return matched;
-        },
-        /**
-        *按照某个规则 逐级展开 取某一级 包括本身
-        *@param {Element} elem
-        *@param {String} dir 条件比如nextSibling
-        */
-        nthLevel: function (cur, result, dir, elem) {
-            result = result || 1;
-            var num = 0;
-
-            for (; cur; cur = cur[dir])
-                if (cur.nodeType == 1 && ++num == result)
-                    break;
-
-            return cur;
-        },
-        contents: function (elem) {
-            return /iframe/i.test(elem.nodeName) ? (elem.contentDocument || elem.contentWindow.document) : SL.Convert.convertToArray(elem.childNodes);
-
-        },
-        firstChild: function (elem, exceptTextNode) {
-            elem = elem.firstChild;
-            return elem && exceptTextNode && elem.nodeType != 1 ?
-        this.nextSibling(elem, exceptTextNode) : elem;
-        },
-        lastChild: function (elem) {
-            elem = elem.lastChild;
-            return elem && elem.nodeType != 1 ?
-        this.prevSibling(elem) : elem;
-        },
-        parentNode: function (elem, level) {
-            level = level || 1;
-            for (var i = 0; i < level; i++)
-                if (elem != null) elem = elem.parentNode;
-            return elem;
-        },
-        appendFirstChild: function (newNode, parentNode) {
-            this.insertNode(parentNode, "afterBegin", newNode);
-
-        },
-        append: function (newNode, parentNode) {
-            this.insertNode(parentNode, "beforeEnd", newNode);
-        },
-        insertBefore: function (newNode, targetNode) {
-            this.insertNode(targetNode, "beforeBegin", newNode);
-        },
-        // 在目标Node之后加入 新的Node.
-        insertAfter: function (newNode, targetNode) {
-            this.insertNode(targetNode, "afterEnd", newNode);
-        },
-
-        insertNode: function (el, where, parsedNode) {
-            switch (where) {
-                case "beforeBegin":
-                    el.parentNode.insertBefore(parsedNode, el);
-                    break;
-                case "afterBegin":
-                    if (el.firstChild) {
-                        el.insertBefore(parsedNode, el.firstChild);
-                    } else {
-                        el.appendChild(parsedNode);
-                    }
-                    break;
-                case "beforeEnd":
-                    el.appendChild(parsedNode);
-                    break;
-                case "afterEnd":
-                    if (el.nextSibling) {
-                        el.parentNode.insertBefore(parsedNode, el.nextSibling);
-                    } else {
-                        el.parentNode.appendChild(parsedNode);
-                    }
-                    break;
-            }
-        },
-        insertAdjacentHTML: function (node, sWhere, sHtml) {
-            if (node.nodeType != 1) throw new Error(ns + ':insertAdjacentHTML方法 参数有错误.');
-            if ((sWhere = sWhere.tolowerCase()) == 'afterbegin' || sWhere == 'beforeend') {
-                if (/hr|br|img|input|link|col|meta|base|area/i.test(node.tagName))
-                    return false;
-            }
-            if (node.insertAdjacentHTML) node.insertAdjacentHTML(sWhere, sHtml);
-            else {
-                var df, r = node.ownerDocument.createRange();
-                switch (new String(sWhere).toLowerCase()) {
-                    case "beforebegin":
-                        r.setStartBefore(node);
-                        df = r.createContextualFragment(sHtml);
-                        node.parentNode.insertBefore(df, node);
-                        break;
-                    case "afterbegin":
-                        r.selectNodeContents(node);
-                        r.collapse(true);
-                        df = r.createContextualFragment(sHtml);
-                        node.insertBefore(df, node.firstChild);
-                        break;
-                    case "beforeend":
-                        r.selectNodeContents(node);
-                        r.collapse(false);
-                        df = r.createContextualFragment(sHtml);
-                        node.appendChild(df);
-                        break;
-                    case "afterend":
-                        r.setStartAfter(node);
-                        df = r.createContextualFragment(sHtml);
-                        node.parentNode.insertBefore(df, node.nextSibling);
-                        break;
-                }
-
-            }
-        },
-        map: function (elems, callback) {
-            var ret = [];
-            for (var i = 0, length = elems.length; i < length; i++) {
-                var value = callback(elems[i], i);
-
-                if (value != null)
-                    ret[ret.length] = value;
-            }
-
-            return ret.concat.apply([], ret);
-        },
-        transactionDom: function (elems, doc, fragment, scripts) {
-            /*处理tr opotion table这种直接div下设置innerhtml无效*/
-            var wrapMap = {
-                option: [1, "<select multiple='multiple'>", "</select>"],
-                legend: [1, "<fieldset>", "</fieldset>"],
-                thead: [1, "<table>", "</table>"],
-                tr: [2, "<table><tbody>", "</tbody></table>"],
-                td: [3, "<table><tbody><tr>", "</tr></tbody></table>"],
-                col: [2, "<table><tbody></tbody><colgroup>", "</colgroup></table>"],
-                area: [1, "<map>", "</map>"],
-                _default: [0, "", ""]
-            };
-            wrapMap.optgroup = wrapMap.option,
-            wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead,
-            wrapMap.th = wrapMap.td;
-            doc = doc || document;
-            if (typeof doc.createElement === "undefined") {
-                doc = doc.ownerDocument || doc[0] && doc[0].ownerDocument || document;
-            }
-            //返回节点集
-            var ret = [];
-            SL.each(elems, function (i, elem) {
-                if (typeof elem === "number") {
-                    elem += "";
-                }
-
-                if (!elem) {
-                    return;
-                }
-                //直接文本
-                if (typeof elem === "string" && !/<|&\w+;/.test(elem)) {
-                    elem = doc.createTextNode(elem);
-                } else if (typeof elem === "string") {
-                    // Fix "XHTML"-style tags in all browsers
-                    elem = elem.replace(/(<([\w:]+)[^>]*?)\/>/g, fcloseTag = function (all, front, tag) {
-                        return /^(?:area|br|col|embed|hr|img|input|link|meta|param)$/i.test(tag) ? all : front + "></" + tag + ">";
-                    });
-                    // 获取 tag名 小写
-                    var tag = (/<([\w:]+)/.exec(elem) || ["", ""])[1].toLowerCase(),
-                    //处理tr opotion table这种直接div下设置innerhtml无效
-					wrap = wrapMap[tag] || wrapMap._default,
-					depth = wrap[0],
-					div = doc.createElement("div");
-                    // 处理tr opotion table这种直接div下设置innerhtml无效 包裹
-                    div.innerHTML = wrap[1] + elem + wrap[2];
-                    // Move to the right depth
-                    while (depth--) {
-                        div = div.lastChild;
-                    }
-                    // ie6 ie7会在table下自动添加  <tbody>  需要移除不然<thead></thead>会返回<thead></thead><tbody></tbody>
-                    if (!SL.Support.tbody) {
-                        // 如果string是table可能自动产生tbody
-                        var hasBody = /<tbody/i.test(elem),
-						tbody = tag === "table" && !hasBody ?
-							div.firstChild && div.firstChild.childNodes :
-                        // String=<thead> or <tfoot> 可能自动产生tbody
-							wrap[1] === "<table>" && !hasBody ?
-								div.childNodes :
-								[];
-                        for (var j = tbody.length - 1; j >= 0; --j) {
-                            if (/tbody/i.test(tbody[j].nodeName) && !tbody[j].childNodes.length) {
-                                tbody[j].parentNode.removeChild(tbody[j]);
-                            }
-                        }
-
-                    }
-
-                    //  IE6-ie8 innerHTML会自动删除开头空格 补充上
-                    if (!SL.Support.leadingWhitespace && /^\s+/.test(elem)) {
-                        div.insertBefore(doc.createTextNode(/^\s+/.exec(elem)[0]), div.firstChild);
-                    }
-                    elem = SL.Convert.convertToArray(div.childNodes);
-                }
-                if (elem.nodeType) {
-                    ret.push(elem);
-                } else {
-                    ret = SL.merge(ret, elem);
-                }
-            });
-            /*附加到fragment并分离出srcipt*/
-            if (fragment) {
-                for (var i = 0; ret[i]; i++) {
-                    if (scripts && /script/i.test(ret[i].nodeName) && (!ret[i].type || ret[i].type.toLowerCase() === "text/javascript")) {
-                        scripts.push(ret[i].parentNode ? ret[i].parentNode.removeChild(ret[i]) : ret[i]);
-                    } else {
-                        if (ret[i].nodeType === 1) {
-                            ret.splice.apply(ret, [i + 1, 0].concat(SL.Convert.convertToArray(ret[i].getElementsByTagName("script"))));
-                        }
-                        fragment.appendChild(ret[i]);
-                    }
-                }
-            }
-
-            return ret;
-        },
-        parseHtml: function (htmlstr, doc) {
-
-            doc = doc || document;
-            var fragment = doc.createDocumentFragment();
-            this.transactionDom([htmlstr], doc, fragment, []);
-            return fragment;
-
-        },
-        //ie6 ie7附加tr必须在tbody
-        _getDomRoot: function (parentNode, childNode) {
-            return /table/i.test(parentNode.nodeName) && /tr/i.test(childNode.nodeName) ?
-				(parentNode.getElementsByTagName("tbody")[0] ||
-				parentNode.appendChild(parentNode.ownerDocument.createElement("tbody"))) :
-				parentNode;
-        },
-        clone: function (node) {
-            //html5
-            if (document.createElement("nav").cloneNode(true).outerHTML !== "<:nav></:nav>") {
-                return node.cloneNode(true);
-            } else {
-                var fragment = document.createDocumentFragment(),
-			doc = fragment.createElement ? fragment : document;
-                doc.createElement(node.tagName);
-                var div = doc.createElement('div');
-                fragment.appendChild(div);
-                div.innerHTML = node.outerHTML; //
-                return div.firstChild;
-            }
-        },
-        setNodeStyle: function (node, styleString) {
-            if (!(node = this.$id(node)) || !SL.InstanceOf.String(styleString)) throw new Error(ns + ':setNodeStyle 参数 有错误.');
-            if (ns.clientBrowser.is_ie) {//IE方法
-                node.style.cssText = styleString;
-            }
-            else node.setAttribute('style', styleString); //w3c方法
-        },
-        empty: function (elem) {
-            while (elem.firstChild) {
-                elem.removeChild(elem.firstChild);
-            }
-
-        },
-        text: function (elem, text) {
-            var i, node, nodeType = elem.nodeType, ret = "";
-            if (nodeType) {
-                if (text !== undefined) {
-                    return this.empty().append((elem && elem.ownerDocument || document).createTextNode(text));
-                }
-                else {
-                    if (nodeType === 1 || nodeType === 9 || nodeType === 11) {
-                        if (typeof elem.textContent === "string") {
-                            return elem.textContent;
-                        } else {
-                            for (elem = elem.firstChild; elem; elem = elem.nextSibling) {
-                                ret += getText(elem);
-                            }
-                        }
-                    } else if (nodeType === 3 || nodeType === 4) {
-                        return elem.nodeValue;
-                    }
-                }
-            }
-
-        },
-
-        html: function (node, html) {
-            if (html !== undefined) {
-                if (node != null && 'innerHTML' in node) {
-                    node.innerHTML = html;
-                }
-            } else {
-                return node.innerHTML;
-            }
-        }
-    };
-
-    SL.Dom = SL.Dom || {};
-    SL.Dom = new Dom();
-});
 //sizzle
 SL().create(function (SL) {
     (function () {
@@ -5227,4 +4434,797 @@ SL().create(function (SL) {
 
     SL.selector = new slSelector();
     SL.select = SL.selector.find;
+});
+//event
+sl.create(function () {
+
+    EventOperator = {
+        triggered: false,
+        addEvent: function (elem, type, handler, data) {
+            if (elem.nodeType == 3 || elem.nodeType == 8) {
+                return;
+            }
+            if (!handler.guid) {
+                handler.guid = sl.guid++;
+            }
+            if (data !== undefined) {
+                var fn = handler;
+                // 创建一个代理的handler 来保存data 保障data的唯一性
+                handler = sl.proxy(fn);
+                handler.extendData = data;
+            }
+            var events = sl.data(elem, "events") || sl.data(elem, "events", {}),
+			handle = sl.data(elem, "handle"), eventHandle;
+            if (!handle) {
+                eventHandle = function () {
+                    return !EventOperator.triggered ?
+                    EventOperator.handle.apply(eventHandle.elem, arguments) : undefined;
+                };
+                handle = sl.data(elem, "handle", eventHandle);
+            }
+            handle.elem = elem;
+            var handlers = events[type];
+            //防止重复绑定事件
+            if (!handlers) {
+                handlers = events[type] = {};
+                // Bind the global event handler to the element
+                if (elem.addEventListener) {
+                    elem.addEventListener(type, handle, false);
+                } else if (elem.attachEvent) {
+                    elem.attachEvent("on" + type, handle);
+                }
+
+            }
+            handlers[handler.guid] = handler;
+
+        },
+        removeEvent: function (elem, type, handler) {
+            if (elem.nodeType === 3 || elem.nodeType === 8) {
+                return;
+            }
+            var events = sl.data(elem, "events"), ret, type, fn;
+            if (events) {
+                if (!type) {
+                    for (var _type in events) {
+                        EventOperator.removeEvent(elem, _type, handler);
+                    }
+                }
+                if (events[type]) {
+                    if (handler) {
+                        fn = events[type][handler.guid];
+                        delete events[type][handler.guid];
+                    } else {
+                        for (var handle in events[type]) {
+                            delete events[type][handle];
+
+                        }
+                    }
+                    // remove generic event handler if no more handlers exist
+                    for (ret in events[type]) {
+                        break;
+                    }
+                    if (!ret) {
+                        if (elem.removeEventListener) {
+                            elem.removeEventListener(type, sl.data(elem, "handle"), false);
+                        } else if (elem.detachEvent) {
+                            elem.detachEvent("on" + type, sl.data(elem, "handle"));
+                        }
+
+                        ret = null;
+                        delete events[type];
+                    }
+                }
+                // event没任何东西
+                for (ret in events) {
+                    break;
+                }
+                if (!ret) {
+                    var handle = sl.data(elem, "handle");
+                    if (handle) {
+                        handle.elem = null;
+                    }
+                    sl.removeData(elem, "events");
+                    sl.removeData(elem, "handle");
+                }
+            }
+        },
+        triggerEvent: function (event, data, elem, bubbling) {
+            var type = event.type || event;
+
+            if (!bubbling) {
+                event = typeof event === "object" ?
+				event[sl.expando] ? event :
+				sl.extend(SL.Event(type), event) :
+                //(string)
+				SL.Event(type);
+
+                if (!elem || elem.nodeType === 3 || elem.nodeType === 8) {
+                    return undefined;
+                }
+
+                event.result = undefined;
+                event.target = elem;
+                data = sl.Convert.convertToArray(data);
+                data.unshift(event);
+            }
+
+            event.currentTarget = elem;
+            var handle = sl.data(elem, "handle");
+            if (handle) {
+                handle.apply(elem, data);
+            }
+
+            var parent = elem.parentNode || elem.ownerDocument;
+            //处理通过onType属性添加的事件处理器（如：elem.onClick = function(){...};）
+            try {
+                if (!(elem && elem.nodeName)) {
+                    if (elem["on" + type] && elem["on" + type].apply(elem, data) === false) {
+                        event.result = false;
+                    }
+                }
+            } catch (e) { }
+
+            if (!event.isPropagationStopped && parent) {
+                //冒泡动作
+                EventOperator.triggerEvent(event, data, parent, true);
+
+            } else if (!event.isDefaultPrevented) {
+                //触发默认动作···
+                var target = event.target, old,
+				isClick = target.nodeName == "A" && type === "click";
+
+                if (!isClick && !(target && target.nodeName)) {
+                    try {
+                        if (target[type]) {
+                            /* 假设type为click
+                            因为下面想通过click()来触发默认操作，
+                            但是又不想执行对应的事件处理器（re-trigger），
+                            所以需要做两方面工作：
+                            首先将elem.onclick = null；
+                            然后将jQuery.event.triggered = 'click'; 
+                            将在入口handle（第62行）不再dispatch了
+                            之后再将它们还原*/
+                            old = target["on" + type];
+
+                            if (old) {
+                                target["on" + type] = null;
+                            }
+
+                            this.triggered = true;
+                            target[type]();
+                        }
+
+                        // prevent IE from throwing an error for some elements with some event types, see #3533
+                    } catch (e) { }
+
+                    if (old) {
+                        target["on" + type] = old;
+                    }
+
+                    this.triggered = false;
+                }
+            }
+
+
+
+        },
+        props: "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode layerX layerY metaKey newValue offsetX offsetY originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which".split(" "),
+        //处理实际的event 忽略其差异性 实际的trigger中的event切勿fix
+        fixEvent: function (event) {
+
+            if (event[sl.expando]) {
+                return event;
+            }
+            var originalEvent = event;
+            event = SL.Event(originalEvent);
+            for (var i = EventOperator.props.length, prop; i; ) {
+                prop = EventOperator.props[--i];
+                event[prop] = originalEvent[prop];
+            }
+            if (!event.target) {
+                event.target = event.srcElement || document;
+            }
+
+            //(safari)
+            if (event.target.nodeType === 3) {
+                event.target = event.target.parentNode;
+            }
+            if (!event.relatedTarget && event.fromElement) {
+                event.relatedTarget = event.fromElement === event.target ? event.toElement : event.fromElement;
+            }
+
+            if (event.pageX == null && event.clientX != null) {
+                var doc = document.documentElement, body = document.body;
+                event.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc && doc.clientLeft || body && body.clientLeft || 0);
+                event.pageY = event.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc && doc.clientTop || body && body.clientTop || 0);
+            }
+            // Netscape/Firefox/Opera
+            if (!event.which && ((event.charCode || event.charCode === 0) ? event.charCode : event.keyCode)) {
+                event.which = event.charCode || event.keyCode;
+            }
+
+            // Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
+            if (!event.metaKey && event.ctrlKey) {
+                event.metaKey = event.ctrlKey;
+            }
+
+            // 为 click 事件添加 which 属性，左1 中2 右3
+            // IE button的含义：
+            // 0：没有键被按下 
+            // 1：按下左键 
+            // 2：按下右键 
+            // 3：左键与右键同时被按下 
+            // 4：按下中键 
+            // 5：左键与中键同时被按下 
+            // 6：中键与右键同时被按下 
+            // 7：三个键同时被按下
+            if (!event.which && event.button !== undefined) {
+                event.which = [0, 1, 3, 0, 2, 0, 0, 0][event.button];
+            }
+            event.charCode = (event.type == "keypress") ? oEvent.keyCode : 0;
+            event.eventPhase = 2;
+            event.isChar = (event.charCode > 0);
+            return event;
+        },
+        handle: function (event) {
+            // returned undefined or false
+            var handlers;
+            event = arguments[0] = EventOperator.fixEvent(event || window.event);
+            event.currentTarget = this;
+            handlers = (sl.data(this, "events") || {})[event.type];
+
+            for (var j in handlers) {
+                var handler = handlers[j];
+                event.handler = handler;
+                event.extendData = handler.extendData;
+
+                var ret = handler.apply(this, arguments);
+
+                if (ret !== undefined) {
+                    event.result = ret;
+                    if (ret === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                }
+                if (event.isImmediatePropagationStopped) {
+                    break;
+                }
+            }
+
+            return event.result;
+        },
+        hover: function (element, enterfn, leavefn) {
+            EventOperator.addEvent(element, "mouseover", enterfn);
+            EventOperator.addEvent(element, "mouseout", leavefn);
+        }
+    }
+
+    SL.Event = function (src) {
+        //是否已经经过初始化的event
+        if (!this.preventDefault) {
+            return new SL.Event(src);
+        }
+        if (src && src.type) {
+            this.originalEvent = src;
+            this.type = src.type;
+        } else {
+            this.type = src;
+        }
+        this.timeStamp = new Date();
+
+        //用来标注已经初始化
+        this[sl.expando] = true;
+    };
+    SL.Event.prototype = {
+        preventDefault: function () {
+            // DOM LV3
+            this.isDefaultPrevented = true;
+            var e = this.originalEvent;
+
+            if (!e) {
+                return;
+            }
+
+            // DOM LV2
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            // IE6-8
+            else {
+                e.returnValue = false;
+            }
+        },
+        stopPropagation: function () {
+            // DOM LV3
+            this.isPropagationStopped = true;
+            var e = this.originalEvent;
+
+            if (!e) {
+                return;
+            }
+
+            // DOM LV2
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            else {
+                // IE6-8
+                e.cancelBubble = true;
+            }
+        },
+        stopImmediatePropagation: function () {
+            this.isImmediatePropagationStopped = true;
+            this.stopPropagation();
+        },
+        isDefaultPrevented: false,
+        isPropagationStopped: false,
+        isImmediatePropagationStopped: false
+    };
+
+    sl.Event = EventOperator;
+});
+//attr
+SL().create(function () {
+    function attribute() { }
+    attribute.prototype = {
+        getAttr: function (ele, name) {
+            if (/href|src|width|height|colSpan|rowSpan/.test(name)) {
+                /**IE的getAttribute支持第二个参数，可以为 0,1,2,4
+                0 是默认；1 区分属性的大小写；2取出源代码中的原字符串值(注，IE67对动态创建的节点没效)。
+                IE 在取 href 的时候默认拿出来的是绝对路径，加参数2得到我们所需要的相对路径。*/
+                return ele.getAttribute(name, 2);
+            } else if ("style" === name) {
+                return ele.style.cssText;
+            } else if (name == "tabIndex") {
+                var attributeNode = ele.getAttributeNode("tabIndex");
+                return attributeNode && attributeNode.specified
+						? attributeNode.value
+						: ele.nodeName.match(/^(a|area|button|input|object|select|textarea)$/i)
+							? 0
+							: undefined;
+            } else {
+                return ele.getAttribute(name);
+            }
+        },
+        setAttr: function (ele, name, value) {
+            //设置属性
+            if (value == null) {
+                ele.removeAttribute(name);
+            } else {
+                if ("style" === name) {
+                    ele.style.cssText ? ele.style.cssText = value : ele.setAttribute("style", value);
+                } else {
+                    ele.setAttribute(name, value);
+                }
+            }
+
+        },
+        removeAttr: function (ele, name) {
+            this.setAttr(ele, name, "");
+            if (ele.nodeType === 1) {
+                if (ele.removeAttribute) {
+                    ele.removeAttribute(name);
+                }
+                else if (ele.attributes && ele.attributes.removeNamedItem) {
+                    ele.attributes.removeNamedItem(name);
+                }
+            }
+
+        },
+        addClass: function (ele, value) {
+            if (value && typeof value === "string") {
+                //分割
+                var classNames = (value || "").split(/\s+/);
+                if (ele.nodeType === 1) {
+                    if (!ele.className && classNames.length === 1) {
+                        ele.className = value;
+
+                    } else {
+                        var className = " " + ele.className + " ";
+                        for (var c = 0, cl = classNames.length; c < cl; c++) {
+                            if (className.indexOf(" " + classNames[c] + " ") < 0) {
+                                ele.className += " " + classNames[c];
+                            }
+                        }
+                    }
+                }
+            }
+
+        },
+        hasClass: function (ele, value) {
+            var re = new RegExp('(\\s|^)' + value + '(\\s|$)');
+            return re.test(ele.className.replace(/[\n\t]/, " "));
+
+        },
+        removeClass: function (ele, value) {
+            if ((value && typeof value === "string") || value === undefined) {
+                var classNames = (value || "").split(/\s+/);
+
+                if (ele.nodeType === 1 && ele.className) {
+                    if (value) {
+                        var className = (" " + ele.className + " ").replace(/[\n\t]/g, " ");
+                        for (var c = 0, cl = classNames.length; c < cl; c++) {
+                            className = className.replace(" " + classNames[c] + " ", " ");
+                        }
+                        ele.className = className.substring(1, className.length - 1);
+
+                    } else {
+                        ele.className = "";
+                    }
+                }
+            }
+        },
+        toggleClass: function (ele, value) {
+            if (this.hasClass(ele, value)) {
+                this.removeClass(ele, value);
+            } else {
+                this.addClass(ele, value);
+            }
+        },
+        //select-multiple 还未考虑
+        getValue: function (ele) {
+            if (sl.InstanceOf.DOMElement(ele) && "value" in ele) {
+                return ele.value;
+            }
+            return "";
+        },
+        setValue: function (ele, value) {
+            if (sl.InstanceOf.DOMElement(ele) && "value" in ele) {
+                ele.value = value;
+            }
+        }
+    }
+    sl.attr = new attribute();
+});
+//DOM
+SL().create(function (SL) {
+    //var xuzhiweiSL = new SL();
+    /**
+    *@class
+    *@name Dom
+    */
+    var Dom = function () { };
+    Dom.prototype = {
+        toString: "SL框架DOM模块",
+        boxModel: document.compatMode === "CSS1Compat",
+        getDocumentElement: function () {
+
+            return document.documentElement || document.body;
+        },
+
+
+        prevSibling: function (elem) {
+            do {
+                elem = elem.previousSibling;
+            } while (elem && elem.nodeType != 1);
+            return elem;
+        },
+        nextSibling: function (elem) {
+            do {
+                elem = elem.nextSibling;
+            } while (elem && elem.nodeType != 1);
+            return elem;
+        },
+        siblings: function (elem) {
+            if (!elem.nodeType) return [];
+            if (elem === document) return [];
+            var n = elem.parentNode.firstChild;
+            var r = [];
+
+            for (; n; n = n.nextSibling) {
+                if (n.nodeType == 1 && n != elem)
+                    r.push(n);
+            }
+
+            return r;
+        },
+        /**
+        *按照某个规则 逐级展开 不包括本身
+        *@param {Element} elem
+        *@param {String} dir 条件比如nextSibling
+        */
+        dir: function (elem, dir) {
+            var matched = [], cur = elem[dir];
+            while (cur && cur != document) {
+                if (cur.nodeType == 1)
+                    matched.push(cur);
+                cur = cur[dir];
+            }
+            return matched;
+        },
+        /**
+        *按照某个规则 逐级展开 取某一级 包括本身
+        *@param {Element} elem
+        *@param {String} dir 条件比如nextSibling
+        */
+        nthLevel: function (cur, result, dir, elem) {
+            result = result || 1;
+            var num = 0;
+
+            for (; cur; cur = cur[dir])
+                if (cur.nodeType == 1 && ++num == result)
+                    break;
+
+            return cur;
+        },
+        contents: function (elem) {
+            return /iframe/i.test(elem.nodeName) ? (elem.contentDocument || elem.contentWindow.document) : SL.Convert.convertToArray(elem.childNodes);
+
+        },
+        firstChild: function (elem, exceptTextNode) {
+            elem = elem.firstChild;
+            return elem && exceptTextNode && elem.nodeType != 1 ?
+        this.nextSibling(elem, exceptTextNode) : elem;
+        },
+        lastChild: function (elem) {
+            elem = elem.lastChild;
+            return elem && elem.nodeType != 1 ?
+        this.prevSibling(elem) : elem;
+        },
+        parentNode: function (elem, level) {
+            level = level || 1;
+            for (var i = 0; i < level; i++)
+                if (elem != null) elem = elem.parentNode;
+            return elem;
+        },
+        appendFirstChild: function (newNode, parentNode) {
+            this.insertNode(parentNode, "afterBegin", newNode);
+
+        },
+        append: function (newNode, parentNode) {
+            this.insertNode(parentNode, "beforeEnd", newNode);
+        },
+        insertBefore: function (newNode, targetNode) {
+            this.insertNode(targetNode, "beforeBegin", newNode);
+        },
+        // 在目标Node之后加入 新的Node.
+        insertAfter: function (newNode, targetNode) {
+            this.insertNode(targetNode, "afterEnd", newNode);
+        },
+
+        insertNode: function (el, where, parsedNode) {
+            switch (where) {
+                case "beforeBegin":
+                    el.parentNode.insertBefore(parsedNode, el);
+                    break;
+                case "afterBegin":
+                    if (el.firstChild) {
+                        el.insertBefore(parsedNode, el.firstChild);
+                    } else {
+                        el.appendChild(parsedNode);
+                    }
+                    break;
+                case "beforeEnd":
+                    el.appendChild(parsedNode);
+                    break;
+                case "afterEnd":
+                    if (el.nextSibling) {
+                        el.parentNode.insertBefore(parsedNode, el.nextSibling);
+                    } else {
+                        el.parentNode.appendChild(parsedNode);
+                    }
+                    break;
+            }
+        },
+        insertAdjacentHTML: function (node, sWhere, sHtml) {
+            if (node.nodeType != 1) throw new Error(ns + ':insertAdjacentHTML方法 参数有错误.');
+            if ((sWhere = sWhere.tolowerCase()) == 'afterbegin' || sWhere == 'beforeend') {
+                if (/hr|br|img|input|link|col|meta|base|area/i.test(node.tagName))
+                    return false;
+            }
+            if (node.insertAdjacentHTML) node.insertAdjacentHTML(sWhere, sHtml);
+            else {
+                var df, r = node.ownerDocument.createRange();
+                switch (new String(sWhere).toLowerCase()) {
+                    case "beforebegin":
+                        r.setStartBefore(node);
+                        df = r.createContextualFragment(sHtml);
+                        node.parentNode.insertBefore(df, node);
+                        break;
+                    case "afterbegin":
+                        r.selectNodeContents(node);
+                        r.collapse(true);
+                        df = r.createContextualFragment(sHtml);
+                        node.insertBefore(df, node.firstChild);
+                        break;
+                    case "beforeend":
+                        r.selectNodeContents(node);
+                        r.collapse(false);
+                        df = r.createContextualFragment(sHtml);
+                        node.appendChild(df);
+                        break;
+                    case "afterend":
+                        r.setStartAfter(node);
+                        df = r.createContextualFragment(sHtml);
+                        node.parentNode.insertBefore(df, node.nextSibling);
+                        break;
+                }
+
+            }
+        },
+        map: function (elems, callback) {
+            var ret = [];
+            for (var i = 0, length = elems.length; i < length; i++) {
+                var value = callback(elems[i], i);
+
+                if (value != null)
+                    ret[ret.length] = value;
+            }
+
+            return ret.concat.apply([], ret);
+        },
+        transactionDom: function (elems, doc, fragment, scripts) {
+            /*处理tr opotion table这种直接div下设置innerhtml无效*/
+            var wrapMap = {
+                option: [1, "<select multiple='multiple'>", "</select>"],
+                legend: [1, "<fieldset>", "</fieldset>"],
+                thead: [1, "<table>", "</table>"],
+                tr: [2, "<table><tbody>", "</tbody></table>"],
+                td: [3, "<table><tbody><tr>", "</tr></tbody></table>"],
+                col: [2, "<table><tbody></tbody><colgroup>", "</colgroup></table>"],
+                area: [1, "<map>", "</map>"],
+                _default: [0, "", ""]
+            };
+            wrapMap.optgroup = wrapMap.option,
+            wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead,
+            wrapMap.th = wrapMap.td;
+            doc = doc || document;
+            if (typeof doc.createElement === "undefined") {
+                doc = doc.ownerDocument || doc[0] && doc[0].ownerDocument || document;
+            }
+            //返回节点集
+            var ret = [];
+            SL.each(elems, function (i, elem) {
+                if (typeof elem === "number") {
+                    elem += "";
+                }
+
+                if (!elem) {
+                    return;
+                }
+                //直接文本
+                if (typeof elem === "string" && !/<|&\w+;/.test(elem)) {
+                    elem = doc.createTextNode(elem);
+                } else if (typeof elem === "string") {
+                    // Fix "XHTML"-style tags in all browsers
+                    elem = elem.replace(/(<([\w:]+)[^>]*?)\/>/g, fcloseTag = function (all, front, tag) {
+                        return /^(?:area|br|col|embed|hr|img|input|link|meta|param)$/i.test(tag) ? all : front + "></" + tag + ">";
+                    });
+                    // 获取 tag名 小写
+                    var tag = (/<([\w:]+)/.exec(elem) || ["", ""])[1].toLowerCase(),
+                    //处理tr opotion table这种直接div下设置innerhtml无效
+					wrap = wrapMap[tag] || wrapMap._default,
+					depth = wrap[0],
+					div = doc.createElement("div");
+                    // 处理tr opotion table这种直接div下设置innerhtml无效 包裹
+                    div.innerHTML = wrap[1] + elem + wrap[2];
+                    // Move to the right depth
+                    while (depth--) {
+                        div = div.lastChild;
+                    }
+                    // ie6 ie7会在table下自动添加  <tbody>  需要移除不然<thead></thead>会返回<thead></thead><tbody></tbody>
+                    if (!SL.Support.tbody) {
+                        // 如果string是table可能自动产生tbody
+                        var hasBody = /<tbody/i.test(elem),
+						tbody = tag === "table" && !hasBody ?
+							div.firstChild && div.firstChild.childNodes :
+                        // String=<thead> or <tfoot> 可能自动产生tbody
+							wrap[1] === "<table>" && !hasBody ?
+								div.childNodes :
+								[];
+                        for (var j = tbody.length - 1; j >= 0; --j) {
+                            if (/tbody/i.test(tbody[j].nodeName) && !tbody[j].childNodes.length) {
+                                tbody[j].parentNode.removeChild(tbody[j]);
+                            }
+                        }
+
+                    }
+
+                    //  IE6-ie8 innerHTML会自动删除开头空格 补充上
+                    if (!SL.Support.leadingWhitespace && /^\s+/.test(elem)) {
+                        div.insertBefore(doc.createTextNode(/^\s+/.exec(elem)[0]), div.firstChild);
+                    }
+                    elem = SL.Convert.convertToArray(div.childNodes);
+                }
+                if (elem.nodeType) {
+                    ret.push(elem);
+                } else {
+                    ret = SL.merge(ret, elem);
+                }
+            });
+            /*附加到fragment并分离出srcipt*/
+            if (fragment) {
+                for (var i = 0; ret[i]; i++) {
+                    if (scripts && /script/i.test(ret[i].nodeName) && (!ret[i].type || ret[i].type.toLowerCase() === "text/javascript")) {
+                        scripts.push(ret[i].parentNode ? ret[i].parentNode.removeChild(ret[i]) : ret[i]);
+                    } else {
+                        if (ret[i].nodeType === 1) {
+                            ret.splice.apply(ret, [i + 1, 0].concat(SL.Convert.convertToArray(ret[i].getElementsByTagName("script"))));
+                        }
+                        fragment.appendChild(ret[i]);
+                    }
+                }
+            }
+
+            return ret;
+        },
+        parseHtml: function (htmlstr, doc) {
+
+            doc = doc || document;
+            var fragment = doc.createDocumentFragment();
+            this.transactionDom([htmlstr], doc, fragment, []);
+            return fragment;
+
+        },
+        //ie6 ie7附加tr必须在tbody
+        _getDomRoot: function (parentNode, childNode) {
+            return /table/i.test(parentNode.nodeName) && /tr/i.test(childNode.nodeName) ?
+				(parentNode.getElementsByTagName("tbody")[0] ||
+				parentNode.appendChild(parentNode.ownerDocument.createElement("tbody"))) :
+				parentNode;
+        },
+        clone: function (node) {
+            //html5
+            if (document.createElement("nav").cloneNode(true).outerHTML !== "<:nav></:nav>") {
+                return node.cloneNode(true);
+            } else {
+                var fragment = document.createDocumentFragment(),
+			doc = fragment.createElement ? fragment : document;
+                doc.createElement(node.tagName);
+                var div = doc.createElement('div');
+                fragment.appendChild(div);
+                div.innerHTML = node.outerHTML; //
+                return div.firstChild;
+            }
+        },
+        setNodeStyle: function (node, styleString) {
+            if (!(node = this.$id(node)) || !SL.InstanceOf.String(styleString)) throw new Error(ns + ':setNodeStyle 参数 有错误.');
+            if (ns.clientBrowser.is_ie) {//IE方法
+                node.style.cssText = styleString;
+            }
+            else node.setAttribute('style', styleString); //w3c方法
+        },
+        empty: function (elem) {
+            while (elem.firstChild) {
+                elem.removeChild(elem.firstChild);
+            }
+
+        },
+        text: function (elem, text) {
+            var i, node, nodeType = elem.nodeType, ret = "";
+            if (nodeType) {
+                if (text !== undefined) {
+                    return this.empty().append((elem && elem.ownerDocument || document).createTextNode(text));
+                }
+                else {
+                    if (nodeType === 1 || nodeType === 9 || nodeType === 11) {
+                        if (typeof elem.textContent === "string") {
+                            return elem.textContent;
+                        } else {
+                            for (elem = elem.firstChild; elem; elem = elem.nextSibling) {
+                                ret += getText(elem);
+                            }
+                        }
+                    } else if (nodeType === 3 || nodeType === 4) {
+                        return elem.nodeValue;
+                    }
+                }
+            }
+
+        },
+
+        html: function (node, html) {
+            if (html !== undefined) {
+                if (node != null && 'innerHTML' in node) {
+                    node.innerHTML = html;
+                }
+            } else {
+                return node.innerHTML;
+            }
+        }
+    };
+
+    SL.Dom = SL.Dom || {};
+    SL.Dom = new Dom();
 });

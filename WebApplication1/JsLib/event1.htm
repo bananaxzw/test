@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../jquery-1.4.1-vsdoc.js" type="text/javascript"></script>
+    <script src="SL.Core.js" type="text/javascript"></script>
+    <script src="SL.Data.js" type="text/javascript"></script>
+    <script src="SL.EventEX.js" type="text/javascript"></script>
+</head>
+<body>
+    <form id="sf">
+    <input id="Text1" type="text" name='sffs' />
+    <input id="Text2" type="text" />
+    <input id="Text3" type="text" name='sffs' />
+    </form>
+    <div id="sff" style="background: red; width: 200px; height: 100px" onclick="console.log('me')">
+        sfsa</div>
+    <div style="background: red; width: 200px; height: 100px" id="hoverdiv">
+        safsa</div>
+    <script type="text/javascript">
+        sl.ready(function () {
+            var chk = document.getElementById("Checkbox1");
+            sl.Event.addEvent(chk, "change", function () {
+                console.log(this.checked);
+            });
+           sl.Event.removeEvent(chk, "change");
+           sl.Event.addEvent(chk, "mouseenter", function () {
+               console.log(this.checked);
+           });
+        });
+    </script>
+    <select id="Select1">
+        <option>safs</option>
+        <option>safs</option>
+    </select>
+    <input id="Text4" type="text" onpropertychange="mm(this.checked);" />
+    <input id="Checkbox1" type="checkbox" />
+</body>
+</html>
