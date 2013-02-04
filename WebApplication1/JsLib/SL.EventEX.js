@@ -5,6 +5,8 @@ sl.create(function () {
     rtypenamespace = /^([^\.]*)?(?:\.(.+))?$/,
     rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
     rkeyEvent = /^key/,
+    rFormElems = /^(?:textarea|input|select)$/i,
+	rInputCheck = /^(?:radio|checkbox|)$/,
 	rmouseEvent = /^(?:mouse|contextmenu)|click/,
 	quickParse = function (selector) {
 	    var quick = rquickIs.exec(selector);
@@ -30,13 +32,14 @@ sl.create(function () {
         } else if (elem.detachEvent) {
             elem.detachEvent("on" + type, handle);
         }
-    };
+    },
+    specialEvent = {};
 
     HooksHelper = {
         fixHooks: {},
         keyHooks: {
             props: "char charCode key keyCode".split(" "),
-            filter: function (event, original) {
+            fixevent: function (event, original) {
                 if (event.which == null) {
                     event.which = original.charCode != null ? original.charCode : original.keyCode;
                 }
@@ -46,7 +49,7 @@ sl.create(function () {
         },
         mouseHooks: {
             props: "button buttons clientX clientY fromElement offsetX offsetY pageX pageY screenX screenY toElement".split(" "),
-            filter: function (event, original) {
+            fixevent: function (event, original) {
                 var eventDoc, doc, body,
 				button = original.button,
 				fromElement = original.fromElement;
@@ -94,7 +97,7 @@ sl.create(function () {
                 return {};
             }
         }
-    }
+    };
 
     EventOperator = {
         triggered: false,
@@ -137,6 +140,7 @@ sl.create(function () {
             for (t = 0; t < types.length; t++) {
 
                 tns = rtypenamespace.exec(types[t]) || [];
+                special = specialEvent[type] || {};
                 type = tns[1]; //预留接口
                 namespaces = (tns[2] || "").split(".").sort();
 
@@ -157,11 +161,14 @@ sl.create(function () {
                 if (!handlers) {
                     handlers = events[type] = [];
                     handlers.delegateCount = 0;
-                    if (elem.addEventListener) {
-                        elem.addEventListener(type, eventHandle, false);
+                    //特殊事件的钩子
+                    if (!special.setup || special.setup.call(elem, data, namespaces, eventHandle) === false) {
+                        if (elem.addEventListener) {
+                            elem.addEventListener(type, eventHandle, false);
 
-                    } else if (elem.attachEvent) {
-                        elem.attachEvent("on" + type, eventHandle);
+                        } else if (elem.attachEvent) {
+                            elem.attachEvent("on" + type, eventHandle);
+                        }
                     }
                 }
 
@@ -203,6 +210,7 @@ sl.create(function () {
                     }
                     continue;
                 }
+                special = specialEvent.special[type] || {};
                 eventType = events[type] || [];
                 origCount = eventType.length;
                 namespaces = namespaces ? new RegExp("(^|\\.)" + namespaces.split(".").sort().join("\\.(?:.*\\.)?") + "(\\.|$)") : null;
@@ -222,7 +230,9 @@ sl.create(function () {
                 }
                 //如果该类型没有任何绑定事件 就removeEventlistener
                 if (eventType.length === 0 && origCount !== eventType.length) {
-                    detachEvent(elem, type, elemData.handle);
+                    if (!special.teardown || special.teardown.call(elem, namespaces) === false) {
+                        detachEvent(elem, type, elemData.handle);
+                    }
                     delete events[type];
                 }
             }
@@ -398,18 +408,19 @@ sl.create(function () {
                 event.eventPhase = 2;
             }
             event.isChar = (event.charCode > 0);
-            return fixHook.filter ? fixHook.filter(event, originalEvent) : event;
+            return fixHook.fixevent ? fixHook.fixevent(event, originalEvent) : event;
         },
         handle: function (event) {
             event = EventOperator.fixEvent(event || window.event);
             var handlers = ((sl.data(this, "events") || {})[event.type] || []),
 			delegateCount = handlers.delegateCount,
 			args = [].slice.call(arguments),
+            special = specialEvent[event.type];
             //exclusive表示trigger的事件包含!也就是只触发没有命名空间的
             //exclusive只会在trigger中发生
             //namespace也只会在trigger中发生 
             //所以不是通过trigger模拟的事件run_all一直会是true
-			run_all = !event.exclusive && !event.namespace,
+            run_all = !event.exclusive && !event.namespace,
 			handlerQueue = [],
 			i, j, cur, ret, selMatch, matched, matches, handleObj, sel, related;
             args[0] = event;
@@ -461,7 +472,8 @@ sl.create(function () {
                         event.extendData = handleObj.data;
                         event.handleObj = handleObj;
 
-                        ret = handleObj.handler.apply(this, arguments);
+                        ret = ((jQuery.event.special[handleObj.origType] || {}).handle || handleObj.handler)
+							.apply(matched.elem, args);
 
                         if (ret !== undefined) {
                             event.result = ret;
@@ -479,6 +491,82 @@ sl.create(function () {
             EventOperator.addEvent(element, "mouseover", enterfn);
             EventOperator.addEvent(element, "mouseout", leavefn);
         }
+    };
+    SpecialHelper = {
+        //特殊事件的模拟
+        simulate: function (type, elem, event, bubble) {
+            var e = sl.extend(
+			new SL.Event(),
+			event,
+			{ type: type,
+			    isSimulated: true,
+			    originalEvent: {}
+			}
+		);
+            if (bubble) {
+                EventOperator.triggerEvent(e, null, elem);
+            } else {
+                EventOperator.handle.call(elem, e);
+            }
+            if (e.isDefaultPrevented) {
+                event.preventDefault();
+            }
+        }
+    };
+
+    specialEvent.change = {
+        setup: function () {
+            // IE6-8不支持radio、checkbox的change事件，要实现代理也得模拟
+            if (rFormElems.test(this.nodeName)) {
+                if (rInputCheck.test(this.type)) {
+                    EventOperator.addEvent(this, "propertychange._change", function (event) {
+                        if (event.originalEvent.propertyName === "checked") {
+                            this._just_changed = true;
+                        }
+                    });
+                    EventOperator.addEven(this, "click._change", function (event) {
+                        if (this._just_changed && !event.isTrigger) {
+                            this._just_changed = false;
+                        }
+                        // Allow triggered, simulated change events (#11500)
+                        SpecialHelper.simulate("change", this, event, true);
+                    });
+                }
+                return false;
+            }
+            /*
+            就是延迟绑定啊     
+            此事件就是触发在focus之前, 这时就可以确定现在页面已经动态添加了多少个新节点
+            */
+            EventOperator.add(this, "beforeactivate._change", function (e) {
+                var elem = e.target;
+
+                if (rFormElems.test(elem.nodeName) && !sl.data(elem, "_change_attached")) {
+                    EventOperator.addEvent(elem, "change._change", function (event) {
+                        if (this.parentNode && !event.isSimulated && !event.isTrigger) {
+                            jQuery.event.simulate("change", this.parentNode, event, true);
+                        }
+                    });
+                    sl.data(elem, "_change_attached", true);
+                }
+            });
+        },
+
+        handle: function (event) {
+            var elem = event.target;
+
+            // Swallow native change events from checkbox/radio, we already triggered them above
+            if (this !== elem || event.isSimulated || event.isTrigger || (elem.type !== "radio" && elem.type !== "checkbox")) {
+                return event.handleObj.handler.apply(this, arguments);
+            }
+        },
+
+        teardown: function () {
+            EventOperator.removeEvent(this, "._change");
+
+            return rFormElems.test(this.nodeName);
+        }
+
     }
 
     SL.Event = function (src) {
