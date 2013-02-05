@@ -12,6 +12,11 @@ sl.create(function () {
 	rmouseEvent = /^(?:mouse|contextmenu)|click/,
     isECMAEvent = !!document.addEventListener,
 	quickParse = function (selector) {
+	    /// <summary>
+	    /// 快速id class tag的匹配
+	    /// </summary>
+	    /// <param name="selector"></param>
+	    /// <returns type=""></returns>
 	    var quick = rquickIs.exec(selector);
 	    if (quick) {
 	        //   0  1    2   3
@@ -22,6 +27,12 @@ sl.create(function () {
 	    return quick;
 	},
 	quickIs = function (elem, m) {
+	    /// <summary>
+	    ///  快速id class tag的匹配
+	    /// </summary>
+	    /// <param name="elem"></param>
+	    /// <param name="m"></param>
+	    /// <returns type=""></returns>
 	    var attrs = elem.attributes || {};
 	    return (
 			(!m[1] || elem.nodeName.toLowerCase() === m[1]) &&
@@ -34,6 +45,14 @@ sl.create(function () {
             elem.removeEventListener(type, handle, false);
         } else if (elem.detachEvent) {
             elem.detachEvent("on" + type, handle);
+        }
+    },
+    attachEvent = function (elem, type, handle) {
+        if (elem.addEventListener) {
+            elem.addEventListener(type, handle, false);
+        }
+        else {
+            elem.attachEvent("on" + type, handle);
         }
     },
     specialEvent = {};
@@ -145,7 +164,7 @@ sl.create(function () {
                 tns = rtypenamespace.exec(types[t]) || [];
                 type = tns[1];
                 special = specialEvent[type] || {};
-                type = (selector ? special.delegateType : special.bindType) || type;//事件模拟中会用到
+                type = (selector ? special.delegateType : special.bindType) || type; //事件模拟中会用到
                 namespaces = (tns[2] || "").split(".").sort();
                 special = specialEvent[type] || {};
                 handleObj = sl.extend({
@@ -167,12 +186,7 @@ sl.create(function () {
                     handlers.delegateCount = 0;
                     //特殊事件的钩子
                     if (!special.setup || special.setup.call(elem, data, namespaces, eventHandle) === false) {
-                        if (elem.addEventListener) {
-                            elem.addEventListener(type, eventHandle, false);
-
-                        } else if (elem.attachEvent) {
-                            elem.attachEvent("on" + type, eventHandle);
-                        }
+                        attachEvent(elem, type, eventHandle);
                     }
                 }
 
@@ -183,7 +197,7 @@ sl.create(function () {
                     handlers.push(handleObj);
                 }
 
-                // Keep track of which events have ever been used, for event optimization
+                //注册全局事件 在触发中用到 以便快速判断有没有注册过此类型事件
                 EventOperator.global[type] = true;
             }
 
@@ -443,7 +457,7 @@ sl.create(function () {
                             if (selMatch[sel] === undefined) {
                                 //目前只支持简单的判断 不支持复杂的选择器 后面待添加
                                 selMatch[sel] = (
-								handleObj.quick ? quickIs(cur, handleObj.quick):sl.selector.matchesSelector(cur,sel)
+								handleObj.quick ? quickIs(cur, handleObj.quick) : sl.selector.matchesSelector(cur, sel)
 							);
                             }
                             if (selMatch[sel]) {
