@@ -1,7 +1,7 @@
 ﻿/// <reference path="SL.Core.js" />
 /// <reference path="SL.Json.js" />
 
-SL().create(function (SL) {
+sl.create("sl", function (SL) {
     // var uu = new SL();
     function now() {
         return (new Date).getTime();
@@ -107,6 +107,7 @@ SL().create(function (SL) {
     var defaultSetting = {
         type: "POST",
         data: null,
+        processData: true, //格式化data 用query string形式表示
         dataType: "text",
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         onSuccess: function () { },
@@ -129,11 +130,11 @@ SL().create(function (SL) {
         }
     }
     function ajax(options) {
-        options = SL.extend(true, {}, defaultSetting, options);
+        options = SL.extend(defaultSetting, options);
         var isComplete = false, status,
         xhr = new window.XMLHttpRequest(), jsonp, callbackContext = options.callbackContext || options;
         //传进来的data没经过处理
-        if (options.data && typeof options.data != "string") {
+        if (options.data && options.processData && typeof options.data != "string") {
             options.data = SL.param(options.data);
         }
         // 处理jsonp
@@ -144,6 +145,7 @@ SL().create(function (SL) {
                     options.url += (rquery.test(options.url) ? "&" : "?") + (options.jsonp || "callback") + "=?";
                 }
             } else if (!options.data || !jsre.test(options.data)) {
+                //data后面加callback=?
                 options.data = (options.data ? options.data + "&" : "") + (options.jsonp || "callback") + "=?";
             }
             options.dataType = "json";
@@ -172,6 +174,7 @@ SL().create(function (SL) {
                 }
             };
         }
+        //cache (default: true, false for dataType 'script' and 'jsonp')
         if (options.dataType === "script" && options.cache === null) {
             options.cache = false;
         }
@@ -239,7 +242,8 @@ SL().create(function (SL) {
         } catch (e) { }
 
         var onreadystatechange = xhr.onreadystatechange = function (isTimeout) {
-            if (xhr.readyState == 0) {
+        //ajax请求被终止
+            if (!xhr || xhr.readyState == 0) {
                 if (intervalState) {
                     clearInterval(intervalState);
                     intervalState = null;
@@ -304,6 +308,9 @@ SL().create(function (SL) {
     };
     SL.Ajax = function (options) {
         ajax(options);
+    }
+    this.ajaxSetup = function (setting) {
+        sl.extend(defaultSetting, setting);
     }
 
 });

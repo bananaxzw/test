@@ -5,26 +5,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-    <script src="../jquery-1.4.1-vsdoc.js" type="text/javascript"></script>
+    <script src="jq1.72.js" type="text/javascript"></script>
     <script src="SL.Core.js" type="text/javascript"></script>
     <script src="SL.AJAX.js" type="text/javascript"></script>
     <script src="SL.Json.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#Button1").click(function () {
-                SL().Ajax({
+                $.ajax({
                     url: "WebService1.asmx/GetPerson121",
                     type: "POST",
                     contentType:"application/json",
                     data:"{'Id':2}",
-                    onSuccess: function (data) {
+                    success: function (data) {
                         console.log(data);
 
                     },
-                    onError: function (status, xhr) {
+                    error: function (status, xhr) {
                         console.log(status);
                     },
-                    onTimeOut: function (status, xhr) {
+                    timeout: function (status, xhr) {
                         console.log(status);
                     
                     }
