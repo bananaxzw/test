@@ -4,7 +4,7 @@
 sl.create("sl", function (SL) {
     // var uu = new SL();
     function now() {
-        return (new Date).getTime();
+        return (new Date()).getTime();
     }
     var jsc = now(),
     rscript = /<script(.|\s)*?\/script>/gi,
@@ -39,14 +39,17 @@ sl.create("sl", function (SL) {
     *@ignore  事件处理
     */
     var oHandleEvent = {
-        success: function (options, data, xhr) {
-            options.onSuccess.call(options.callbackContext, data, xhr);
+        success: function (options, data, status, xhr) {
+            options.success.call(options.callbackContext, data, status, xhr);
         },
-        error: function (options, status, xhr) {
-            options.onError.call(options.callbackContext, status, xhr);
+        error: function (options, status, xhr, errorMsg) {
+            options.error.call(options.callbackContext, xhr, status, errorMsg);
         },
         timeout: function (options, status, xhr) {
-            options.onTimeout.call(options.callbackContext, status, xhr);
+            options.onTimeout.call(options.callbackContext, xhr, status);
+        },
+        complete: function (options, status, xhr, data) {
+            options.complete.call(options.callbackContext, xhr, status);
         }
     }
     /**
@@ -110,11 +113,11 @@ sl.create("sl", function (SL) {
         processData: true, //格式化data 用query string形式表示
         dataType: "text",
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-        onSuccess: function () { },
-        onError: function () { },
-        onComplete: function () { },
+        success: function () { },
+        error: function () { },
+        complete: function () { },
         onTimeout: function () { },
-        isAsync: true,
+        async: true,
         timeout: 30000,
         url: "",
         cache: false,
@@ -131,7 +134,7 @@ sl.create("sl", function (SL) {
     }
     function ajax(options) {
         options = SL.extend(defaultSetting, options);
-        var isComplete = false, status,
+        var isComplete = false, status, data,
         xhr = new window.XMLHttpRequest(), jsonp, callbackContext = options.callbackContext || options;
         //传进来的data没经过处理
         if (options.data && options.processData && typeof options.data != "string") {
@@ -160,10 +163,10 @@ sl.create("sl", function (SL) {
             options.url = options.url.replace(jsre, "=" + jsonp + "$1");
             //当做sript处理
             options.dataType = "script";
-            // jsonp回调函数
+            // jsonp回调函数 也是成功的处理函数
             window[jsonp] = window[jsonp] || function (tmp) {
                 data = tmp;
-                options.onSuccess(data, xhr);
+                oHandleEvent.success(options, data, status, xhr);
                 window[jsonp] = undefined;
                 try {
                     delete window[jsonp];
@@ -201,6 +204,7 @@ sl.create("sl", function (SL) {
             if (options.scriptCharset) {
                 script.charset = options.scriptCharset;
             }
+            //请求sript并且不是jsonp  因为jsonp里面只有回调函数
             if (!jsonp) {
                 var done = false;
                 // 脚本下载完毕 执行
@@ -208,7 +212,7 @@ sl.create("sl", function (SL) {
                     if (!done && (!this.readyState ||
 							this.readyState === "loaded" || this.readyState === "complete")) {
                         done = true;
-                        oHandleEvent.success(options, "", xhr);
+                        oHandleEvent.success(options, data, status, xhr);
 
                         // 防止内存泄露
                         script.onload = script.onreadystatechange = null;
@@ -222,7 +226,7 @@ sl.create("sl", function (SL) {
             head.insertBefore(script, head.firstChild);
             return undefined;
         }
-        xhr.open(options.type, options.url, options.isAsync);
+        xhr.open(options.type, options.url, options.async);
 
         try {
             if (options.data && options.contentType) {
@@ -242,20 +246,19 @@ sl.create("sl", function (SL) {
         } catch (e) { }
 
         var onreadystatechange = xhr.onreadystatechange = function (isTimeout) {
-        //ajax请求被终止
-            if (!xhr || xhr.readyState == 0) {
-                if (intervalState) {
-                    clearInterval(intervalState);
-                    intervalState = null;
+            //ajax请求被终止
+            if (!xhr || xhr.readyState === 0 || isTimeout === "abort") {
+                if (!isComplete) {
+                    oHandleEvent.complete(s, xhr, status, data);
+                }
+
+                requestDone = true;
+                if (xhr) {
+                    xhr.onreadystatechange = jQuery.noop;
                 }
             }
             else if (!isComplete && xhr && (xhr.readyState == 4 || isTimeout == "timeout")) {
                 isComplete = true;
-                if (intervalState) {
-                    clearInterval(intervalState);
-                    intervalState = null;
-                }
-
                 status = isTimeout == "timeout" ? "timeout" :
                 !oAjaxHelper.isRequestSuccess(xhr) ? "error" :
                 options.ifModified && oAjaxHelper.httpNotModified(xhr, options.url) ? "notmodified" :
@@ -268,7 +271,7 @@ sl.create("sl", function (SL) {
                     }
                 }
                 if (status == "success") {
-                    oHandleEvent.success(options, data, xhr);
+                    oHandleEvent.success(options, data,status,xhr);
 
                 } else if (status == "timeout") {
                     oHandleEvent.timeout(options, status, xhr);
@@ -282,8 +285,22 @@ sl.create("sl", function (SL) {
             }
 
         };
+
+        // 重写abort ie6支持
+        // Opera不能触发onreadystatechange在abort触发
+        try {
+            var oldAbort = xhr.abort;
+            xhr.abort = function () {
+                if (xhr) {
+                    //ie7的abort没有call属性
+                    Function.prototype.call.call(oldAbort, xhr);
+                }
+
+                onreadystatechange("abort");
+            };
+        } catch (abortError) { }
         //异步操作 超时判断
-        if (options.isAsync) {
+        if (options.async) {
             var intervalState = setInterval(onreadystatechange, 10);
             //超时判断
             if (options.timeout > 0) {
