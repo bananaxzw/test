@@ -50,7 +50,7 @@ sl.create("sl", function (SL) {
         complete: function (options, xhr, status, data) {
             options.complete.call(options.callbackContext, xhr, status);
         }
-    }
+    };
     /**
     *@ignore 一些版主 比如判断请求是否成功等等
     */
@@ -114,13 +114,16 @@ sl.create("sl", function (SL) {
 
             // Opera returns 0 when status is 304
             return xhr.status === 304 || xhr.status === 0;
+        },
+        setRequestHeaders: function (xhr, option) {
+
         }
-    }
+    };
     this.ajaxSettting = {
         type: "POST",
         data: null,
         processData: true, //格式化data 用query string形式表示
-        dataType: "text",
+        //        dataType: "text",
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         success: function () { },
         error: function () { },
@@ -140,9 +143,9 @@ sl.create("sl", function (SL) {
             text: "text/plain",
             _default: "*/*"
         }
-    }
-    function ajax(options) {
-        options = sl.extend(sl.ajaxSettting, options);
+    };
+    this.ajax = function (options) {
+        options = sl.extend(true, {}, sl.ajaxSettting, options);
         var isComplete = false, status, data, type = options.type,
         xhr = new window.XMLHttpRequest(), jsonp, callbackContext = options.callbackContext || options, noContent = rGETHEAD.test(type);
         //传进来的data没经过处理
@@ -199,8 +202,8 @@ sl.create("sl", function (SL) {
             //判断是否有时间戳了 没有的话加上时间戳
             options.url = ret + ((ret === options.url) ? (rquery.test(options.url) ? "&" : "?") + "_=" + ts : "");
         }
-        //GET附加data到url 
-        if (options.data && options.type === "GET") {
+        //GET 或者 head请求 附加data到url 
+        if (options.data && noContent) {
             options.url += (rquery.test(options.url) ? "&" : "?") + options.data;
         }
         //判断是否跨域
@@ -346,73 +349,26 @@ sl.create("sl", function (SL) {
         }
         return xhr;
     };
-    sl.Ajax = function (options) {
-        ajax(options);
-    }
+    this.get = function (url, data, callback, type) {
+        // 没有data只有回调函数
+        if (sl.InstanceOf.Function(data)) {
+            type = type || callback;
+            callback = data;
+            data = null;
+        }
+
+        return sl.ajax({
+            type: "GET",
+            url: url,
+            data: data,
+            success: callback,
+            dataType: type
+        });
+     };
     this.ajaxSetup = function (setting) {
         sl.extend(sl.ajaxSettting, setting);
-    }
-
-});
-
-
-
-sl.create("sl", function () {
-
-    var rbracket = /\[\]$/,
-    r20 = /%20/g;
-    this.param = function (a, traditional) {
-        var s = [],
-			add = function (key, value) {
-			    value = sl.InstanceOf.Function(value) ? value() : value;
-			    s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);
-			};
-
-        //兼容1.32 jq
-        if (traditional === undefined) {
-            traditional = sl.ajaxSettting.traditional;
-        }
-
-        //选择器遍历元素
-        if (a.isChain && a.isChain(a)) {
-            // Serialize the form elements
-            sl.each(a.elements, function () {
-                add(this.name, this.value);
-            });
-
-        } else {
-            for (var prefix in a) {
-                buildParams(prefix, a[prefix], traditional, add);
-            }
-        }
-        return s.join("&").replace(r20, "+");
-    }
-    function buildParams(prefix, obj, traditional, add) {
-        if (sl.InstanceOf.Array(obj) && obj.length) {
-            // Serialize array item.
-            sl.each(obj, function (i, v) {
-                if (traditional || rbracket.test(prefix)) {
-                    // Treat each array item as a scalar.
-                    add(prefix, v);
-
-                } else {
-                    buildParams(prefix + "[" + (typeof v === "object" || sl.InstanceOf.Array(v) ? i : "") + "]", v, traditional, add);
-                }
-            });
-
-        } else if (!traditional && obj != null && typeof obj === "object") {
-            if (sl.InstanceOf.EmptyObject(obj)) {
-                add(prefix, "");
-            } else {
-                sl.each(obj, function (k, v) {
-                    buildParams(prefix + "[" + k + "]", v, traditional, add);
-                });
-            }
-
-        } else {
-            // Serialize scalar item.
-            add(prefix, obj);
-        }
     };
+
 });
+
    

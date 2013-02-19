@@ -13,10 +13,12 @@
 */
 
 
+
 (function () {
 
-    var version = "1.0", topNamespace = this;
-    var SL = topNamespace.SL, VERSIONS = {}, Instances = {};
+    var version = "1.0", topNamespace = this,
+    SL = topNamespace.SL, VERSIONS = {}, Instances = {};
+
 
     if (SL == undefined) {
         if (SL) {
@@ -259,7 +261,7 @@
                         this.init.apply(this, arguments);
                     }
                     // 指定原型
-                    sl.extend( subClass.prototype,new superClass());
+                    subClass.prototype = new superClass();
                     // 重新指定构造函数
                     subClass.prototype.constructor = subClass;
                     //扩展子类
@@ -272,6 +274,7 @@
                     var newClass = function () {
                         this.init.apply(this, arguments);
                     }
+                    //修正 改为扩展 废除newClass.prototype = members;
                     sl.extend(newClass.prototype, members);
                     return newClass;
                 }
@@ -302,6 +305,24 @@ SL().create(function (SL) {
     *var sl=new SL();
     *sl.InstanceOf.String(obj)
     */
+    var toString = Object.prototype.toString,
+
+    class2type = {
+        "[object String]": "string",
+        "[object Array]": "array",
+        "[object Number]": "number",
+        "[object Boolean]": "boolean",
+        "[object Date]": "date",
+        "[object RegExp]": "regexp",
+        "[object Function]": "function",
+        "[object Object]": "object"
+    };
+
+    sl.type = function (obj) {
+        return obj == null ?
+			String(obj) :
+			class2type[toString.call(obj)] || "object";
+    }
     var InstanceOf = function () {
         /// <summary>
         /// 类型判断相关
@@ -435,40 +456,6 @@ SL().create(function (SL) {
     SL.InstanceOf = SL.InstanceOf || {};
     SL.InstanceOf = new InstanceOf();
 });
-//类型转换
-SL().create(function (SL) {
-    var SLConvert = function () {
-        this.convertToArray = convertToArray;
-    };
-    function convertToArray(obj, fFilter, oThis) {
-        if (obj == null) return [];
-        if (SL.InstanceOf.Array(obj)) return obj;
-        if (!SL.InstanceOf.Object(obj) && obj != '[object NodeList]') return [obj]; //safari下typeof nodeList 返回 'function'
-        if (sl.InstanceOf.DOMNode(obj)) return [obj];
-        oThis = oThis || window;
-        if (obj.hasOwnProperty) {//非ie浏览器的nodeList集合 都具备 hasOwnProperty方法 
-            if (SL.InstanceOf.DOMNodeList(obj) || SL.InstanceOf.Arguments(obj)) {//ie arguments 可过
-                return fFilter ? arguments.callee._pushAsArray(obj, fFilter, oThis) : Array.prototype.slice.call(obj);
-            }
-        }
-        else if (SL.InstanceOf.DOMNodeList(obj)) return arguments.callee._pushAsArray(obj, fFilter, oThis); //ie nodeList
-        return arguments.callee._pushAsObject(obj, fFilter, oThis);
-    };
-    convertToArray._pushAsArray = function (obj, fFilter, oThis) {
-        var aReturn = [];
-        if (fFilter) for (var i = 0, len = obj.length; i < len; i++) fFilter.call(oThis, obj[i], i, obj) && aReturn.push(obj[i]);
-        else for (var i = 0, len = obj.length; i < len; i++) aReturn.push(obj[i]);
-        return aReturn;
-    };
-    convertToArray._pushAsObject = function (obj, fFilter, oThis) {
-        var aReturn = [];
-        if (fFilter) for (var o in obj) fFilter.call(oThis, obj[o], o, obj) && aReturn.push(obj[o]);
-        else for (var o in obj) aReturn.push(obj[o]);
-        return aReturn;
-    };
-    SL.Convert = new SLConvert();
-
-});
 /**
 *@memberOf SL
 *对象扩展
@@ -552,7 +539,37 @@ SL().create(function (SL) {
     SL.extend = extend;
 });
 SL().create(function (SL) {
-    //var uu = new SL();
+    var rbracket = /\[\]$/,
+    r20 = /%20/g;
+    function buildParams(prefix, obj, traditional, add) {
+        if (sl.InstanceOf.Array(obj) && obj.length) {
+            // Serialize array item.
+            sl.each(obj, function (i, v) {
+                if (traditional || rbracket.test(prefix)) {
+                    // Treat each array item as a scalar.
+                    add(prefix, v);
+
+                } else {
+                    buildParams(prefix + "[" + (typeof v === "object" || sl.InstanceOf.Array(v) ? i : "") + "]", v, traditional, add);
+                }
+            });
+
+        } else if (!traditional && obj != null && typeof obj === "object") {
+            if (sl.InstanceOf.EmptyObject(obj)) {
+                add(prefix, "");
+            } else {
+                sl.each(obj, function (k, v) {
+                    buildParams(prefix + "[" + k + "]", v, traditional, add);
+                });
+            }
+
+        } else {
+            // Serialize scalar item.
+            add(prefix, obj);
+        }
+    };
+
+
     (function () {
         this.each = function (object, callback, args) {
             var name, i = 0, length = object.length;
@@ -613,23 +630,36 @@ SL().create(function (SL) {
             return proxy;
         };
         //把json转换成querying形式 比如{width:100,height:100}=>width=100&height=100
-        this.param = function (object) {
-            var s = [];
-            function add(key, value) {
-                value = SL.InstanceOf.Function(value) ? value() : value;
-                s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);
-            }
-            SL.each(object, function build(prefix, o) {
-                if (typeof o == "object") {
-                    SL.each(o, function (i, v) {
-                        build(prefix + "[" + i + "]", v);
-                    });
-                } else {
-                    add(prefix, o);
-                }
-            });
+        this.param = function (a, traditional) {
+            var s = [],
+			add = function (key, value) {
+			    value = sl.InstanceOf.Function(value) ? value() : value;
+			    s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);
+			};
 
-            return s.join("&").replace(/%20/g, "+");
+            //兼容1.32 jq
+            if (traditional === undefined) {
+                traditional = sl.ajaxSettting.traditional;
+            }
+            //serialize 中用到
+            if (sl.InstanceOf.Array(a)) {
+                sl.each(a, function () {
+                    add(this.name, this.value);
+                });
+            }
+            //选择器遍历元素
+            else if (a.isChain && a.isChain(a)) {
+                // Serialize the form elements
+                sl.each(a.elements, function () {
+                    add(this.name, this.value);
+                });
+
+            } else {
+                for (var prefix in a) {
+                    buildParams(prefix, a[prefix], traditional, add);
+                }
+            }
+            return s.join("&").replace(r20, "+");
         };
         //统一get set属性访问器
         this.access = function (elems, key, value, getter, setter, bind, setReturn) {
@@ -671,6 +701,7 @@ SL().create(function (SL) {
         this.grep = function (elems, callback, inv) {
             var ret = [];
             for (var i = 0, length = elems.length; i < length; i++) {
+                //若inv为true表示不满足callback条件 inv为false表示满足callback条件
                 if (!inv !== !callback(elems[i], i)) {
                     ret.push(elems[i]);
                 }
@@ -690,7 +721,41 @@ SL().create(function (SL) {
 
             return ret.concat.apply([], ret);
         };
+        this.evalSript = function (sriptText) {
+            if (sriptText && /\S/.test(sriptText)) {
+                (window.execScript || function (sriptText) {
+                    window["eval"].call(window, sriptText);
+                })(sriptText);
+            }
+        }
     }).call(SL);
+
+});
+
+//类型转换
+SL().create(function (SL) {
+    var hasOwn = Object.prototype.hasOwnProperty,
+	push = Array.prototype.push,
+	slice = Array.prototype.slice,
+	trim = String.prototype.trim,
+	indexOf = Array.prototype.indexOf;
+    var SLConvert = function () {
+        this.convertToArray = convertToArray;
+    };
+    function convertToArray(array, results) {
+        var ret = results || [];
+        if (array != null) {
+            var type = sl.type(array);
+            if (array.length == null || type === "string" || type === "function" || type === "regexp" || sl.InstanceOf.Window(array)) {
+                push.call(ret, array);
+            } else {
+                sl.merge(ret, array);
+            }
+        }
+
+        return ret;
+    };
+    SL.Convert = new SLConvert();
 
 });
 //判断页面加载

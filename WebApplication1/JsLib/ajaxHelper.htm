@@ -3,15 +3,15 @@
 <head>
     <title></title>
     <script src="sl.js" type="text/javascript"></script>
+    <script src="SL.AJAXEX.js" type="text/javascript"></script>
     <script src="SL.Node.js" type="text/javascript"></script>
-    <script src="jq1.72.js" type="text/javascript"></script>
     <script type="text/javascript">
         sl.ready(function () {
-          
-            alert(String(null));
-            $.makeArray(document.getElementById("f"));
             $('form').submit(function () {
-                console.log($(this).serializeArray());
+                var rr = $(this).serializeArray();
+                var qr = $(this).serialize();
+                console.dir($(this).serializeArray());
+                console.log(qr);
                 return false;
             })
 

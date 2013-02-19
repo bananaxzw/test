@@ -537,7 +537,37 @@ SL().create(function (SL) {
     SL.extend = extend;
 });
 SL().create(function (SL) {
-    //var uu = new SL();
+    var rbracket = /\[\]$/,
+    r20 = /%20/g;
+    function buildParams(prefix, obj, traditional, add) {
+        if (sl.InstanceOf.Array(obj) && obj.length) {
+            // Serialize array item.
+            sl.each(obj, function (i, v) {
+                if (traditional || rbracket.test(prefix)) {
+                    // Treat each array item as a scalar.
+                    add(prefix, v);
+
+                } else {
+                    buildParams(prefix + "[" + (typeof v === "object" || sl.InstanceOf.Array(v) ? i : "") + "]", v, traditional, add);
+                }
+            });
+
+        } else if (!traditional && obj != null && typeof obj === "object") {
+            if (sl.InstanceOf.EmptyObject(obj)) {
+                add(prefix, "");
+            } else {
+                sl.each(obj, function (k, v) {
+                    buildParams(prefix + "[" + k + "]", v, traditional, add);
+                });
+            }
+
+        } else {
+            // Serialize scalar item.
+            add(prefix, obj);
+        }
+    };
+
+
     (function () {
         this.each = function (object, callback, args) {
             var name, i = 0, length = object.length;
@@ -598,23 +628,36 @@ SL().create(function (SL) {
             return proxy;
         };
         //把json转换成querying形式 比如{width:100,height:100}=>width=100&height=100
-        this.param = function (object) {
-            var s = [];
-            function add(key, value) {
-                value = SL.InstanceOf.Function(value) ? value() : value;
-                s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);
-            }
-            SL.each(object, function build(prefix, o) {
-                if (typeof o == "object") {
-                    SL.each(o, function (i, v) {
-                        build(prefix + "[" + i + "]", v);
-                    });
-                } else {
-                    add(prefix, o);
-                }
-            });
+        this.param = function (a, traditional) {
+            var s = [],
+			add = function (key, value) {
+			    value = sl.InstanceOf.Function(value) ? value() : value;
+			    s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);
+			};
 
-            return s.join("&").replace(/%20/g, "+");
+            //兼容1.32 jq
+            if (traditional === undefined) {
+                traditional = sl.ajaxSettting.traditional;
+            }
+            //serialize 中用到
+            if (sl.InstanceOf.Array(a)) {
+                sl.each(a, function () {
+                    add(this.name, this.value);
+                });
+            }
+            //选择器遍历元素
+            else if (a.isChain && a.isChain(a)) {
+                // Serialize the form elements
+                sl.each(a.elements, function () {
+                    add(this.name, this.value);
+                });
+
+            } else {
+                for (var prefix in a) {
+                    buildParams(prefix, a[prefix], traditional, add);
+                }
+            }
+            return s.join("&").replace(r20, "+");
         };
         //统一get set属性访问器
         this.access = function (elems, key, value, getter, setter, bind, setReturn) {
@@ -701,7 +744,7 @@ SL().create(function (SL) {
         var ret = results || [];
         if (array != null) {
             var type = sl.type(array);
-            if (array.length == null || type === "string" || type === "function" || type === "regexp" || jQuery.isWindow(array)) {
+            if (array.length == null || type === "string" || type === "function" || type === "regexp" || sl.InstanceOf.Window(array)) {
                 push.call(ret, array);
             } else {
                 sl.merge(ret, array);
