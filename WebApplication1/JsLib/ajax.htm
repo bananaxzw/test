@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-      <script src="jq1.72.js" type="text/javascript"></script>
+  <script src="jq1.72.js" type="text/javascript"></script>
+<!--    <script src="jq1.4.js" type="text/javascript"></script>-->
     <script src="SL.Core.js" type="text/javascript"></script>
     <script src="SL.AJAXEX.js" type="text/javascript"></script>
     <script src="SL.Json.js" type="text/javascript"></script>
@@ -16,9 +17,7 @@
             $("#Button1").click(function () {
                 $.ajax({
                     url: "WebService1.asmx/GetPerson121",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: "{'Id':2}",
+                    type: "HEAD",
                     success: function (data) {
                         console.log(data);
 
