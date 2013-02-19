@@ -862,6 +862,7 @@
     <Content Include="JsLib\anim.html" />
     <Content Include="JsLib\event1.htm" />
     <Content Include="JsLib\invisible.htm" />
+    <Content Include="JsLib\jq1.4.js" />
     <Content Include="JsLib\jqtest.htm" />
     <Content Include="JsLib\load.htm" />
     <Content Include="JsLib\requirejs\my\increment.js" />

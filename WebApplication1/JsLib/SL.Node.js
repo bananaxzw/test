@@ -433,21 +433,20 @@
             return sl.position(this.elements[0]);
         },
         serialize: function () {
-            return jQuery.param(this.serializeArray());
+            return sl.param(this.serializeArray());
         },
 
         serializeArray: function () {
             var _this = this;
-            this.map(function () {
-                //表单的子元素
+            var newChain = this.map(function () {
                 return this.elements ? sl.Convert.convertToArray(this.elements) : _this.elements;
-            })
-		.filter(function () {
-		    return this.name && !this.disabled &&
+            }).filter(function () {
+                return this.name && !this.disabled &&
 				(this.checked || rselectTextarea.test(this.nodeName) ||
 					rinput.test(this.type));
-		});
-            var tt= sl.map(this.elements, function (i, elem) {
+            });
+
+            return sl.map(newChain.elements, function (elem, index) {
                 var val = sl.attr.getValue(elem);
 
                 return val == null ?
