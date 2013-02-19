@@ -125,12 +125,12 @@
       <DependentUpon>Number.aspx</DependentUpon>
     </Compile>
     <Compile Include="JsLib\Person.cs" />
-    <Compile Include="JsLib\WebForm1.aspx.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
+    <Compile Include="JsLib\WebForm2.aspx.cs">
+      <DependentUpon>WebForm2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="JsLib\WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
+    <Compile Include="JsLib\WebForm2.aspx.designer.cs">
+      <DependentUpon>WebForm2.aspx</DependentUpon>
     </Compile>
     <Compile Include="JsLib\WebService1.asmx.cs">
       <DependentUpon>WebService1.asmx</DependentUpon>
@@ -814,6 +814,8 @@
     <Content Include="JQ\1.7\src\traversing.js" />
     <Content Include="JsLib\%24SL.js" />
     <Content Include="JsLib\ajax.aspx" />
+    <Content Include="JsLib\ajax.htm" />
+    <Content Include="JsLib\ajaxHelper.htm" />
     <Content Include="JsLib\Arbiter.js" />
     <Content Include="JsLib\Array.htm" />
     <Content Include="JsLib\chainDemo\chainEvent.htm" />
@@ -1156,7 +1158,8 @@
     <Content Include="JsLib\UI\waterfallimage\3.jpg" />
     <Content Include="JsLib\UI\waterfallimage\4.jpg" />
     <Content Include="JsLib\UI\waterfallimage\5.jpg" />
-    <Content Include="JsLib\WebForm1.aspx" />
+    <Content Include="JsLib\value.htm" />
+    <Content Include="JsLib\WebForm2.aspx" />
     <Content Include="JsLib\WebService1.asmx" />
     <Content Include="JsLib\XmlOp.htm" />
     <Content Include="JSUntil\broswerdetect.js" />

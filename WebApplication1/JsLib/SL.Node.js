@@ -11,6 +11,9 @@
 /// <reference path="SL.offset.js" />
 
 (function () {
+    var rCRLF = /\r?\n/g,
+     rselectTextarea = /^(?:select|textarea)/i,
+    	rinput = /^(?:color|date|datetime|datetime-local|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/i;
     //链式操作
     function chain(selector, context) {
         // (""), (null), or (undefined)
@@ -92,7 +95,11 @@
 			this.slice(i) :
 			this.slice(i, i + 1);
         },
-
+        get: function (num) {
+            return num == null ?
+			Array.prototype.slice.call(this.elements) :
+			(num < 0 ? this.elements[this.length + num] : this.elements[num]);
+        },
         first: function () {
             return this.eq(0);
         },
@@ -165,7 +172,7 @@
             if (sl.InstanceOf.Function(arguments[0])) {
                 var callFun = arguments[0];
                 return this.pushStack(sl.grep(this.elements, function (elem, i) {
-                    return callFun.call(elem, elem);
+                    return callFun.call(elem, i, elem);
                 }));
 
             }
@@ -197,7 +204,7 @@
             var othis = this;
             var ret = this.map(function () {
                 var n = sl.Dom.clone(this);
-                sl.attr.removeAttr(n, sl.expando);//移除data属性
+                sl.attr.removeAttr(n, sl.expando); //移除data属性
                 return n;
             })
             return ret;
@@ -424,7 +431,35 @@
                 return null;
             }
             return sl.position(this.elements[0]);
+        },
+        serialize: function () {
+            return jQuery.param(this.serializeArray());
+        },
+
+        serializeArray: function () {
+            var _this = this;
+            this.map(function () {
+                //表单的子元素
+                return this.elements ? sl.Convert.convertToArray(this.elements) : _this.elements;
+            })
+		.filter(function () {
+		    return this.name && !this.disabled &&
+				(this.checked || rselectTextarea.test(this.nodeName) ||
+					rinput.test(this.type));
+		});
+            var tt= sl.map(this.elements, function (i, elem) {
+                var val = sl.attr.getValue(elem);
+
+                return val == null ?
+				null :
+				sl.InstanceOf.Array(val) ?
+					sl.map(val, function (val, i) {
+					    return { name: elem.name, value: val.replace(rCRLF, "\r\n") };
+					}) :
+					{ name: elem.name, value: val.replace(rCRLF, "\r\n") };
+            });
         }
+
     };
 
     sl.each({

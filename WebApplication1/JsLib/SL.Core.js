@@ -14,8 +14,9 @@
 
 (function () {
 
-    var version = "1.0", topNamespace = this;
-    var SL = topNamespace.SL, VERSIONS = {}, Instances = {};
+    var version = "1.0", topNamespace = this,
+    SL = topNamespace.SL, VERSIONS = {}, Instances = {};
+
 
     if (SL == undefined) {
         if (SL) {
@@ -302,15 +303,33 @@ SL().create(function (SL) {
     *var sl=new SL();
     *sl.InstanceOf.String(obj)
     */
-  var  InstanceOf = function () {
+    var toString = Object.prototype.toString,
+
+    class2type = {
+        "[object String]": "string",
+        "[object Array]": "array",
+        "[object Number]": "number",
+        "[object Boolean]": "boolean",
+        "[object Date]": "date",
+        "[object RegExp]": "regexp",
+        "[object Function]": "function",
+        "[object Object]": "object"
+    };
+
+    sl.type = function (obj) {
+        return obj == null ?
+			String(obj) :
+			class2type[toString.call(obj)] || "object";
+    }
+    var InstanceOf = function () {
         /// <summary>
         /// 类型判断相关
         /// </summary>
     };
-   InstanceOf.prototype = {
-       /**
+    InstanceOf.prototype = {
+        /**
         *判断是否字符串
-       */
+        */
         String: function (obj) {
             return Object.prototype.toString.call(obj) == '[object String]';
         },
@@ -401,7 +420,7 @@ SL().create(function (SL) {
             return true;
 
         },
-        DOMNode:function(node){
+        DOMNode: function (node) {
             return this.Object(node) && node.nodeType;
         },
         /**
@@ -423,7 +442,7 @@ SL().create(function (SL) {
             return this.Object(node) && node.nodeType == 3;
         },
         DOMNodeList: function (obj) {
-            return !!obj && (!obj.hasOwnProperty || obj == '[object NodeList]' || obj == '[object StaticNodeList]' || obj == '[object HTMLCollection]'|| ('length' in obj&&this.DOMNode(obj[0])));
+            return !!obj && (!obj.hasOwnProperty || obj == '[object NodeList]' || obj == '[object StaticNodeList]' || obj == '[object HTMLCollection]' || ('length' in obj && this.DOMNode(obj[0])));
         },
         /**
         *判断是否dom片段文档
@@ -434,40 +453,6 @@ SL().create(function (SL) {
     }
     SL.InstanceOf = SL.InstanceOf || {};
     SL.InstanceOf = new InstanceOf();
-});
-//类型转换
-SL().create(function (SL) {
-    var SLConvert = function () {
-        this.convertToArray = convertToArray;
-    };
-    function convertToArray(obj, fFilter, oThis) {
-        if (obj == null) return [];
-        if (SL.InstanceOf.Array(obj)) return obj;
-        if (!SL.InstanceOf.Object(obj) && obj != '[object NodeList]') return [obj]; //safari下typeof nodeList 返回 'function'
-        if (sl.InstanceOf.DOMNode(obj)) return [obj];
-        oThis = oThis || window;
-        if (obj.hasOwnProperty) {//非ie浏览器的nodeList集合 都具备 hasOwnProperty方法 
-            if (SL.InstanceOf.DOMNodeList(obj) || SL.InstanceOf.Arguments(obj)) {//ie arguments 可过
-                return fFilter ? arguments.callee._pushAsArray(obj, fFilter, oThis) : Array.prototype.slice.call(obj);
-            }
-        }
-        else if (SL.InstanceOf.DOMNodeList(obj)) return arguments.callee._pushAsArray(obj, fFilter, oThis); //ie nodeList
-        return arguments.callee._pushAsObject(obj, fFilter, oThis);
-    };
-    convertToArray._pushAsArray = function (obj, fFilter, oThis) {
-        var aReturn = [];
-        if (fFilter) for (var i = 0, len = obj.length; i < len; i++) fFilter.call(oThis, obj[i], i, obj) && aReturn.push(obj[i]);
-        else for (var i = 0, len = obj.length; i < len; i++) aReturn.push(obj[i]);
-        return aReturn;
-    };
-    convertToArray._pushAsObject = function (obj, fFilter, oThis) {
-        var aReturn = [];
-        if (fFilter) for (var o in obj) fFilter.call(oThis, obj[o], o, obj) && aReturn.push(obj[o]);
-        else for (var o in obj) aReturn.push(obj[o]);
-        return aReturn;
-    };
-    SL.Convert = new SLConvert();
-
 });
 /**
 *@memberOf SL
@@ -605,7 +590,7 @@ SL().create(function (SL) {
             context = context || SL;
             if (fn) {
                 proxy = function () {
-                    return fn.apply(context,arguments);
+                    return fn.apply(context, arguments);
                 }
             }
             //事件中有用到
@@ -671,6 +656,7 @@ SL().create(function (SL) {
         this.grep = function (elems, callback, inv) {
             var ret = [];
             for (var i = 0, length = elems.length; i < length; i++) {
+                //若inv为true表示不满足callback条件 inv为false表示满足callback条件
                 if (!inv !== !callback(elems[i], i)) {
                     ret.push(elems[i]);
                 }
@@ -690,7 +676,41 @@ SL().create(function (SL) {
 
             return ret.concat.apply([], ret);
         };
+        this.evalSript = function (sriptText) {
+            if (sriptText && /\S/.test(sriptText)) {
+                (window.execScript || function (sriptText) {
+                    window["eval"].call(window, sriptText);
+                })(sriptText);
+            }
+        }
     }).call(SL);
+
+});
+
+//类型转换
+SL().create(function (SL) {
+    var hasOwn = Object.prototype.hasOwnProperty,
+	push = Array.prototype.push,
+	slice = Array.prototype.slice,
+	trim = String.prototype.trim,
+	indexOf = Array.prototype.indexOf;
+    var SLConvert = function () {
+        this.convertToArray = convertToArray;
+    };
+    function convertToArray(array, results) {
+        var ret = results || [];
+        if (array != null) {
+            var type = sl.type(array);
+            if (array.length == null || type === "string" || type === "function" || type === "regexp" || jQuery.isWindow(array)) {
+                push.call(ret, array);
+            } else {
+                sl.merge(ret, array);
+            }
+        }
+
+        return ret;
+    };
+    SL.Convert = new SLConvert();
 
 });
 //判断页面加载

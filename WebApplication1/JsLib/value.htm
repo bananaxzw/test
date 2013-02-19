@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="sl.js" type="text/javascript"></script>
+    <script src="SL.Node.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+// <![CDATA[
+
+        function Button1_onclick() {
+            $("#saff").val("1");
+            $("#sasa").val(1111);
+            $("#Radio2").val("sasafs");
+        }
+
+
+
+        function Button2_onclick() {
+            console.log($("#saff").val());
+            console.log($("#sasa").val());
+        }
+
+// ]]>
+    </script>
+</head>
+<body>
+<form  action=ajax.aspx method=get> 
+ 
+<input id="Checkbox1" type="checkbox"  name="saffsasfaafsaf"/>
+  <input id="Radio1" type="radio" name="saf"  value="123" />
+  <input id="Radio2" type="radio"  name="saf" value="sasafs" /><input id="Submit1" type="submit" value="submit" name="safsa" />
+</form>
+
+<input type=text  id="sasa"/>
+    <input id="Button1" type="button" value="set" onclick="return Button1_onclick()" />
+    <select id='saff'>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+    </select>
+    <input id="Button2" type="button" value="get" onclick="return Button2_onclick()" />
+</body>
+</html>

@@ -2,7 +2,6 @@
 /// <reference path="SL.Json.js" />
 
 sl.create("sl", function (SL) {
-    // var uu = new SL();
     function now() {
         return (new Date()).getTime();
     }
@@ -10,6 +9,7 @@ sl.create("sl", function (SL) {
     rscript = /<script(.|\s)*?\/script>/gi,
     rselectTextarea = /select|textarea/i,
     rinput = /color|date|datetime|email|hidden|month|number|password|range|search|tel|text|time|url|week/i,
+    rGETHEAD = /^(?:GET|HEAD)/,
     //jsonp临时结尾
     jsre = /=\?(&|$)/,
     //querying
@@ -18,7 +18,6 @@ sl.create("sl", function (SL) {
     rts = /(\?|&)_=.*?(&|$)/,
     //URL
     rurl = /^(\w+:)?\/\/([^\/?#]+)/,
-    r20 = /%20/g,
     lastModified = {},
 	etag = {};
     if (!window.XMLHttpRequest) {
@@ -42,13 +41,13 @@ sl.create("sl", function (SL) {
         success: function (options, data, status, xhr) {
             options.success.call(options.callbackContext, data, status, xhr);
         },
-        error: function (options, status, xhr, errorMsg) {
+        error: function (options, xhr, status, errorMsg) {
             options.error.call(options.callbackContext, xhr, status, errorMsg);
         },
-        timeout: function (options, status, xhr) {
+        timeout: function (options, xhr, status) {
             options.onTimeout.call(options.callbackContext, xhr, status);
         },
-        complete: function (options, status, xhr, data) {
+        complete: function (options, xhr, status, data) {
             options.complete.call(options.callbackContext, xhr, status);
         }
     }
@@ -57,32 +56,42 @@ sl.create("sl", function (SL) {
     */
     var oAjaxHelper = {
         getData: function (xhr, type) {
-
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="xhr"></param>
+            /// <param name="type">预期options的datatype</param>
+            /// <returns type=""></returns>
             var ct = xhr.getResponseHeader("content-type"),
 			xml = type === "xml" || !type && ct && ct.indexOf("xml") >= 0,
 			data = xml ? xhr.responseXML : xhr.responseText;
 
             if (xml && data.documentElement.nodeName === "parsererror") {
-                throw "parsererror";
+                throw new Error("parsererror");
             }
 
             if (typeof data === "string") {
                 //用户自定义返回json
-                if (type === "json") {
-                    if (typeof SL.Josn === "object" && SL.Josn.parse) {
-                        data = SL.Josn.parse(data);
+                if (type === "json" || !type && ct.indexOf("json") >= 0) {
+                    if (typeof sl.Josn === "object" && sl.Josn.parse) {
+                        data = sl.Josn.parse(data);
                     } else {
                         data = (new Function("return " + data))();
                     }
+                }
+                else if (type === "script" || !type && ct.indexOf("javascript") >= 0) {
+                    sl.evalSript(data);
                 }
             }
             return data;
 
         },
         isRequestSuccess: function (xhr) {
+            //IE error sometimes returns 1223 when it should be 204 so treat it as success
             try {
                 return (!xhr.status && location.protocol == "file:")
                     || (xhr.status >= 200 && xhr.status < 300)
+                    || xhr.status === 1223
                     || (xhr.status == 304)
                     || (navigator.userAgent.indexOf("Safari") > -1 && typeof xhr.status == "undefined");
             } catch (e) {
@@ -92,22 +101,22 @@ sl.create("sl", function (SL) {
 
         },
         httpNotModified: function (xhr, url) {
-            var lastModified = xhr.getResponseHeader("Last-Modified"),
-			etag = xhr.getResponseHeader("Etag");
+            var _lastModified = xhr.getResponseHeader("Last-Modified"),
+			_etag = xhr.getResponseHeader("Etag");
 
-            if (lastModified) {
-                lastModified[url] = lastModified;
+            if (_lastModified) {
+                lastModified[url] = _lastModified;
             }
 
-            if (etag) {
-                etag[url] = etag;
+            if (_etag) {
+                etag[url] = _etag;
             }
 
             // Opera returns 0 when status is 304
             return xhr.status === 304 || xhr.status === 0;
         }
     }
-    var defaultSetting = {
+    this.ajaxSettting = {
         type: "POST",
         data: null,
         processData: true, //格式化data 用query string形式表示
@@ -133,12 +142,12 @@ sl.create("sl", function (SL) {
         }
     }
     function ajax(options) {
-        options = SL.extend(defaultSetting, options);
-        var isComplete = false, status, data,
-        xhr = new window.XMLHttpRequest(), jsonp, callbackContext = options.callbackContext || options;
+        options = sl.extend(sl.ajaxSettting, options);
+        var isComplete = false, status, data, type = options.type,
+        xhr = new window.XMLHttpRequest(), jsonp, callbackContext = options.callbackContext || options, noContent = rGETHEAD.test(type);
         //传进来的data没经过处理
         if (options.data && options.processData && typeof options.data != "string") {
-            options.data = SL.param(options.data);
+            options.data = sl.param(options.data);
         }
         // 处理jsonp
         if (options.dataType === "jsonp") {
@@ -167,6 +176,7 @@ sl.create("sl", function (SL) {
             window[jsonp] = window[jsonp] || function (tmp) {
                 data = tmp;
                 oHandleEvent.success(options, data, status, xhr);
+                oHandleEvent.complete(options, xhr, status, data);
                 window[jsonp] = undefined;
                 try {
                     delete window[jsonp];
@@ -182,7 +192,7 @@ sl.create("sl", function (SL) {
             options.cache = false;
         }
         //是否缓存 GET会有缓存危险 POST不会有 
-        if (options.cache === false && options.type === "GET") {
+        if (options.cache === false && noContent) {
             var ts = now();
             //如果已经有时间戳了 替换
             var ret = options.url.replace(rts, "$1_=" + ts + "$2");
@@ -213,6 +223,7 @@ sl.create("sl", function (SL) {
 							this.readyState === "loaded" || this.readyState === "complete")) {
                         done = true;
                         oHandleEvent.success(options, data, status, xhr);
+                        oHandleEvent.complete(options, xhr, status, data);
 
                         // 防止内存泄露
                         script.onload = script.onreadystatechange = null;
@@ -252,33 +263,44 @@ sl.create("sl", function (SL) {
                     oHandleEvent.complete(s, xhr, status, data);
                 }
 
-                requestDone = true;
+                isComplete = true;
                 if (xhr) {
-                    xhr.onreadystatechange = jQuery.noop;
+                    xhr.onreadystatechange = function () { };
                 }
             }
             else if (!isComplete && xhr && (xhr.readyState == 4 || isTimeout == "timeout")) {
                 isComplete = true;
+                xhr.onreadystatechange = function () { };
                 status = isTimeout == "timeout" ? "timeout" :
                 !oAjaxHelper.isRequestSuccess(xhr) ? "error" :
                 options.ifModified && oAjaxHelper.httpNotModified(xhr, options.url) ? "notmodified" :
                 "success";
+                var errorMsg;
                 if (status == "success" || status === "notmodified") {
                     try {
                         data = oAjaxHelper.getData(xhr, options.dataType);
                     } catch (e) {
                         status = "parsererror";
+                        errorMsg = e;
+
                     }
                 }
-                if (status == "success") {
-                    oHandleEvent.success(options, data,status,xhr);
+
+                if (status == "success" || status === "notmodified") {
+                    // 因为jsonp里面只有回调函数
+                    if (!jsonp) {
+                        oHandleEvent.success(options, data, status, xhr);
+                    }
 
                 } else if (status == "timeout") {
-                    oHandleEvent.timeout(options, status, xhr);
+                    oHandleEvent.timeout(options, xhr, status);
                 } else {
-                    oHandleEvent.error(options, status, xhr);
+                    oHandleEvent.error(options, xhr, status, errorMsg);
                 }
-
+                // Fire the complete handlers
+                if (!jsonp) {
+                    oHandleEvent.complete(options, xhr, status, data);
+                }
                 // 防止内存泄露
                 if (options.async)
                     xhr = null;
@@ -300,34 +322,97 @@ sl.create("sl", function (SL) {
             };
         } catch (abortError) { }
         //异步操作 超时判断
-        if (options.async) {
-            var intervalState = setInterval(onreadystatechange, 10);
-            //超时判断
-            if (options.timeout > 0) {
-                setTimeout(function () {
-                    if (xhr) {
-                        if (!isComplete) {
-                            onreadystatechange("timeout");
-                        }
-                        xhr.abort();
+        if (options.async && options.timeout > 0) {
+            setTimeout(function () {
+                if (xhr) {
+                    if (!isComplete) {
+                        onreadystatechange("timeout");
                     }
+                    xhr.abort();
+                }
 
-                }, options.timeout);
-            }
+            }, options.timeout);
+
         }
 
         try {
-            xhr.send(options.type === "POST" ? options.data : null);
+            xhr.send(noContent || options.data == null ? null : options.data);
         } catch (e) {
 
         }
+        // firefox 1.5 doesn't fire statechange for sync requests
+        if (!options.async) {
+            onreadystatechange();
+        }
         return xhr;
     };
-    SL.Ajax = function (options) {
+    sl.Ajax = function (options) {
         ajax(options);
     }
     this.ajaxSetup = function (setting) {
-        sl.extend(defaultSetting, setting);
+        sl.extend(sl.ajaxSettting, setting);
     }
 
 });
+
+
+
+sl.create("sl", function () {
+
+    var rbracket = /\[\]$/,
+    r20 = /%20/g;
+    this.param = function (a, traditional) {
+        var s = [],
+			add = function (key, value) {
+			    value = sl.InstanceOf.Function(value) ? value() : value;
+			    s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);
+			};
+
+        //兼容1.32 jq
+        if (traditional === undefined) {
+            traditional = sl.ajaxSettting.traditional;
+        }
+
+        //选择器遍历元素
+        if (a.isChain && a.isChain(a)) {
+            // Serialize the form elements
+            sl.each(a.elements, function () {
+                add(this.name, this.value);
+            });
+
+        } else {
+            for (var prefix in a) {
+                buildParams(prefix, a[prefix], traditional, add);
+            }
+        }
+        return s.join("&").replace(r20, "+");
+    }
+    function buildParams(prefix, obj, traditional, add) {
+        if (sl.InstanceOf.Array(obj) && obj.length) {
+            // Serialize array item.
+            sl.each(obj, function (i, v) {
+                if (traditional || rbracket.test(prefix)) {
+                    // Treat each array item as a scalar.
+                    add(prefix, v);
+
+                } else {
+                    buildParams(prefix + "[" + (typeof v === "object" || sl.InstanceOf.Array(v) ? i : "") + "]", v, traditional, add);
+                }
+            });
+
+        } else if (!traditional && obj != null && typeof obj === "object") {
+            if (sl.InstanceOf.EmptyObject(obj)) {
+                add(prefix, "");
+            } else {
+                sl.each(obj, function (k, v) {
+                    buildParams(prefix + "[" + k + "]", v, traditional, add);
+                });
+            }
+
+        } else {
+            // Serialize scalar item.
+            add(prefix, obj);
+        }
+    };
+});
+   

@@ -6,7 +6,12 @@
     </script>
     <script src="JsLib/jq1.72.js" type="text/javascript"></script>
     <script type="text/javascript">
-
+        try {
+            throw "safs";
+        } catch (ex) {
+            alert(ex.name);
+            alert(ex.message);
+    }
 //        $(function () {
 //            $("body").delegate("li", "click", function (e) {
 //                alert(this.nodeName);

@@ -42,6 +42,7 @@ namespace WebApplication1.JsLib
 
             return "<a>1";
         }
+        
         [WebMethod]
         public  string GetPerson11()
         {
@@ -56,15 +57,36 @@ namespace WebApplication1.JsLib
 
         }
 
+        static int i = 0;
         [WebMethod]
         public List<Person> GetPerson121(string Id)
         {
-            Person p1 = new Person("ssss", 1);
-            Person p2 = new Person("sss1s", 2);
-            List<Person> list = new List<Person>();
-            list.Add(p1);
-            list.Add(p2);
-            return list;
+            if (i >= 1)
+            {
+                Person p1 = new Person("ssss", 666666);
+                Person p2 = new Person("sss1s", 666666666);
+                List<Person> list = new List<Person>();
+                list.Add(p1);
+                list.Add(p2);
+                i++;
+                return list;
+                //HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.Public);
+                //HttpContext.Current.Response.Cache.SetLastModified(DateTime.Now);
+                //HttpContext.Current.Response.StatusCode = 304;
+                //HttpContext.Current.Response.StatusDescription = "Not Modified";
+                //return null;
+
+            }
+            else
+            {
+                Person p1 = new Person("ssss", 1);
+                Person p2 = new Person("sss1s", 2);
+                List<Person> list = new List<Person>();
+                list.Add(p1);
+                list.Add(p2);
+                i++;
+                return list;
+            }
         }
     }
 }

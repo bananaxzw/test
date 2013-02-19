@@ -1,5 +1,8 @@
 ﻿/// <reference path="SL.Core.js" />
 /// <reference path="SL.CSS.js" />
+/// <reference path="SL.support.js" />
+/// <reference path="SL.Array.js" />
+
 /*css还未整理*/
 
 
@@ -18,6 +21,85 @@
 */
 
 SL().create(function () {
+    var valHooks = {
+        option: {
+            get: function (elem) {
+                //看看有没有设置value ie没设置value默认会""
+                var val = elem.attributes.value;
+                return !val || val.specified ? elem.value : elem.text;
+            }
+        },
+        select: {
+            get: function (elem) {
+                var value, i, max, option,
+					index = elem.selectedIndex,
+					values = [],
+					options = elem.options,
+					one = elem.type === "select-one";
+
+                if (index < 0) {
+                    return null;
+                }
+                i = one ? index : 0;
+                max = one ? index + 1 : options.length;
+                for (; i < max; i++) {
+                    option = options[i];
+
+                    // 某些浏览器在select设置disabled时候选项也disbled 要让他们不disabled
+                    if (option.selected && (sl.Support.optDisabled ? !option.disabled : option.getAttribute("disabled") === null) &&
+							(!option.parentNode.disabled || !/optgroup/i.test(option.parentNode.nodeName))) {
+                        value = sl.attr.getValue(option);
+                        if (one) {
+                            return value;
+                        }
+                        values.push(value);
+                    }
+                }
+
+                //  select.val() broken in IE after form.reset()
+                if (one && !values.length && options.length) {
+                    return sl.attr.getValue(options[index]);
+                }
+
+                return values;
+            },
+
+            set: function (elem, value) {
+                var values = sl.Convert.convertToArray(value);
+
+                for (var i = 0, length = elem.options.length; i < length; i++) {
+                    var opt = elem.options[i];
+                    if (sl.Array.indexOf(values, sl.attr.getValue(opt)) > -1) {
+                        opt.selected = true;
+                    }
+                }
+
+                if (!values.length) {
+                    elem.selectedIndex = -1;
+                }
+                return values;
+            }
+        }
+    };
+    // Radios and checkboxes getter/setter
+    if (!sl.Support.checkOn) {
+        sl.each(["radio", "checkbox"], function (i, d) {
+            valHooks[d] = {
+                get: function (elem) {
+                    //某些浏览器 webkit没设置radio和checkbox的值时候value为空 而ie和FF为on 统一为on
+                    return elem.getAttribute("value") === null ? "on" : elem.value;
+                },
+                set: function (elem, value) {
+                    var values = sl.Convert.convertToArray(value);
+
+                    return (elem.checked = sl.Array.indexOf(values, sl.attr.getValue(elem)) >= 0);
+
+                }
+
+            };
+        });
+    }
+
     function attribute() { }
     attribute.prototype = {
         getAttr: function (ele, name) {
@@ -114,17 +196,27 @@ SL().create(function () {
                 this.addClass(ele, value);
             }
         },
-        //select-multiple 还未考虑
         getValue: function (ele) {
+            var hooks = valHooks[ele.type] || valHooks[ele.nodeName.toLowerCase()];
+            if (hooks && "get" in hooks && (ret = hooks.get(ele)) !== undefined) {
+                return ret;
+            }
             if (sl.InstanceOf.DOMElement(ele) && "value" in ele) {
                 return ele.value;
             }
             return "";
         },
         setValue: function (ele, value) {
-            if (sl.InstanceOf.DOMElement(ele) && "value" in ele) {
-                ele.value = value;
+            if (ele.nodeType != 1) {
+                return;
             }
+            var hooks = valHooks[ele.type] || valHooks[ele.nodeName.toLowerCase()];
+            if (!hooks || !("set" in hooks) || hooks.set(ele, value) === undefined) {
+                if ("value" in ele) {
+                    ele.value = value;
+                }
+            }
+
         }
     }
     sl.attr = new attribute();
