@@ -103,6 +103,9 @@
     <Compile Include="JsLib\iframeOnload\WebForm1.aspx.designer.cs">
       <DependentUpon>WebForm1.aspx</DependentUpon>
     </Compile>
+    <Compile Include="JsLib\jsonphandler.ashx.cs">
+      <DependentUpon>jsonphandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="JsLib\Moni\data.aspx.cs">
       <DependentUpon>data.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -816,6 +819,7 @@
     <Content Include="JsLib\ajax.aspx" />
     <Content Include="JsLib\ajax.htm" />
     <Content Include="JsLib\ajaxHelper.htm" />
+    <Content Include="JsLib\ajaxscript.js" />
     <Content Include="JsLib\Arbiter.js" />
     <Content Include="JsLib\Array.htm" />
     <Content Include="JsLib\chainDemo\chainEvent.htm" />
@@ -2619,6 +2623,8 @@
     <None Include="JQ\1.4\test\data\text.php" />
     <None Include="JQ\1.4\test\polluted.php" />
     <None Include="JQ\1.4\test\xhtml.php" />
+    <None Include="JsLib\ajaxsjon.json" />
+    <Content Include="JsLib\jsonphandler.ashx" />
     <None Include="JsLib\UI\default\images\Thumbs.db" />
     <None Include="KITJS\KitJs\.project" />
     <None Include="KITJS\KitJs\.settings\org.eclipse.core.resources.prefs" />

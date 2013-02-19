@@ -1,6 +1,0 @@
-D:\mycodegit\test\WebApplication1\bin\WebApplication1.dll
-D:\mycodegit\test\WebApplication1\bin\WebApplication1.pdb
-D:\mycodegit\test\WebApplication1\bin\Newtonsoft.Json.Net20.dll
-D:\mycodegit\test\WebApplication1\obj\Debug\ResolveAssemblyReference.cache
-D:\mycodegit\test\WebApplication1\obj\Debug\WebApplication1.dll
-D:\mycodegit\test\WebApplication1\obj\Debug\WebApplication1.pdb

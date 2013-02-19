@@ -349,22 +349,30 @@ sl.create("sl", function (SL) {
         }
         return xhr;
     };
-    this.get = function (url, data, callback, type) {
-        // 没有data只有回调函数
-        if (sl.InstanceOf.Function(data)) {
-            type = type || callback;
-            callback = data;
-            data = null;
-        }
+    sl.each(["get", "post"], function (i, _type) {
+        sl[_type] = function (url, data, callback, dateType) {
+            // 没有data只有回调函数
+            if (sl.InstanceOf.Function(data)) {
+                dateType = dateType || callback;
+                callback = data;
+                data = null;
+            }
 
-        return sl.ajax({
-            type: "GET",
-            url: url,
-            data: data,
-            success: callback,
-            dataType: type
-        });
-     };
+            return sl.ajax({
+                type: _type,
+                url: url,
+                data: data,
+                success: callback,
+                dataType: dateType
+            });
+        };
+    });
+    this.getScript = function (url, callback) {
+        return sl.get(url, undefined, callback, "script");
+    };
+    this.getJSON = function (url, data, callback) {
+        return sl.get(url, data, callback, "json");
+    };
     this.ajaxSetup = function (setting) {
         sl.extend(sl.ajaxSettting, setting);
     };
