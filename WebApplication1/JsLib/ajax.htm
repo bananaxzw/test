@@ -2,20 +2,22 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-  <script src="jq1.72.js" type="text/javascript"></script>
-<!--    <script src="jq1.4.js" type="text/javascript"></script>-->
+    <!--  <script src="jq1.72.js" type="text/javascript"></script>-->
+    <!--    <script src="jq1.4.js" type="text/javascript"></script>-->
     <script src="SL.Core.js" type="text/javascript"></script>
+    <script src="sl.js" type="text/javascript"></script>
     <script src="SL.AJAXEX.js" type="text/javascript"></script>
     <script src="SL.Json.js" type="text/javascript"></script>
+    <script src="SL.Node.js" type="text/javascript"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        sl.ready(function () {
             console.log(sl.param({ a: [2, 3, 4] })); // "a[]=2&a[]=3&a[]=4"
 
 
             console.log(decodeURI(sl.param({ a: { b: 1, c: 2 }, d: [3, 4, { e: 5}] }))); // "a[b]=1&a[c]=2&d[]=3&d[]=4&d[2][e]=5"
 
             $("#Button1").click(function () {
-                $.ajax({
+                sl.ajax({
                     url: "WebService1.asmx/GetPerson121",
                     type: "HEAD",
                     success: function (data) {
@@ -37,7 +39,7 @@
                     url: "WebService1.asmx/GetPerson121",
                     type: "GET",
                     cache: false,
-                    ifModified:true,
+                    ifModified: true,
                     data: { 'Id': 2 },
                     success: function (data) {
                         console.log(data);
@@ -73,15 +75,63 @@
                     }
                 });
             });
+            $('#Button4').click(function () {
+                sl.getJSON('ajaxsjon.json', function (data) {
+
+                    sl.each(data, function (entryIndex, entry) {
+                        var html = '<div class="entry">';
+                        html += '<h3 class="term">' + entry.term + '</h3>';
+                        html += '<div class="part">' + entry.part + '</div>';
+                        html += '<div class="definition">';
+                        html += entry['definition'];
+                        if (entry['quote']) {
+                            html += '<div class="quote">';
+                            sl.each(entry['quote'], function (lineIndex, line) {
+                                html += '<div class="quote-line">' + line + '</div>';
+                            });
+                            if (entry['author']) {
+                                html += '<div class="quote-author">' + entry['author'] + '</div>';
+                            }
+                            html += '</div>';
+                        }
+                        html += '</div>';
+                        html += '</div>';
+                        console.log(html);
+                    });
+                });
+            });
+
+            $('#Button5').click(function () {
+                sl.getScript('ajaxscript.js');
+            });
+
+            $("#Button6").click(function () {
+                sl.ajax({
+                    type: "GET",
+                    url: "http://localhost/JsLib/jsonphandler.ashx",
+                    cache: false,
+                    data: "p1=ffafa&p2=12",
+                    error: function (e) {
+                        alert(e);
+                    },
+                    dataType: "jsonp",
+                    success: function (result) {
+                        alert(result);
+                    }
+                });
+            });
         })
 
     </script>
 </head>
 <body>
-<form id="form1" runat="server">
-       <input id="Button1" type="button" value="调用后台方法" />
-          <input id="Button2" type="button" value="调用后台方法" />
-                    <input id="Button3" type="button" value="调用后台方法" />
+    <form id="form1" runat="server">
+    <input id="Button1" type="button" value="调用后台方法" />
+    <input id="Button2" type="button" value="调用后台方法" />
+    <input id="Button3" type="button" value="调用后台方法" />
+    <input id="Button4" type="button" value="getjson" />
+    <input id="Button5" type="button" value="getscript" />
+    <input id="Button6" type="button" value="jsonp" />
     </form>
 </body>
 </html>
