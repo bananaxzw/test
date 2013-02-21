@@ -107,6 +107,8 @@ vertical-align: baseline;
 .row-fluid .span2 {
 	  width:14.893617021276595%;
 	*width:14.840425531914894%;
+	height:100%;
+	 background:#F3F3F3;
 }
 .row-fluid .span1 {
 	  width:6.382978723404255%;

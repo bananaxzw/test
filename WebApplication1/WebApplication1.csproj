@@ -2759,12 +2759,15 @@
     <None Include="JsLib\JsDOC\generate-SL-jsdoc.bat" />
     <None Include="JsLib\JsDOC\jsdoc-toolkit\conf\sample.conf" />
     <None Include="JsLib\JsDOC\jsdoc-toolkit\jsrun.sh" />
-    <None Include="JsLib\JsDOC\jsdoc-toolkit\templates\SL_doc_zh-cn\allclasses.tmpl" />
+    <None Include="JsLib\JsDOC\jsdoc-toolkit\templates\SL_doc_zh-cn\allclasses.tmpl">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="JsLib\JsDOC\jsdoc-toolkit\templates\SL_doc_zh-cn\allfiles.tmpl" />
     <None Include="JsLib\JsDOC\jsdoc-toolkit\templates\SL_doc_zh-cn\class.tmpl" />
     <None Include="JsLib\JsDOC\jsdoc-toolkit\templates\SL_doc_zh-cn\index.tmpl" />
     <None Include="JsLib\JsDOC\jsdoc-toolkit\templates\SL_doc_zh-cn\symbol.tmpl" />
     <Content Include="JsLib\JsDOC\JsDOC.zip" />
+    <None Include="JsLib\JsDOC\jsdoc-toolkit\templates\SL_doc_zh-cn\副本 class.tmpl" />
     <None Include="JsLib\JsDOC\SL-doc-config.conf" />
     <None Include="JsLib\UI\default\images\Thumbs.db" />
     <None Include="KITJS\KitJs\.project" />
