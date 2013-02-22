@@ -28,17 +28,40 @@
                         {! var classType = ""; if (data.isBuiltin()) { classType += "[内建]"; } if (data.isNamespace)
                         { if (data.is('FUNCTION')) { classType += "函数 "; } classType += "命名空间 "; } else
                         { classType += "类 "; } !} {+classType+}{+data.alias+}
+                    </h1>
+                    <!-- ============================== class summary ========================== -->
+                    <p class="description">
+                        <if test="data.augments.length"><br />Extends
+					{+
+						data.augments
+						.sort()
+						.map(
+							function($) { return new Link().toSymbol($); }
+						)
+						.join(", ")
+					+}.<br />
+				</if>
+                        {+resolveLinks(data.classDesc)+}
+                        <if test="!data.isBuiltin()">{# isn't defined in any file #}
+					<br /><i>Defined in: </i> {+new Link().toSrc(data.srcFile)+}.
+				</if>
+                    </p>
+                    <h1 class="classTitle">
+                        {! var classType = ""; if (data.isBuiltin()) { classType += "[内建]"; } if (data.isNamespace)
+                        { if (data.is('FUNCTION')) { classType += "函数 "; } classType += "命名空间 "; } else
+                        { classType += "类 "; } !} {+classType+}{+data.alias+}
                         <div class='file'>
                             define in:{+new Link().toSrc(data.srcFile)+}.</div>
                     </h1>
                     <hr>
-                    <!-- ============================== class summary ========================== -->
-                    <br />
+                     <br />
                     <h3>
                         类概要</h3>
                     <p class="description">
                         &nbsp;&nbsp;&nbsp;</p>
                     <br />
+
+
                     <!-- ============================== constructor summary ==================== -->
                     <if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))">
 			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class {+data.alias+}.">

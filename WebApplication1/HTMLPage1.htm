@@ -1,292 +1,92 @@
-﻿<html>
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
-    <script src="jquery-1.4.1-vsdoc.js" type="text/javascript"></script>
-    <script src="CalvinUI/JS/CalvinBase.js" type="text/javascript"></script>
-    <script src="jx.core.js" type="text/javascript"></script>
-    <script src="jx.array.js" type="text/javascript"></script>
-    <script src="jx.browser.js" type="text/javascript"></script>
-    <script src="jx.event.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        function ClassA(sColor) {
-            this.color = sColor;
-
-            this.sayColor = function () {
-                ttt();
-            };
-
-            function ttt() {
-                alert(this);
-            }
-        }
-
-<<<<<<< .mine        var yy = function () { }
-        var hj = new yy();
-        var jh = new yy();
-        alert(hj === jh);
-        var t = new Jx()
-=======        var A = new ClassA("sfs");
-        A.sayColor();
-
->>>>>>> .theirs        var m = new Jx();
-<<<<<<< .mine        alert(t === m);
-
-
-//        var ttt = new yet();
-//        ttt.tt();
-
-=======>>>>>>> .theirs//        t().tt();
-//        var tf = window;
-        /*
-        var tt = [4, 2, 6, 7, 21, 6, 12, 7, 822, 323, 532];
-        for (var i in tt) {
-        alert(i);
-        }
-        tt.quickSort();
-        function consoleTime() {
-        var timeName = "timer1";
-        console.time(timeName);
-        var a = 0;
-        for (var i = 0; i < 100; i++) {
-        for (var j = 0; j < 100; j++) {
-        //                        console.log('Hello world');
-        a = a + 1;
-        }
-        }
-
-        console.error("a = %4d", a);
-        console.timeEnd(timeName);
-        }
-        consoleTime();
-        var tt = function () {
-        this.mm = function () {
-        this.yy();
-        }
-        this.yy = function () {
-        alert(this.hh);
-        }
-        this.hh = "sfsa";
-        };
-        
-        //        function hhhh() {
-        //            this;
-        //        }
-        var g = new tt();
-        console.dir(g);
-        var Cat = Class.create();
-        Cat.prototype = {
-        initialize: function (name) {
-        this.name = name;
-        },
-        show: function () {
-        alert('mao!!!');
-        }
-        }
-        var Dog = Class.create();
-        Dog.prototype = {
-        initialize: function (name) {
-        this.name = name;
-        },
-        run: function () {
-        alert("run!!!");
-        }
-        }
-
-        var cat1 = new Cat("cat1");
-        cat1.show();
-        var dog1 = new Dog();
-        run1 = dog1.run.bind(cat1);
-        run1();
-        show2 = cat1.show.bind(dog1);
-        show2();
-
-        function a(a, b) {
-        alert("a method invoked!!!" + (a + b));
-        }
-        function b() {
-        var a = 0;
-        }
-
-        var b1 = new b();
-        a.apply(b1, [1, 2]);
-        a.call(b1, 1, 2);
-
-
-
-        var m = {};
-        var t = m;
-        t["sfs"] = "sfsa";
-        alert(m["sfs"]);
-        alert(Boolean(-22));
-        function sum(a, b) {
-        alert(a + b);
-        }
-        function doFunction(a, b, op) {
-
-        op(a, b);
-
-        }
-        doFunction(1,2,sum);
-        alert(document.compatMode);
-        //        function rightCl(event) {
-        //            var e = event;
-        //            alert(e.button);
-        //            var sfa = document.getElementById("sfa");
-        //            sfa.style.left = (e.clientX + (document.body.scrollLeft || document.documentElement.scrollLeft)) + "px";
-        //            sfa.style.top = (e.clientY + (document.body.scrollTop || document.documentElement.scrollTop)) + "px";
-
-        //        }
-        var t = "3,222.22";
-        alert(t.replace(/,/, ''));
-        $(document).ready(function () {
-        center(document.getElementById("sfs"), true, true);
-        })
-        function center(el, x, y) {
-        if (!x && !y) return;
-        var p = el.parentNode, s = el.style;
-        var $p = $(p);
-        var borderAndPaddingWidth, borderAndPaddingHeight;
-
-        if ($.support.boxModel) {
-        borderAndPaddingWidth = $p.outerWidth() - $p.width();
-        borderAndPaddingHeight = $p.outerHeight() - $p.height();
-        }
-
-        var l, t;
-        if ($.support.boxModel) {
-        l = ((p.offsetWidth - el.offsetWidth) / 2) - (borderAndPaddingWidth / 2);
-        t = ((p.offsetHeight - el.offsetHeight) / 2) - (borderAndPaddingHeight / 2);
-
-        }
-        else {
-        l = (p.offsetWidth - el.offsetWidth) / 2;
-        t = (p.offsetHeight - el.offsetHeight) / 2;
-        }
-        if (x) s.left = l > 0 ? (l + 'px') : '0';
-        if (y) s.top = t > 0 ? (t + 'px') : '0';
-        }
-
-        function sz(el, p) {
-        return parseInt($.css(el, p)) || 0;
-        };
-        */
-    </script>
-    <script type="text/javascript">
-    /*
-        window.onload = function () {
-            var tt = document.getElementById("sfs");
-
-            addEvent(tt, "click", t1);
-            addEvent(tt, "click", t2);
-        }
-        function t1() {
-            var i = this;
-        }
-        function t2() {
-            var i = this;
-        }
-
-        function addEvent(element, type, handler) {
-            //给函数分配唯一的标志ID
-            if (!handler.$$guid) handler.$$guid = addEvent.guid++;
-            //创建一个hash table来保存各种事件的处理函数  
-            if (!element.events) element.events = {};
-            //创建一个hash table来保存某个事件处理函数
-            var handlers = element.events[type];
-            if (!handlers) {
-                handlers = element.events[type] = {};
-                //储存已经存在的事件处理函数
-                if (element["on" + type]) {
-                    handlers[0] = element["on" + type];
-                }
-            }
-            // 保存时间处理函数到hash table中
-            handlers[handler.$$guid] = handler;
-            // 为事件提供一个统一全局的处理函数 这句是关键handleEvent函数属于element，也就是说函数的内部this是指向element
-            element["on" + type] = handleEvent;
-        };
-        addEvent.guid = 1;
-        function removeEvent(element, type, handler) {
-            // 移除 
-            if (element.events && element.events[type]) {
-                delete element.events[type][handler.$$guid];
-            }
-        };
-        function handleEvent(event) {
-            //获取事件对象
-            event = event || window.event;
-            // 注意这里的this指向dom元素 因为addEvent中element["on" + type] = handleEvent
-            //获取已经缓存到dom元素的events属性的各个事件函数
-            var handlers = this.events[event.type];
-            //遍历各个函数
-            for (var i in handlers) {
-                // 注意这里的this指向dom元素 所有实际的处理函数变成element的一个内部处理函数 
-                // 所以函数内部this指向dom元素
-                this.$$handleEvent = handlers[i];
-                //触发函数
-                this.$$handleEvent(event);
-            }
-        };  
-    </script>
+    <meta http-equiv="content-type" content="text/html; charset={+IO.encoding+}" />
+    <title>SL API 开发参考文档 - Index</title>
+    <meta name="generator" content="JsDoc Toolkit" />
+    <style type="text/css">
+		{+include("static/style.css")+}
+		</style>
 </head>
 <body>
-    <table width="99%" border="0" cellspacing="1" bgcolor="#999999">
-        <tbody>
-            <tr>
-                <td colspan="2" align="center" bgcolor="#FFFFFF" height="26">
-                    <a href="http://sports.cntv.cn/20120917/107102.shtml">9月17日天下足球完整视频</a>|<a href="http://sports.cntv.cn/20120917/106861.shtml">特别制作:《永不消逝的皮波》下集</a>|<a
-                        href="http://sports.cntv.cn/20120917/106865.shtml">因扎吉职业生涯50大精彩进球</a>
-                </td>
-            </tr>
-            <tr>
-                <td align="center" bgcolor="#FAFAFA" width="150" height="26">
-                    <img src="images/lq.gif" alt="篮球视频" width="12" height="12" border="0" />
-                    <span style="color: #ff0000;"><strong>中国国奥VS乌兹别克</strong></span>
-                </td>
-                <td bgcolor="#FFFFFF" width="74%" height="26">
-                    CNTV版 <a href="http://sports.cntv.cn/20120917/104036.shtml">第一节</a> <a href="http://sports.cntv.cn/20120917/104245.shtml">
-                        第二节</a> <a href="http://sports.cntv.cn/20120917/104515.shtml">第三节</a> <a href="http://sports.cntv.cn/20120917/104629.shtml">
-                            第四节</a> <a href="http://sports.cntv.cn/20120917/106370.shtml">新闻集锦</a> <a href="http://s.sohu.com/20120917/n353362708.shtml">
-                                搜狐集锦</a> <a href="http://cbachina.sports.sohu.com/20120917/n353350741.shtml">战报</a>&amp;<a
-                                    href="http://cbachina.sports.sohu.com/20120917/n353351855.shtml">统计</a>
-                    <a href="http://video.sina.com.cn/p/sports/cba/v/2012-09-17/133761866089.html">王哲林抢断快攻一条龙双手怒扣</a>
-                    <a href="http://video.sina.com.cn/p/sports/cba/v/2012-09-17/135561866103.html">睢冉抢断妙传俞长栋隔人怒扣荡秋千</a>
-                    <a href="http://video.sina.com.cn/p/sports/cba/v/2012-09-17/143561866123.html">王子瑞虚虚实实耍4人张大宇篮下暴起压筐扣</a>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center" bgcolor="#FFFFFF" height="26">
-                    <a href="http://video.sina.com.cn/p/sports/k/v/2012-09-04/104761856203.html">NBA恶意犯规暴力冲突合集</a>|<a
-                        href="http://p.you.video.sina.com.cn/swf/quotePlayer20100721_V4_4_39_0.swf?autoPlay=1&amp;as=0&amp;vid=84866576">大胡子哈登12赛季精彩集锦</a>|<a
-                            href="http://p.you.video.sina.com.cn/swf/quotePlayer20100721_V4_4_39_0.swf?autoPlay=1&amp;as=0&amp;vid=84874210">詹姆斯韦德最新精彩集锦：my
-                            time</a>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center" bgcolor="#FFFFFF" height="26">
-                    <a href="http://video.sina.com.cn/p/sports/k/v/2012-09-04/112061856245.html">NBA近20年精彩镜头大合集</a>|<a
-                        href="http://p.you.video.sina.com.cn/swf/quotePlayer20100721_V4_4_39_0.swf?autoPlay=1&amp;as=0&amp;vid=84828824">当今联盟五大后卫精彩合集</a>|<a
-                            href="http://p.you.video.sina.com.cn/swf/quotePlayer20100721_V4_4_39_0.swf?autoPlay=1&amp;as=0&amp;vid=84894310">2011-12赛季NBA关键球与绝杀最新合集</a>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center" bgcolor="#FFFFFF" height="26">
-                    <a href="http://sports.sina.com.cn/nba/video/10signaturemoves/">NBA十大球星招牌动作汇总</a>|<a
-                        href="http://p.you.video.sina.com.cn/swf/quotePlayer20100721_V4_4_39_0.swf?autoPlay=1&amp;as=0&amp;vid=84910299">韦德近几赛季十佳火爆扣篮</a>|<a
-                            href="http://p.you.video.sina.com.cn/swf/quotePlayer20100721_V4_4_39_0.swf?autoPlay=1&amp;as=0&amp;vid=84859824">纯剪辑系列之韦德在进攻端的精彩表现第一辑</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <script type="text/javascript">
-
-        //     var tt = [0, 2, 3];
-        //   var mm= $.map(tt, function (d) {
-        //         return d + 1;
-        //     });
-
-        //     alert(mm[0]);
-        //     alert(tt[0]);
-    </script>
+    {+include("static/header.html")+}
+    <div class="container-fluid">
+        <div class="row-fluid">
+            {+publish.classesIndex+}
+            <div class="span10">
+                <h1 class="classTitle">
+                    速查表 Quick Search<i style="font-size: 14px; color: Gray;">尚未完善,请导航</i>
+                </h1>
+                <hr />
+                <div>
+                    <dl class="quickSearchList">
+                        <dt>语言模块 </dt>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                    </dl>
+                    <dl class="quickSearchList">
+                        <dt>通信模块 </dt>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fineprint" style="clear: both">
+        <if test="JSDOC.opt.D.copyright">&copy;{+JSDOC.opt.D.copyright+}<br /></if>
+        文档生成 by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blankt">JsDoc Toolkit</a>
+        {+JSDOC.VERSION+} on {+new Date()+}
+    </div>
 </body>
 </html>
