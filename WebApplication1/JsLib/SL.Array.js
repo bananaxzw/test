@@ -16,8 +16,8 @@
 /// <reference path="SL.Core.js" />
 SL().create(function (SL) {
     /**
-    * array扩展
-    * @class
+    * @description array扩展
+    * @class array扩展
     * @name array
     */
     var array = function () { };
@@ -25,6 +25,7 @@ SL().create(function (SL) {
 
         /**
         *把数据拷贝到新的数组中
+        *@private
         *@example
         * var initalArray = [1, 2, 3, 4, 6, 6, 7];
         *    var copyArray = slArray.copy(initalArray);

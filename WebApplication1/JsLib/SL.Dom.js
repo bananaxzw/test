@@ -29,7 +29,7 @@ SL().create(function (SL) {
             return document.documentElement || document.body;
         },
 
-      
+
         prevSibling: function (elem) {
             do {
                 elem = elem.previousSibling;
@@ -330,7 +330,7 @@ SL().create(function (SL) {
         text: function (elem, text) {
             var i, node, nodeType = elem.nodeType, ret = "";
             if (nodeType) {
-                if (text!==undefined) {
+                if (text !== undefined) {
                     return this.empty().append((elem && elem.ownerDocument || document).createTextNode(text));
                 }
                 else {
@@ -339,8 +339,9 @@ SL().create(function (SL) {
                             return elem.textContent;
                         } else {
                             for (elem = elem.firstChild; elem; elem = elem.nextSibling) {
-                                ret += getText(elem);
+                                ret += this.text(elem);
                             }
+                            return ret;
                         }
                     } else if (nodeType === 3 || nodeType === 4) {
                         return elem.nodeValue;
@@ -351,7 +352,7 @@ SL().create(function (SL) {
         },
 
         html: function (node, html) {
-            if (html!==undefined) {
+            if (html !== undefined) {
                 if (node != null && 'innerHTML' in node) {
                     node.innerHTML = html;
                 }
@@ -360,7 +361,7 @@ SL().create(function (SL) {
             }
         }
     };
- 
+
     SL.Dom = SL.Dom || {};
     SL.Dom = new Dom();
 });

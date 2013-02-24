@@ -5315,8 +5315,9 @@ SL().create(function (SL) {
                             return elem.textContent;
                         } else {
                             for (elem = elem.firstChild; elem; elem = elem.nextSibling) {
-                                ret += getText(elem);
+                                ret += this.text(elem);
                             }
+                            return ret;
                         }
                     } else if (nodeType === 3 || nodeType === 4) {
                         return elem.nodeValue;

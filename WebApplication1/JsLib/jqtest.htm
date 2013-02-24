@@ -2,7 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-
+    <script type="text/javascript">
+        window.$ = "safsf";
+    </script>
     <script src="jq1.72.js" type="text/javascript"></script>
 </head>
 <body>
@@ -25,8 +27,8 @@
     function Button2_onclick() {
         $("#Div2").scrollTop();
     }
-
-    $(function () {
+    var j = jQuery.noConflict();
+    j(function () {
         alert($("#safsaf").val());
         document.getElementById("Button1");
         // console.log($.param([2, 3, 4])); // "a[]=2&a[]=3&a[]=4"

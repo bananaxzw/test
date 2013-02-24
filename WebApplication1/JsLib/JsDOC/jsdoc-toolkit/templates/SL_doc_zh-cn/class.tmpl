@@ -6,10 +6,10 @@
     <meta name="generator" content="JsDoc Toolkit" />
     {! Link.base = "../"; /* all generated links will be relative to this */ !} <title>SL
         API 开发参考文档 - {+data.alias+}</title>
-    <script src="../sl.js" type="text/javascript"></script>
-    <script src="../SL.Node.js" type="text/javascript"></script>
-    <script src="js/hl-all.js" type="text/javascript"></script>
-    <link href="js/style.css" rel="stylesheet" type="text/css" />
+    <script src="../../../sl.js" type="text/javascript"></script>
+    <script src="../../../SL.Node.js" type="text/javascript"></script>
+    <script src="../../../hl-all.js" type="text/javascript"></script>
+    <link href="../../../style.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
         sl.ready(function () {
             DlHighlight.HELPERS.highlightByName("code", "pre");
@@ -43,18 +43,25 @@
                         {! var classType = ""; if (data.isBuiltin()) { classType += "[内建]"; } if (data.isNamespace)
                         { if (data.is('FUNCTION')) { classType += "函数 "; } classType += "命名空间 "; } else
                         { classType += "类 "; } !} {+classType+}{+data.alias+}
-                        <div class='file'>
-                            define in:{+new Link().toSrc(data.srcFile)+}.</div>
+                        <div class='file'>define in:{+new Link().toSrc(data.srcFile)+}.</div>
                     </h1>
                     <hr>
                     <!-- ============================== class summary ========================== -->
-                    <br />
                     <h3>
                         类概要</h3>
                     <p class="description">
-                        &nbsp;&nbsp;&nbsp;</p>
-                    <br />
-                    <!-- ============================== constructor summary ==================== -->
+                       	<if test="data.augments.length"><br />Extends
+					{+
+						data.augments
+						.sort()
+						.map(
+							function($) { return new Link().toSymbol($); }
+						)
+						.join(", ")
+					+}.
+				</if>
+				{+resolveLinks(data.classDesc)+}</p>
+                    <!-- ============================== constructor summary ==================== 
                     <if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))">
 			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class {+data.alias+}.">
 				<caption>{+classType+}概要</caption>
@@ -79,7 +86,7 @@
 					</tr>
 				</tbody>
 			</table>
-			</if>
+			</if>-->
                     <!-- ============================== properties summary ===================== -->
                     <if test="data.properties.length">
 				{! var ownProperties = data.properties.filter(function($){return $.memberOf == data.alias && !$.isNamespace}).sort(makeSortby("name")); !}
@@ -88,9 +95,9 @@
 					<caption>属性概要</caption>
 					<thead>
 						<tr>
-							 <th>
+							<!-- <th>
                                 成员属性
-                            </th>
+                            </th>-->
                             <th>
                                 名称
                             </th>
@@ -102,14 +109,14 @@
 					<tbody>
 					<for each="member" in="ownProperties">
                        <tr>
-                                <td>
+                              <!--  <td>
                                   <label class=" label label-info">{!
 								if (member.isPrivate) output += "&lt;private&gt; ";
 								if (member.isInner) output += "&lt;inner&gt; ";
 								if (member.isStatic) output += "&lt;static&gt; ";
 								if (member.isConstant) output += "&lt;constant&gt; ";
 							!}&nbsp;</label>
-                                </td>
+                                </td>-->
                                 <td>
                                   <if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name)+}</b>
                                 </td>
@@ -154,13 +161,13 @@
                     <if test="data.methods.length">
 				{! var ownMethods = data.methods.filter(function($){return $.memberOf == data.alias  && !$.isNamespace}).sort(makeSortby("name")); !}
 				<if test="ownMethods.length">
+                <h3>方法概要</h3>
 				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class {+data.alias+}.">
-					<caption>方法概要</caption>
 					<thead>
 						<tr>
-						 <th>
+						<!-- <th>
                                 成员属性
-                            </th>
+                            </th>-->
                             <th>
                                 名称
                             </th>
@@ -172,14 +179,14 @@
 					<tbody>
 					<for each="member" in="ownMethods">
                         <tr>
-                                <td>
+                               <!-- <td>
                                   <label class=" label label-info">{!
 								if (member.isPrivate) output += "&lt;private&gt; ";
 								if (member.isInner) output += "&lt;inner&gt; ";
 								if (member.isStatic) output += "&lt;static&gt; ";
 								if (member.isConstant) output += "&lt;constant&gt; ";
 							!}&nbsp;</label>
-                                </td>
+                                </td>-->
                                 <td>
                                  <if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name)+}</b>{+makeSignature(member.params)+}
                                 </td>
@@ -228,9 +235,9 @@
 					<caption>事件概要</caption>
 					<thead>
 						<tr>
-						 <th>
+						<!-- <th>
                                 成员属性
-                            </th>
+                            </th>-->
                             <th>
                                 名称
                             </th>
@@ -242,14 +249,14 @@
 					<tbody>
 					<for each="member" in="ownEvents">
 						 <tr>
-                                <td>
+                             <!--   <td>
                                   <label class=" label label-info">{!
 								if (member.isPrivate) output += "&lt;private&gt; ";
 								if (member.isInner) output += "&lt;inner&gt; ";
 								if (member.isStatic) output += "&lt;static&gt; ";
 								if (member.isConstant) output += "&lt;constant&gt; ";
 							!}&nbsp;</label>
-                                </td>
+                                </td>-->
                                 <td>
                                  <if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name)+}</b>{+makeSignature(member.params)+}
                                 </td>
@@ -290,7 +297,7 @@
 				</dl>
 				</if>
 			</if>
-                    <!-- ============================== constructor details ==================== -->
+                    <!-- ============================== constructor details ====================
                     <if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))">
 			<div class="details"><a name="constructor"> </a>
 				<div class="sectionTitle">
@@ -388,7 +395,7 @@
 					</if>
 
 			</div>
-			</if>
+			</if> -->
                     <!-- ============================== field details ========================== -->
                     <if test="defined(ownProperties) && ownProperties.length">
 				<div class="sectionTitle">
