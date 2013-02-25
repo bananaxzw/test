@@ -1,6 +1,12 @@
 ﻿/// <reference path="SL.Core.js" />
 /// <reference path="SL.Json.js" />
 
+
+/**
+*Ajax操作
+*@namespace
+*@name ajax
+*/
 sl.create("sl", function (SL) {
     function now() {
         return (new Date()).getTime();
@@ -144,9 +150,16 @@ sl.create("sl", function (SL) {
             _default: "*/*"
         }
     };
+    /**
+    *ajax请求
+    *@memberOf ajax
+    *@function
+    *@name ajax
+    *@param options  ss<br/>ss
+    */
     this.ajax = function (options) {
         options = sl.extend(true, {}, sl.ajaxSettting, options);
-        var isComplete = false, status, data, type = options.type,
+        var isComplete = false, status, data, type = options.type.toUpperCase(),
         xhr = new window.XMLHttpRequest(), jsonp, callbackContext = options.callbackContext || options, noContent = rGETHEAD.test(type);
         //传进来的data没经过处理
         if (options.data && options.processData && typeof options.data != "string") {
@@ -349,6 +362,20 @@ sl.create("sl", function (SL) {
         }
         return xhr;
     };
+
+    /**
+    *ajax请求GET方式
+    *@memberOf ajax
+    *@function
+    *@name get
+    */
+
+    /**
+    *ajax请求POST方式
+    *@memberOf ajax
+    *@function
+    *@name post
+    */
     sl.each(["get", "post"], function (i, _type) {
         sl[_type] = function (url, data, callback, dateType) {
             // 没有data只有回调函数
@@ -373,6 +400,9 @@ sl.create("sl", function (SL) {
     this.getJSON = function (url, data, callback) {
         return sl.get(url, data, callback, "json");
     };
+    this.getJSONP = function (url, data, callback) {
+        return sl.get(url, data, callback, "jsonp");
+    }
     this.ajaxSetup = function (setting) {
         sl.extend(sl.ajaxSettting, setting);
     };

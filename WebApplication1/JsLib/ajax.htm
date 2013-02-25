@@ -120,6 +120,11 @@
                     }
                 });
             });
+            $("#Button7").click(function () {
+                sl.getJSONP("http://localhost/JsLib/jsonphandler.ashx", "p1=ffafa&p2=12", function (data) {
+                    alert(data);
+                });
+            });
         })
 
     </script>
@@ -132,6 +137,7 @@
     <input id="Button4" type="button" value="getjson" />
     <input id="Button5" type="button" value="getscript" />
     <input id="Button6" type="button" value="jsonp" />
+    <input id="Button7" type="button" value="jsonp-quick" />
     </form>
 </body>
 </html>
