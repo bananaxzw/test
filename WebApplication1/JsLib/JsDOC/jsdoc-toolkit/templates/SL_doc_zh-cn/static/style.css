@@ -33,7 +33,7 @@ display: inline-block;
 padding: 2px 4px;
 font-size: 11.844px;
 font-weight: bold;
-line-height: 14px;
+line-height: 24px;
 color: #ffffff;
 text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 white-space: nowrap;
@@ -42,7 +42,7 @@ vertical-align: baseline;
 .header {
 	    width:100%;
 	height:197px;
-	background:url('../img/header.png') no-repeat 0px 0px;
+	background:url('/docs/img/header.png') no-repeat 0px 0px;
 	color:white;
 	padding-top:10px;
 }

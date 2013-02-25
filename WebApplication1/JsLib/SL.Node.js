@@ -14,6 +14,8 @@
     var rCRLF = /\r?\n/g,
      rselectTextarea = /^(?:select|textarea)/i,
     	rinput = /^(?:color|date|datetime|datetime-local|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/i;
+
+    var _$ = window.$;
     //链式操作
     function chain(selector, context) {
         // (""), (null), or (undefined)
@@ -71,6 +73,7 @@
             _chain.previousChain = this;
             return _chain;
         },
+
         isChain: function (o) {
             return o != null && sl.InstanceOf.Object(o) && o.name == "SL.CHAIN";
         },
@@ -528,10 +531,14 @@
         return resultNodes;
 
     }
-
-    window.$ = function (selector, context) {
-
+    window.slChain = window.$ = function (selector, context) {
         return new chain(selector, context);
     }
+    slChain.noConflict = function () {
+        if (window.$ === slChain) {
+            window.$ = _$;
+        }
+        return slChain;
+    };
 
 })();
