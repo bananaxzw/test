@@ -40,17 +40,18 @@
                 <div id="content">
                     <!-- ============================== class title ============================ -->
                     <h1 class="classTitle">
-                        {! var classType = ""; if (data.isBuiltin()) { classType += "[内建]"; } if (data.isNamespace)
-                        { if (data.is('FUNCTION')) { classType += "函数 "; } classType += "命名空间 "; } else
-                        { classType += "类 "; } !} {+classType+}{+data.alias+}
-                        <div class='file'>define in:{+new Link().toSrc(data.srcFile)+}.</div>
+                        {! var classType = ""; if (data.isBuiltin()) { classType += ""; } if (data.isNamespace)
+                        { if (data.is('FUNCTION')) { classType += ""; } classType += ""; } else { classType
+                        += ""; } !} {+classType+}{+data.alias+}
+                        <div class='file'>
+                            define in:{+new Link().toSrc(data.srcFile)+}.</div>
                     </h1>
                     <hr>
                     <!-- ============================== class summary ========================== -->
                     <h3>
                         类概要</h3>
                     <p class="description">
-                       	<if test="data.augments.length"><br />Extends
+                        <if test="data.augments.length"><br />Extends
 					{+
 						data.augments
 						.sort()
@@ -60,7 +61,7 @@
 						.join(", ")
 					+}.
 				</if>
-				{+resolveLinks(data.classDesc)+}</p>
+                        {+resolveLinks(data.classDesc)+}</p>
                     <!-- ============================== constructor summary ==================== 
                     <if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))">
 			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class {+data.alias+}.">
@@ -91,8 +92,8 @@
                     <if test="data.properties.length">
 				{! var ownProperties = data.properties.filter(function($){return $.memberOf == data.alias && !$.isNamespace}).sort(makeSortby("name")); !}
 				<if test="ownProperties.length">
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class {+data.alias+}.">
-					<caption>属性概要</caption>
+                	<h3>属性概要</h3>
+			     <table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class {+data.alias+}.">
 					<thead>
 						<tr>
 							<!-- <th>
@@ -118,7 +119,7 @@
 							!}&nbsp;</label>
                                 </td>-->
                                 <td>
-                                  <if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name)+}</b>
+                                  <if test="member.isStatic && member.memberOf != '_global_'"><!--{+member.memberOf+}.--></if><b>{+new Link().toSymbol(member.alias).withText(member.name)+}</b>
                                 </td>
                                 <td>
                                    {+resolveLinks(summarize(member.desc))+}
@@ -188,7 +189,7 @@
 							!}&nbsp;</label>
                                 </td>-->
                                 <td>
-                                 <if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name)+}</b>{+makeSignature(member.params)+}
+                                 <if test="member.isStatic && member.memberOf != '_global_'"><!--{+member.memberOf+}.--></if><b>{+new Link().toSymbol(member.alias).withText(member.name)+}</b>{+makeSignature(member.params)+}
                                 </td>
                                 <td>
                                    {+resolveLinks(summarize(member.desc))+}
@@ -258,7 +259,7 @@
 							!}&nbsp;</label>
                                 </td>-->
                                 <td>
-                                 <if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name)+}</b>{+makeSignature(member.params)+}
+                                 <if test="member.isStatic && member.memberOf != '_global_'"><!--{+member.memberOf+}.--></if><b>{+new Link().toSymbol(member.alias).withText(member.name)+}</b>{+makeSignature(member.params)+}
                                 </td>
                                 <td>
                                    {+resolveLinks(summarize(member.desc))+}
@@ -398,31 +399,34 @@
 			</if> -->
                     <!-- ============================== field details ========================== -->
                     <if test="defined(ownProperties) && ownProperties.length">
-				<div class="sectionTitle">
+				<h3>
 					属性详解
-				</div>
+				</h3>
 				<for each="member" in="ownProperties">
 					<a name="{+Link.symbolNameToLinkName(member)+}"> </a>
 					<div class="detailTitle fixedFont">
-						<span class="methodType">{!
+					<!--	<span class="methodType">{!
 							if (member.isPrivate) output += "&lt;private&gt; ";
 							if (member.isInner) output += "&lt;inner&gt; ";
 							if (member.isStatic) output += "&lt;static&gt; ";
 							if (member.isConstant) output += "&lt;constant&gt; ";
-						!}</span>
-					
-					<if test="member.type"><span class="methodReturn">{{+new Link().toSymbol(member.type)+}}</span></if>
-					<if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if><b>{+member.name+}</b>
-					
+						!}</span>-->
+			        <label class=" label label-info methodName">
+					<if test="member.type"><!--<span class="methodReturn">{{+new Link().toSymbol(member.type)+}}</span>--></if>
+					<if test="member.isStatic && member.memberOf != '_global_'"><span class="light"><!--{+member.memberOf+}.--></span></if><b>{+member.name+}</b>
+					</label>
 					</div>
-					<div class="description">
+						<dl class="description">
+						<dt class="heading">功能:</dt>
+						<dd>
 						{+resolveLinks(member.desc)+}
 						<if test="member.srcFile != data.srcFile">
 							<br />
 							<i>Defined in: </i> {+new Link().toSrc(member.srcFile)+}.
 						</if>
 						<if test="member.author"><br /><i>Author: </i>{+member.author+}.</if>
-					</div>
+						</dd>
+					</dl>
 					
 					<if test="member.example.length">
 					<for each="example" in="member.example">
@@ -454,7 +458,7 @@
 						</if>
 						<if test="member.defaultValue">
 							<dl class="detailList">
-							<dt class="heading">Default Value:</dt>
+							<dt class="heading">默认值:</dt>
 							<dd>
 								{+resolveLinks(member.defaultValue)+}
 							</dd>
@@ -472,14 +476,14 @@
 				<for each="member" in="ownMethods">
 					<a name="{+Link.symbolNameToLinkName(member)+}"> </a>
 					<div class="detailTitle fixedFont">
-						<span class="methodType">{!
+						<!--<span class="methodType">{!
 							if (member.isPrivate) output += "&lt;private&gt; ";
 							if (member.isInner) output += "&lt;inner&gt; ";
 							if (member.isStatic) output += "&lt;static&gt; ";
-						!}</span>
+						!}</span>-->
 					 <label class=" label label-info methodName">
 					<if test="member.type"><span class="methodReturn">{{+new Link().toSymbol(member.type)+}}</span></if>
-					<if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if><b>{+member.name+}</b>{+makeSignature(member.params)+}
+					<if test="member.isStatic && member.memberOf != '_global_'"><span class="light"><!--{+member.memberOf+}.--></span></if><b>{+member.name+}</b>{+makeSignature(member.params)+}
 					</label>
 					</div>
 					<dl class="description">
@@ -585,7 +589,7 @@
 						!}</span>
 					
 					<if test="member.type"><span class="methodReturn">{{+new Link().toSymbol(member.type)+}}</span></if>
-					<if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if><b>{+member.name+}</b>{+makeSignature(member.params)+}
+					<if test="member.isStatic && member.memberOf != '_global_'"><span class="light"><!--{+member.memberOf+}.--></span></if><b>{+member.name+}</b>{+makeSignature(member.params)+}
 					
 					</div>
 					<dl class="description">
