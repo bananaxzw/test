@@ -20,7 +20,7 @@
 *注意：允许你使用该框架 但是不允许修改该框架 有发现BUG请通知作者 切勿擅自修改框架内容
 */
 
-SL().create(function () {
+sl.create(function () {
     var valHooks = {
         option: {
             get: function (elem) {
@@ -100,8 +100,19 @@ SL().create(function () {
         });
     }
 
+    /**
+    * @description DOM属性操作
+    * @class DOM属性操作
+    * @name attribute
+    */
     function attribute() { }
     attribute.prototype = {
+        /**
+        *获取元素属性
+        *@param  ele DOM元素
+        *@param  name 属性名
+        *@return 属性值
+        */
         getAttr: function (ele, name) {
             if (/href|src|width|height|colSpan|rowSpan/.test(name)) {
                 /**IE的getAttribute支持第二个参数，可以为 0,1,2,4
@@ -121,6 +132,12 @@ SL().create(function () {
                 return ele.getAttribute(name);
             }
         },
+        /**
+        *设置元素属性
+        *@param  ele DOM元素
+        *@param  name 属性名
+        *@param  value 属性值
+        */
         setAttr: function (ele, name, value) {
             //设置属性
             if (value == null) {
@@ -134,6 +151,11 @@ SL().create(function () {
             }
 
         },
+        /**
+        *移除元素属性
+        *@param  ele DOM元素
+        *@param  name 属性名
+        */
         removeAttr: function (ele, name) {
             this.setAttr(ele, name, "");
             if (ele.nodeType === 1) {
@@ -146,6 +168,11 @@ SL().create(function () {
             }
 
         },
+        /**
+        *添加元素CLASS属性
+        *@param  ele DOM元素
+        *@param  value CLASS名字
+        */
         addClass: function (ele, value) {
             if (value && typeof value === "string") {
                 //分割
@@ -166,11 +193,22 @@ SL().create(function () {
             }
 
         },
+        /**
+        *是否具有某CLASS
+        *@param  ele DOM元素
+        *@param  value CLASS名字
+        *@return boolean
+        */
         hasClass: function (ele, value) {
             var re = new RegExp('(\\s|^)' + value + '(\\s|$)');
             return re.test(ele.className.replace(/[\n\t]/, " "));
 
         },
+        /**
+        *移除某个CLASS
+        *@param  ele DOM元素
+        *@param  value CLASS名字
+        */
         removeClass: function (ele, value) {
             if ((value && typeof value === "string") || value === undefined) {
                 var classNames = (value || "").split(/\s+/);
@@ -189,6 +227,11 @@ SL().create(function () {
                 }
             }
         },
+        /**
+        *触发和移除某个CLASS
+        *@param  ele DOM元素
+        *@param  value CLASS名字
+        */
         toggleClass: function (ele, value) {
             if (this.hasClass(ele, value)) {
                 this.removeClass(ele, value);
@@ -196,6 +239,11 @@ SL().create(function () {
                 this.addClass(ele, value);
             }
         },
+        /**
+        *获取元素ele的Value值
+        *@param  ele DOM元素
+        *@return value值
+        */
         getValue: function (ele) {
             var hooks = valHooks[ele.type] || valHooks[ele.nodeName.toLowerCase()];
             if (hooks && "get" in hooks && (ret = hooks.get(ele)) !== undefined) {
@@ -206,6 +254,11 @@ SL().create(function () {
             }
             return "";
         },
+        /**
+        *设置元素value值
+        *@param  ele DOM元素
+        *@param  value value值
+        */
         setValue: function (ele, value) {
             if (ele.nodeType != 1) {
                 return;

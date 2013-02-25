@@ -1,8 +1,12 @@
 ﻿/// <reference path="SL.Core.js" />
 /// <reference path="SL.offset.js" />
 
-SL().create(function () {
-
+/**
+*样式操作
+*@namespace
+*@name css
+*/
+sl.create(function () {
     var colorNameMap = {
         aqua: '#0ff',
         black: '#000',
@@ -327,6 +331,16 @@ SL().create(function () {
             } catch (e) { }
         }
     };
+    /**
+    *获取或者设置元素的style样式 
+    *@memberOf css
+    *@function
+    *@name css
+    *@param  nodes 单个DOM或者元素数组
+    *@param style 样式名称 可以是单个样式 例如backgroundColor:red;或者{backgroundColor:red;color:red;}形式
+    *@param value 样式的值 当style不为object并且value为空表示获取样式值 否则则相反
+    *获取时候
+    */
     sl.css = window.css = function (nodes, style, value) {
         nodes = sl.Convert.convertToArray(nodes, null, sl);
         return sl.access(nodes, style, value, getStyle, setStyle);

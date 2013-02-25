@@ -59,19 +59,19 @@ sl.create("sl.ui",function () {
             // var params = JSON.stringify($.extend({ "key": key }, opts.ajaxOption.extendData));
             var params = sl.param(sl.extend({ "key": key }, opts.ajaxOption.extendData));
             if (opts.dynamicSource) {
-                var xmlhttp = sl.Ajax({
+                var xmlhttp =sl.ajax({
                     type: "POST",
                     url: opts.ajaxOption.url,
                     //contentType: "application/json",
                     dataType: "json",
                     data: params,
-                    onSuccess: function (data) {
+                    success: function (data) {
                         opts.source = data;
                         var $items = MenuItemHelper._GenrateMenuItems(textBox, otherHelper.FilterOptionSouces(opts, textBox.value), height, width, top, left);
                         $loading.hide();
                         return $items;
                     },
-                    onError: function (xhr) {
+                    erroe: function (xhr) {
                         $loading.hide();
                         return null;
                     }
@@ -336,7 +336,7 @@ sl.create("sl.ui",function () {
             return opts.source;
         }
     };
-    this.autoComplete = sl.Class(
+    this.autocomplete = sl.Class(
     {
         init: function (elem, options) {
             var opts = {};

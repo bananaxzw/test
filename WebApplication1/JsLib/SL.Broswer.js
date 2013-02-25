@@ -14,14 +14,14 @@
 *注意：允许你使用该框架 但是不允许修改该框架 有发现BUG请通知作者 切勿擅自修改框架内容
 */
 
-SL().create(function (SL) {
+sl.create(function () {
     /**
     *浏览器信息 目前只提供版本判断
     *@class
     *@name Browser
     *@example 
-    * alert(SL().Browser.chrome)
-    * alert(SL().Browser.ie);
+    * alert(sl.Browser.chrome)
+    * alert(sl.Browser.ie);
     */
     function Browser() {
 
@@ -100,8 +100,8 @@ SL().create(function (SL) {
         safari : 0
     }
 
-    SL.Browser = SL.Browser || {};
-    SL.Browser = new Browser();
+    sl.Browser = sl.Browser || {};
+    sl.Browser = new Browser();
 });
 
 
