@@ -2,6 +2,11 @@
 /// <reference path="SL.CSS.js" />
 /// <reference path="SL.support.js" />
 sl.create(function () {
+    /**
+    *DOM元素位置处理
+    *@namespace
+    *@name offset
+    */
     function offset() {
         this.init = function () {
             if (this.Initialed) return;
@@ -37,8 +42,10 @@ sl.create(function () {
         };
         this.Initialed = false;
     }
-
     offset.prototype = {
+        /**
+        *@ignore
+        */
         bodyOffset: function (body) {
             var top = body.offsetTop, left = body.offsetLeft;
 
@@ -51,6 +58,9 @@ sl.create(function () {
 
             return { top: top, left: left };
         },
+        /**
+        *@ignore
+        */
         getOffset: function (node) {
             if ("getBoundingClientRect" in document.documentElement) {
 
@@ -77,6 +87,9 @@ sl.create(function () {
 
             }
         },
+        /**
+        *@ignore
+        */
         setOffset: function (node, options) {
 
             var computedStyle = document.defaultView && document.defaultView.getComputedStyle ? document.defaultView.getComputedStyle(node, null) : node.currentStyle;
@@ -94,7 +107,11 @@ sl.create(function () {
             };
             sl.css(node, props);
         },
-
+        /**
+        *获取元素的position属性
+        *@param elem 元素
+        *@return {top:**,left:**}
+        */
         position: function (elem) {
 
             var offsetParent = this.offsetParent(elem), offset = this.getOffset(elem);
@@ -112,7 +129,9 @@ sl.create(function () {
                 left: offset.left - parentOffset.left
             };
         },
-
+        /**
+        *@ignore
+        */
         offsetParent: function (elem) {
 
             var offsetParent = elem.offsetParent || document.body;
@@ -123,8 +142,14 @@ sl.create(function () {
         }
 
     }
-
     var _offset = new offset();
+    /**
+    *设置或者获取元素的位置 相对于页面
+    *@memberOf offset
+    *@param nodes DOM元素
+    *@param value 位置的值{left:,top:} 当为空时候表示获取值
+    *@return {top:**,left:**}
+    */
     sl.offset = function (nodes, value) {
         nodes = sl.Convert.convertToArray(nodes, null, sl);
         return sl.access(nodes, "offset", value, _offset.getOffset, _offset.setOffset, _offset, null);
@@ -133,8 +158,16 @@ sl.create(function () {
         return _offset.position(elem);
     };
     var scrollFun = {};
+    /**
+    *设置或者获取元素的scrollLeft
+    *@memberOf offset
+    @name scrollLeft
+    *@param nodes DOM元素
+    *@param value 位置的值{left:,top:} 当为空时候表示获取值
+    *@return {top:**,left:**}
+    */
     sl.each(["scrollLeft", "scrollTop"], function (index, name) {
-        scrollFun[name] = function (elem, nouse, value) {
+        scrollFun[name] = function (elem, value) {
 
             var win = ("scrollTo" in elem && elem.document) ? elem : (elem.nodeType == 9) ? (elem.defaultView || elem.parentWindow) : false;
             if (!elem) {
