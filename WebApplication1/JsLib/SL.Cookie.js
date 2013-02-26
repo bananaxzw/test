@@ -13,15 +13,15 @@
 *注意：允许你使用该框架 但是不允许修改该框架 有发现BUG请通知作者 切勿擅自修改框架内容
 */
 
-SL().create(function (SL) {
+sl.create(function () {
     /**
     * @class
     * @name Cookie
     * @example
-    * SL().Cookie.set("name1", "xuzhiwei", ".testxuzhiwei11.com", "/", 1);
-    * console.log(SL().Cookie.get("name1"));
-    * SL().Cookie.remove("name1");
-    * console.log(SL().Cookie.get("name1"));
+    * sl.Cookie.set("name1", "xuzhiwei", ".testxuzhiwei11.com", "/", 1);
+    * console.log(sl.Cookie.get("name1"));
+    * sl.Cookie.remove("name1");
+    * console.log(sl.Cookie.get("name1"));
     */
     var Cookie = function () { };
     Cookie.prototype = {
@@ -89,6 +89,6 @@ SL().create(function (SL) {
         }
     };
 
-    SL.Cookie = SL.Cookie || {};
-    SL.Cookie = new Cookie();
+    sl.Cookie = SL.Cookie || {};
+    sl.Cookie = new Cookie();
 });

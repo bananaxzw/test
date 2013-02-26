@@ -1,4 +1,5 @@
-﻿/**    
+﻿/// <reference path="sl.js" />
+/**    
 * SL (Javascript Extension Tools) 
 *
 * @version    1.0
@@ -12,14 +13,13 @@
 *注意：允许你使用该框架 但是不允许修改该框架 有发现BUG请通知作者 切勿擅自修改框架内容
 */
 
-
-/// <reference path="SL.Core.js" />
-SL().create(function (SL) {
+sl.create(function () {
     /**
     * @description array扩展
     * @class array扩展
     * @name array
     */
+    
     var array = function () { };
     array.prototype = {
 
@@ -63,7 +63,7 @@ SL().create(function (SL) {
             /// <param name="obj">值</param>
             /// <returns type="int">位置</returns>
             for (var i = 0, len = arr.length; i < len; i++) {
-                if (SL.compare(arr[i], obj)) return i;
+                if (sl.compare(arr[i], obj)) return i;
             }
             return -1;
         },
@@ -82,7 +82,7 @@ SL().create(function (SL) {
             /// <param name="obj"></param>
             /// <returns type=""></returns>
             for (var i = arr.length - 1; i >= 0; i--) {
-                if (SL.compare(arr[i], obj)) return i;
+                if (sl.compare(arr[i], obj)) return i;
             }
             return -1;
         },
@@ -128,7 +128,7 @@ SL().create(function (SL) {
         *@param {Array} arr 要查找的数据
         *@param {Array} items 插入的元素数据
         *@example
-        *   var slArray = SL().Array;
+        *   var slArray = sl.Array;
         *    var initalArray = [1, 2, 3, 4, 6, 6, 7];
         *   slArray.addRange(initalArray, [1, 3, 4]);
         */
@@ -224,7 +224,7 @@ SL().create(function (SL) {
         *移除重复
         *@param {Array} arr  数组
         *@example
-        * var slArray = SL().Array;
+        * var slArray = sl.Array;
         * var initalArray = [1, 2, 3, 4, 6, 6, 7];
         * slArray.deleteRepeater(initalArray);
         */
@@ -253,7 +253,7 @@ SL().create(function (SL) {
         *@param {Function} f 要执行的函数 第一个参数为数据元素 第二个参数为索引
         *@param {Object} oThis 为空时候默认为window对象、
         *@example
-        * var slArray = SL().Array;
+        * var slArray = sl.Array;
         * var initalArray = [1, 2, 3, 4, 6, 6, 7];
         *slArray.forEach(initalArray, function (data, index) {
         *        console.log(index + "|" + data);
@@ -282,7 +282,7 @@ SL().create(function (SL) {
         *@param {Function} f 要过滤规则的函数 第一个参数为数据元素 第二个参数为索引
         *@param {Object} oThis 为空时候默认为window对象、
         *@example
-        * var slArray = SL().Array;
+        * var slArray = sl.Array;
         * var initalArray = [1, 2, 3, 4, 6, 6, 7];
         *  var filterArray = slArray.filter(initalArray, function ( data,index) {
         *     if (index == 1 || data == 7) return true;
@@ -310,7 +310,7 @@ SL().create(function (SL) {
         *@param {Function} f 要执行映射的函数 第一个参数为数据元素 第二个参数为索引 第三个参数为原始数组
         *@param {Object} oThis 为空时候默认为window对象、
         *@example
-        * var slArray = SL().Array;
+        * var slArray = sl.Array;
         * var initalArray = [1, 2, 3, 4, 6, 6, 7];
         *    console.log(slArray.map(initalArray, function (data, index) {
         *       return data + index;
@@ -378,6 +378,6 @@ SL().create(function (SL) {
         }
 
     };
-    SL.Array = SL.Array || {};
-    SL.Array = new array();
+    sl.Array = sl.Array || {};
+    sl.Array = new array();
 });

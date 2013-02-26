@@ -1009,7 +1009,7 @@
     <Content Include="JsLib\requirejs\my\Person.js" />
     <Content Include="JsLib\requirejs\require.htm" />
     <Content Include="JsLib\SL.AJAXEX.js" />
-    <Content Include="JsLib\SL.CSSNew.js" />
+    <Content Include="JsLib\SL.CSSOLD.js" />
     <Content Include="JsLib\SL.Dom - 副本.js" />
     <Content Include="JsLib\SL.easyanim.js" />
     <Content Include="JsLib\easyanim\easyanim.js" />

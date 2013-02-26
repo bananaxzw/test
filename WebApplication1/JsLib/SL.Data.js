@@ -18,6 +18,7 @@
 SL().create(function (SL) {
 
     /**
+    *数据缓存
     *@class
     *@name data
     */
