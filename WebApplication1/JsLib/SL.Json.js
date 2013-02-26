@@ -15,7 +15,7 @@
 
 
 
-SL().create(function (SL) {
+sl.create(function () {
 
 /*
 http://www.JSON.org/json2.js
@@ -27,6 +27,10 @@ NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
 
 See http://www.JSON.org/js.html
 */
+    /**
+    *json操作
+    *@namespace
+    */
     var JSON = window['JSON'] || {};
     (function () {
 
@@ -218,6 +222,11 @@ See http://www.JSON.org/js.html
         // If the JSON object does not yet have a stringify method, give it one.
 
         if (typeof JSON.stringify !== 'function') {
+            /**
+            *把json对象转换成字符串形式
+            *@function
+            *@name stringify
+            */
             JSON.stringify = function (value, replacer, space) {
 
                 // The stringify method takes a value and an optional replacer, and an optional
@@ -333,5 +342,5 @@ replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
             };
         }
     } ());
-    SL.Josn = JSON;
+    sl.Josn = JSON;
 });

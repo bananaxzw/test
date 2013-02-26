@@ -58,16 +58,29 @@ DOM 元素动态定位，window对象的resize和scroll 事件
 */
 
 
-/*
-* 频率控制 返回函数连续调用时，action 执行频率限定为 次 / delay
-* @param delay  {number}    延迟时间，单位毫秒
-* @param action {function}  请求关联函数，实际应用需要调用的函数
-* @param tail?  {bool}      是否在尾部用定时器补齐调用
-* @param ctx {object} 作用域 默认为sl对象
-* @return {function}	返回客户调用函数
-*/
+
+
+
 /// <reference path="SL.Core.js" />
+
+
+/**
+*空闲执行控制
+*@namespace
+*@name throttle
+*/
 sl.create(function () {
+
+    /*
+    *频率控制 返回函数连续调用时，action 执行频率限定为 次 / delay
+    *@memberOf throttle
+    *@function
+    *@param delay  {number}    延迟时间，单位毫秒
+    *@param action {function}  请求关联函数，实际应用需要调用的函数
+    *@param tail?  {bool}      是否在尾部用定时器补齐调用
+    *@param ctx {object} 作用域 默认为sl对象
+    *@return {function}	返回客户调用函数
+    */
     var throttle = function (delay, action, tail, debounce,ctx) {
         var now = function () {
             return new Date();
@@ -102,11 +115,13 @@ sl.create(function () {
     }
     /*
     * 空闲控制 返回函数连续调用时，空闲时间必须大于或等于 idle，action 才会执行
-    * @param idle   {number}    空闲时间，单位毫秒
-    * @param action {function}  请求关联函数，实际应用需要调用的函数
-    * @param tail?  {bool}      是否在尾部执行
-    * @param ctx {object} 作用域 默认为sl对象
-    * @return {function}	返回客户调用函数
+    *@memberOf throttle
+    *@function
+    *@param idle   {number}    空闲时间，单位毫秒
+    *@param action {function}  请求关联函数，实际应用需要调用的函数
+    *@param tail?  {bool}      是否在尾部执行
+    *@param ctx {object} 作用域 默认为sl对象
+    *@return {function}	返回客户调用函数
     */
     var debounce = function (idle, action, tail,ctx) {
         return throttle(idle, action, tail, true,ctx);

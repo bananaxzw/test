@@ -56,7 +56,9 @@ sl.create(function () {
         }
     },
     specialEvent = {};
-
+    /**
+    *@ignore
+    */
     HooksHelper = {
         fixHooks: {},
         keyHooks: {
@@ -120,9 +122,26 @@ sl.create(function () {
             }
         }
     };
-
+    /**
+    *事件操作
+    *@namespace
+    *@name event
+    */
     EventOperator = {
+        /**
+        *@ignore
+        */
         triggered: false,
+        /**
+        *绑定事件
+        *@memberOf event
+        *@name addEvent
+        *@function
+        *@param  elem DOM元素
+        *@param types 事件类型"click"  "click mouseover"
+        *@param handler 事件处理函数
+        *@param data  事件的额外数据 可以在event.extendData中获取到
+        */
         addEvent: function (elem, types, handler, data, selector) {
             var elemData, eventHandle, events,
 			t, tns, type, namespaces, handleObj,
@@ -205,7 +224,19 @@ sl.create(function () {
             elem = null;
 
         },
+        /**
+        *@ignore
+        */
         global: {},
+        /**
+        *移除事件绑定
+        *@memberOf event
+        *@name removeEvent
+        *@function
+        *@param  elem DOM元素
+        *@param types 事件类型"click"  "click mouseover"  为空的时候表示移除所有类型的事件监听
+        *@param handler 事件处理函数 为空的时候表示移除当前事件类型的 所有监听函数
+        */
         removeEvent: function (elem, types, handler, selector, mappedTypes) {
             var elemData = sl.data(elem),
             t, tns, type, origType, namespaces, origCount,
@@ -260,6 +291,15 @@ sl.create(function () {
                 sl.removeData(elem, "events");
             }
         },
+        /**
+        *触发事件
+        *@memberOf event
+        *@name triggerEvent
+        *@function
+        *@param  event 事件对象或者事件类型"click"
+        *@param data 事件处理函数的数据
+        *@param elem DOM元素
+        */
         triggerEvent: function (event, data, elem, onlyHandlers) {
             /// <summary>
             /// 
@@ -395,8 +435,14 @@ sl.create(function () {
             return event.result;
 
         },
+        /**
+        *@ignore
+        */
         props: "attrChange attrName relatedNode srcElement altKey bubbles cancelable ctrlKey currentTarget eventPhase metaKey relatedTarget shiftKey target timeStamp view which".split(" "),
         //处理实际的event 忽略其差异性 实际的trigger中的event切勿fix
+        /**
+        *@ignore
+        */
         fixEvent: function (event) {
 
             if (event[sl.expando]) {
@@ -428,6 +474,9 @@ sl.create(function () {
             event.isChar = (event.charCode > 0);
             return fixHook.fixevent ? fixHook.fixevent(event, originalEvent) : event;
         },
+        /**
+        *@ignore
+        */
         handle: function (event) {
             event = EventOperator.fixEvent(event || window.event);
             var handlers = ((sl.data(this, "events") || {})[event.type] || []),
@@ -505,11 +554,24 @@ sl.create(function () {
             }
             return event.result;
         },
+        /**
+        *hover事件(鼠标进入和离开)
+        *@memberOf event
+        *@name hover
+        *@function
+        *@param elem DOM元素
+        *@param  enterfn 进入函数
+        *@param leavefn 离开函数
+        *
+        */
         hover: function (element, enterfn, leavefn) {
             EventOperator.addEvent(element, "mouseover", enterfn);
             EventOperator.addEvent(element, "mouseout", leavefn);
         }
     };
+    /**
+    *@ignore
+    */
     SpecialHelper = {
         //特殊事件的模拟
         simulate: function (type, elem, event, bubble) {
@@ -611,6 +673,9 @@ sl.create(function () {
             }
         };
     });
+    /**
+    *@ignore
+    */
     SL.Event = function (src) {
         //是否已经经过初始化的event
         if (!(this instanceof SL.Event)) {
@@ -627,6 +692,9 @@ sl.create(function () {
         //用来标注已经初始化
         this[sl.expando] = true;
     };
+    /**
+    *@ignore
+    */
     SL.Event.prototype = {
         preventDefault: function () {
             // DOM LV3
