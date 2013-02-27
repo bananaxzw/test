@@ -1095,12 +1095,10 @@
     <Content Include="JsLib\SL.HttpUrl.js" />
     <Content Include="JsLib\sl.js" />
     <Content Include="JsLib\SL.Json.js" />
-    <Content Include="JsLib\SL.lang.js" />
     <Content Include="JsLib\SL.Load.js" />
     <Content Include="JsLib\SL.Node.js" />
     <Content Include="JsLib\SL.Number.js" />
     <Content Include="JsLib\SL.offset.js" />
-    <Content Include="JsLib\SL.Operation.js" />
     <Content Include="JsLib\SL.QueryString.js" />
     <Content Include="JsLib\SL.Queue.js" />
     <Content Include="JsLib\SL.ready.js" />

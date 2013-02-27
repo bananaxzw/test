@@ -13,23 +13,11 @@
 *注意：允许你使用该框架 但是不允许修改该框架 有发现BUG请通知作者 切勿擅自修改框架内容
 */
 
-
-
 sl.create(function () {
-
-/*
-http://www.JSON.org/json2.js
-2009-08-17
-
-Public Domain.
-
-NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
-
-See http://www.JSON.org/js.html
-*/
     /**
     *json操作
-    *@namespace
+    *@namespace json操作
+    *@name JSON
     */
     var JSON = window['JSON'] || {};
     (function () {
@@ -41,6 +29,9 @@ See http://www.JSON.org/js.html
 
         if (typeof Date.prototype.toJSON !== 'function') {
 
+            /**
+            *@ignore
+            */
             Date.prototype.toJSON = function (key) {
 
                 return isFinite(this.valueOf()) ?
@@ -51,10 +42,18 @@ See http://www.JSON.org/js.html
                  f(this.getUTCMinutes()) + ':' +
                  f(this.getUTCSeconds()) + 'Z' : null;
             };
-
+            /**
+            *@ignore
+            */
             String.prototype.toJSON =
-        Number.prototype.toJSON =
-        Boolean.prototype.toJSON = function (key) {
+            /**
+            *@ignore
+            */
+            Number.prototype.toJSON =
+            /**
+            *@ignore
+            */
+            Boolean.prototype.toJSON = function (key) {
             return this.valueOf();
         };
         }
@@ -92,7 +91,9 @@ See http://www.JSON.org/js.html
             '"' + string + '"';
         }
 
-
+        /**
+        *@ignore
+        */
         function str(key, holder) {
 
             // Produce a string from holder[key].
@@ -224,8 +225,10 @@ See http://www.JSON.org/js.html
         if (typeof JSON.stringify !== 'function') {
             /**
             *把json对象转换成字符串形式
+            *@memberOf JSON
             *@function
             *@name stringify
+            *@param value JSON对象
             */
             JSON.stringify = function (value, replacer, space) {
 
@@ -272,7 +275,13 @@ See http://www.JSON.org/js.html
 
 
         // If the JSON object does not yet have a parse method, give it one.
-
+        /**
+        *把字符串转换成json
+        *@memberOf JSON
+        *@function
+        *@name parse
+        *@param value 字符串对象
+        */
         if (typeof JSON.parse !== 'function') {
             JSON.parse = function (text, reviver) {
 

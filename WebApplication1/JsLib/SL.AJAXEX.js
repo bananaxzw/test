@@ -4,7 +4,7 @@
 
 /**
 *Ajax操作
-*@namespace
+*@namespace  Ajax操作
 *@name ajax
 */
 sl.create("sl", function (SL) {
@@ -155,7 +155,7 @@ sl.create("sl", function (SL) {
     *@memberOf ajax
     *@function
     *@name ajax
-    *@param options  ss<br/>ss
+    *@param options  请求参数
     */
     this.ajax = function (options) {
         options = sl.extend(true, {}, sl.ajaxSettting, options);
@@ -368,6 +368,10 @@ sl.create("sl", function (SL) {
     *@memberOf ajax
     *@function
     *@name get
+    *@param url 请求地址
+    *@param data 发送的数据
+    *@param callback 成功的回调函数
+    *@param datatype 预期返回的类型
     */
 
     /**
@@ -375,12 +379,16 @@ sl.create("sl", function (SL) {
     *@memberOf ajax
     *@function
     *@name post
+    *@param url 请求地址
+    *@param data 发送的数据
+    *@param callback 成功的回调函数
+    *@param datatype 预期返回的类型
     */
     sl.each(["get", "post"], function (i, _type) {
-        sl[_type] = function (url, data, callback, dateType) {
+        sl[_type] = function (url, data, callback, dataType) {
             // 没有data只有回调函数
             if (sl.InstanceOf.Function(data)) {
-                dateType = dateType || callback;
+                dataType = dataType || callback;
                 callback = data;
                 data = null;
             }
@@ -390,19 +398,54 @@ sl.create("sl", function (SL) {
                 url: url,
                 data: data,
                 success: callback,
-                dataType: dateType
+                dataType: dataType
             });
         };
     });
-    this.getScript = function (url, callback) {
-        return sl.get(url, undefined, callback, "script");
+
+    /**
+    *请求script
+    *@memberOf ajax
+    *@function
+    *@name getScript
+    *@param url 请求地址
+    *@param data 数据
+    *@param callback 成功的回调函数
+    */
+    this.getScript = function (url,data, callback) {
+        return sl.get(url, data, callback, "script");
     };
+    /**
+    *请求json
+    *@memberOf ajax
+    *@function
+    *@name getJSON
+    *@param url 请求地址
+    *@param data 数据
+    *@param callback 成功的回调函数
+    */
     this.getJSON = function (url, data, callback) {
         return sl.get(url, data, callback, "json");
-    };
+    }; 
+    /**
+    *请求jsopp(跨域操作)
+    *@memberOf ajax
+    *@function
+    *@name post
+    *@param url 请求地址
+    *@param data 请求地址
+    *@param callback 成功的回调函数
+    */
     this.getJSONP = function (url, data, callback) {
         return sl.get(url, data, callback, "jsonp");
     }
+    /**
+    *请求全局设置参数
+    *@memberOf ajax
+    *@function
+    *@name ajaxSetup
+    *@param setting 参数
+    */
     this.ajaxSetup = function (setting) {
         sl.extend(sl.ajaxSettting, setting);
     };
