@@ -13,7 +13,7 @@
 *注意：允许你使用该框架 但是不允许修改该框架 有发现BUG请通知作者 切勿擅自修改框架内容
 */
 
-SL().create(function (SL) {
+sl.create(function () {
 
     /**
     *查询字符串帮助
@@ -21,14 +21,12 @@ SL().create(function (SL) {
     *@name QueryString
     *@param {String} str 查询字符串的值
     *@example
-    * window.onload = function () {
-    *        SL().create(function (ss) {
-    *            var quering = new ss.QueryString("jj.aspx?name=xuzhiwei&age=11");
-    *            console.log(quering.name);
-    *            console.log(quering.age);
-    *            console.log(quering.toString());
-    *        });
-    *    }
+    *window.onload = function () {
+    *     var quering = new sl.QueryString("jj.aspx?name=xuzhiwei&age=11");
+    *     console.log(quering.name);
+    *     console.log(quering.age);
+    *     console.log(quering.toString());
+    * }
     */
     var QueryString = function (str) {
         this.string = str;
@@ -48,6 +46,9 @@ SL().create(function (SL) {
     *@ignore
     */
     QueryString.prototype = {
+        /**
+        *@ignore
+        */
         toString: function () {
             return this.string;
         }
@@ -65,7 +66,7 @@ SL().create(function (SL) {
     QueryString.Pair.prototype.toString = function () {
         return this.name + '=' + this.value;
     };
-    SL.QueryString = function (str) {
+    sl.QueryString = function (str) {
         return new QueryString(str);
     }
 });
