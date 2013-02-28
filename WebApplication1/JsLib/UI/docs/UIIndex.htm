@@ -57,11 +57,20 @@
 	{ text: 'asfsaf', click: function () { alert('怎么这么多要求!') } }
 ];
 	sl.ready(function () {
-	    var mm = new sl.ui.fixedtop(document.getElementById("nav"), { top: 197 });
+	    var mm = new sl.ui.fixedtop(document.getElementById("nav"), { top: 0 });
 	    mm.reset();
-	    var ss = new sl.ui.menu(document.getElementById("nav"), { menuData: deskTop, autoOpen: true, width: 200, top: 197 });
+	    $(window).scroll(function () {
+	        if ($(this).scrollTop() >= 197) {
+	            mm.set();
+	        }
+	        else {
+	            mm.reset();
+	        }
+	    })
+	    var ss = new sl.ui.menu(document.getElementById("nav"), { menuData: deskTop, autoOpen: true, width: 200 });
 
 	});
+
     </script>
 </head>
 <body>
@@ -85,6 +94,279 @@
                 </h1>
                 <hr />
                 <div>
+                <dl class="quickSearchList">
+                        <dt>语言模块 </dt>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                    </dl>
+                    <dl class="quickSearchList">
+                        <dt>语言模块 </dt>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                    </dl>
+                  <dl class="quickSearchList">
+                        <dt>语言模块 </dt>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                    </dl>
+                      <dl class="quickSearchList">
+                        <dt>语言模块 </dt>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                    </dl>
+                      <dl class="quickSearchList">
+                        <dt>语言模块 </dt>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                    </dl>
+                      <dl class="quickSearchList">
+                        <dt>语言模块 </dt>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                    </dl>
+                      <dl class="quickSearchList">
+                        <dt>语言模块 </dt>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                        <dd>
+                            <a href="#">test</a>
+                        </dd>
+                    </dl>
                     <dl class="quickSearchList">
                         <dt>语言模块 </dt>
                         <dd>

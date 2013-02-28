@@ -9,7 +9,8 @@ sl.create("sl.ui", function () {
         menuData: [],
         width: 140,
         autoOpen: false,
-        click: function () { }
+        click: function () { },
+        isTopMenuAlwaysOpen:false
     };
 
     this.menu = sl.Class(

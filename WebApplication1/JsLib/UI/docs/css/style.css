@@ -1,12 +1,6 @@
-﻿html
-{
-     overflow: hidden;
-	
-    }
-html,body{
+﻿html,body{
 	padding:0px;
 	margin:0px;
-	height:100%;
 	font:14px/24px 'microsoft yahei';
 }
 body {

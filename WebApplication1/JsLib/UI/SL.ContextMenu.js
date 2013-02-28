@@ -20,8 +20,8 @@ sl.create("sl.ui", function () {
             $(document).bind('contextmenu', function (e) {
                 temp.hide();
                 temp._showMenu($(document.getElementById("safsa")), {
-                    left: e.pageX + "px",
-                    top: e.pageY + "px"
+                    left: e.pageX,
+                    top: e.pageY
                 });
                 return false;
             });
