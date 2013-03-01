@@ -24,12 +24,9 @@
             SL.Instances = Instances;
         }
         /**
-        * SL对象原型
-        * @class
+        * 核心模块
         * @namespace
-        * @name SL
-        * @global
-        * @since version 1.0
+        * @name sl
         */
         SL = function (ver, isNewInstance) {
             var _SL = this;
@@ -61,19 +58,18 @@
             },
 
             /**
-            * @description 可以一次性连续创建命名空间
-            * @param {String} name 命名空间名称
-            * @returns {Object} 返回对最末命名空间的引用
+            *@description 可以一次性连续创建命名空间
+            *@name registerNamespace
+            *@memberOf sl
+            *@function
+            *@param {String} name 命名空间名称
+            *@returns {Object} 返回对最末命名空间的引用
             * 
             * @example
             *在全局环境中创建top.sub名字空间, _registerNamespace完成的操作相当于在全局环境中执行如下语句：
             * var top = {};
             * top.sub = {};
-            *
-            * var _s=new SL();
-            * _s._registerNamespace("top.sub");
-            *或者
-            * SL().registerNamespace("top.sub");
+            * sl.registerNamespace("top.sub");
             */
             registerNamespace: function (namespacePath) {
                 var rootObject = topNamespace;
@@ -107,47 +103,49 @@
                 }
                 return rootObject;
             },
+
             /**
-            * @description  创建一个 Javascript 代码包
-            * @param {String} name 要创建的包的命名空间
-            * @param {Function} func 要创建的包的包体
-            * @returns {Mixed} 返回任何自定义的变量
-            * 
-            * @example
-            * SL().create(function(SL){
+            *创建一个 Javascript 代码包
+            *@memberOf sl
+            *@function
+            *@name create
+            *@param {String} name 要创建的包的命名空间
+            *@param {Function} func 要创建的包的包体
+            *@returns {Mixed} 返回任何自定义的变量
+            *@example
+            * sl.create(function(){
             * 	//这时上下文对象this指向全局window对象
             * 	alert(this);
             * };
             * 
-            * SL().create("top.sub", function(SL){
+            *sl.create("top.sub", function(SL){
             * 	//这时上下文对象this指向window对象下的top.sub对象
             * 	alert(this);
             * };
             * 
             *
-            *  SL().create("topNameSpace.sub", function () {
+            *sl.create("topNameSpace.sub", function () {
             *    this.say = function () {
             *        alert("hello word!");
             *        }
-            *      });
+            * });
             *   topNameSpace.sub.say();
             *
-            *    SL().create("topNameSpace.sub.subsub", function () {
+            *sl.create("topNameSpace.sub.subsub", function () {
             *        this.say = function () {
             *            alert("hello word Sub!");
             *        }
-            *    });
-            *    topNameSpace.sub.subsub.say();
+            *});
+            *topNameSpace.sub.subsub.say();
             *
             *
-            *   SL().create("myNameSpace", function (SL) {
+            *sl.create("myNameSpace", function () {
             *        this.say = function () {
             *            alert("hello word myNameSpace!");
             *        }
-            *        SL.U = this;
-            *   });
-            *    alert(myNameSpace.say == SL().U.say);
-            *    alert(myNameSpace.say == (new SL()).U.say);
+            *        sl.U = this;
+            * });
+            *alert(myNameSpace.say == sl.U.say);
             *     
             */
             create: function () {
@@ -177,7 +175,7 @@
 
             },
             /**
-            * @private 比较大小
+            *@ignore
             */
             compare: function (obj1, obj2) {
                 if (obj1 == null || obj2 == null) return (obj1 === obj2);
@@ -204,12 +202,15 @@
 
             /**
             * @description  创建对象
+            *@name Class
+            *@memberOf sl
+            *@function
             * @param {Object} option = {base: superClass} 在option对象的base属性中指定要继承的对象，可以不写，不写就不继承任何类
             * @param {Object}  object={.....} 要创建的类的属性和方法
             * @returns {Object} newclass返回新创建的对象
             * 
             * @example
-            * var Person = SL().Class({
+            * var Person = sl.Class({
             *    init: function (name, sex, age) {
             *        this.name = name;
             *        this.age = age;
@@ -220,7 +221,7 @@
             *    }
             *
             * });
-            * var Employee = SL().Class({ base: Person }, {
+            * var Employee = sl.Class({ base: Person }, {
             *     init: function (name, sex, age, id) {
             *         this.base.init(name, sex, age);
             *         this.EmployeeId = id;
@@ -297,10 +298,7 @@ SL().create(function (SL) {
     * @class
     * @name InstanceOf
     * @example 
-    * return SL().InstanceOf.String(obj)
-    *或者 
-    *var sl=new SL();
-    *sl.InstanceOf.String(obj)
+    * return sl.InstanceOf.String(obj)
     */
     var toString = Object.prototype.toString,
 
@@ -453,15 +451,13 @@ SL().create(function (SL) {
     SL.InstanceOf = SL.InstanceOf || {};
     SL.InstanceOf = new InstanceOf();
 });
-/**
-*@memberOf SL
-*对象扩展
-*/
 SL().create(function (SL) {
 
     /**
-    *@memberOf SL
     *对象扩展
+    *@memberOf sl
+    *@function
+    *@param deep||target,[object1],[objectN]
     *@example
     * var object1 = {
     *        apple: 0,
@@ -473,9 +469,9 @@ SL().create(function (SL) {
     *        durian: 100
     *    };
     *
-    *    console.dir(SL().extend(true, object1, object2));
+    *    console.dir(sl.extend(true, object1, object2));
     *  {"apple":0,"banana":{"weight":52,"price":200},"cherry":97,"durian":100}
-    *    console.dir(SL().extend(object1, object2));
+    *    console.dir(sl.extend(object1, object2));
     *    {"apple":0,"banana":{"price":200},"cherry":97,"durian":100}
     */
     function extend() {
@@ -568,6 +564,22 @@ SL().create(function (SL) {
 
 
     (function () {
+
+        /**
+        *通用例遍方法，可用于例遍对象和数组。
+        *@name each
+        *@memberOf sl
+        *@function
+        *@param object,[callback]
+        *@example
+        *sl.each( [0,1,2], function(i, n){
+        *  alert( "Item #" + i + ": " + n );
+        *});
+        *
+        *sl.each( { name: "John", lang: "JS" }, function(i, n){
+        *  alert( "Name: " + i + ", Value: " + n );
+        *});
+        */
         this.each = function (object, callback, args) {
             var name, i = 0, length = object.length;
             if (args) {
@@ -594,9 +606,25 @@ SL().create(function (SL) {
                 }
             }
         };
+
         /**
+        *返回一个新函数，并且这个函数始终保持了特定的作用域。
+        *@memberOf sl
+        *@name proxy
+        *@function
+        *@param function,context||context,name
+        *@example
         *proxy( obj, "test" )
         *proxy(fn,context)
+        *
+        *var obj = {
+        *  name: "John",
+        *  test: function() {
+        *    alert( this.name );
+        *  }
+        *};
+        *sl.proxy( obj, "test" )
+        *或者 sl.proxy( obj.test, obj )
         */
         this.proxy = function () {
             var fn, proxy, context;
@@ -626,6 +654,16 @@ SL().create(function (SL) {
             if (fn.guid) { proxy.guid = fn.guid; }
             return proxy;
         };
+        /**
+        *将表单元素数组或者对象序列化。
+        *@name param
+        *@memberOf sl
+        *@function
+        *@param obj
+        *@example
+        *var params = {width:100,height:100}
+        *var str = sl.param(params);=>width=100&height=100
+        */
         //把json转换成querying形式 比如{width:100,height:100}=>width=100&height=100
         this.param = function (a, traditional) {
             var s = [],
@@ -678,6 +716,16 @@ SL().create(function (SL) {
             } //取得第一个元素的属性, getter的参数总是很小的
             return length ? getter.call(bind || elems[0], elems[0], key) : void 0;
         };
+        /**
+        *合并两个数组
+        *@memberOf sl
+        *@function
+        *@name merge
+        *@param first,second
+        *@example
+        *var params = {width:100,height:100}
+        *var str = sl.param(params);=>width=100&height=100
+        */
         this.merge = function (first, second) {
             var i = first.length, j = 0;
 
@@ -695,21 +743,46 @@ SL().create(function (SL) {
 
             return first;
         };
-        this.grep = function (elems, callback, inv) {
+        /**
+        *使用过滤函数过滤数组元素。
+        *@memberOf sl
+        *@function
+        *@name grep
+        *@param array 待过滤数组
+        *@param callback 此函数将处理数组每个元素
+        *@param invert (可选) 如果 "invert" 为 false 或为设置，则函数返回数组中由过滤函数返回 true 的元素，当"invert" 为 true，则返回过滤函数中返回 false 的元素集。
+        *@example
+        *sl.grep( [0,1,2], function(n,i){
+        *  return n > 0;
+        });
+        */
+        this.grep = function (arr, callback, inv) {
             var ret = [];
-            for (var i = 0, length = elems.length; i < length; i++) {
+            for (var i = 0, length = arr.length; i < length; i++) {
                 //若inv为true表示不满足callback条件 inv为false表示满足callback条件
-                if (!inv !== !callback(elems[i], i)) {
-                    ret.push(elems[i]);
+                if (!inv !== !callback(arr[i], i)) {
+                    ret.push(arr[i]);
                 }
             }
 
             return ret;
         };
-        this.map = function (elems, callback, arg) {
+        /**
+        *将一个数组中的元素转换到另一个数组中。
+        *@memberOf sl
+        *@function
+        *@name map
+        *@param array 待转换数组
+        *@param callback 此函数将处理数组每个元素
+        *@example
+        *sl.map( [0,1,2], function(n){
+        *  return n + 4;
+        *   });
+        */
+        this.map = function (arr, callback, arg) {
             var ret = [], value;
-            for (var i = 0, length = elems.length; i < length; i++) {
-                value = callback(elems[i], i, arg);
+            for (var i = 0, length = arr.length; i < length; i++) {
+                value = callback(arr[i], i, arg);
 
                 if (value != null) {
                     ret[ret.length] = value;
@@ -718,6 +791,13 @@ SL().create(function (SL) {
 
             return ret.concat.apply([], ret);
         };
+        /**
+        *动态执行js代码
+        *@memberOf sl
+        *@function
+        *@name evelScript
+        *@param sriptText js代码串
+        */
         this.evalSript = function (sriptText) {
             if (sriptText && /\S/.test(sriptText)) {
                 (window.execScript || function (sriptText) {

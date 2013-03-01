@@ -9,7 +9,8 @@ sl.create("sl.ui", function () {
         menuData: [],
         width: 140,
         autoOpen: false,
-        click: function () { }
+        click: function () { },
+        isTopMenuAlwaysOpen:false
     };
 
     this.menu = sl.Class(
@@ -21,7 +22,7 @@ sl.create("sl.ui", function () {
 
             menuHelper.InitMenu(elem);
             //点击文档别的位置按钮消失
-            $(document).bind('click', function () { menuHelper.hideAllMenu($(elem)); });
+            $(document).bind('click', function () { menuHelper.hideAllSubMenu($(elem)); });
         },
         /*为contextMenu提供的接口*/
         _showMenu: function ($menu, pos) {
@@ -52,13 +53,13 @@ sl.create("sl.ui", function () {
                 }
             }
             $subMenu.hide();
-            $subMenu.css({ width: "140px" });
+            $subMenu.css({ width: opts.width });
             $subMenu.appendTo("body");
             return $subMenu;
         },
         buildTopMenu: function (target, data) {
             var menuData = data.menuData;
-            var $target = $(target);
+            $target = $(target), opts = sl.data(target, "slmenu").options;
             $target.addClass('menu-top').addClass("menu"); // the top menu
             $target.css({ "z-index": data.zIndex++, "left": data.left, "top": data.top });
             for (var i = 0, j = menuData.length; i < j; i++) {
@@ -69,8 +70,8 @@ sl.create("sl.ui", function () {
                     MenuItem.$subMenu = $subMenu;
                 }
             }
-            $target.css({ width: "140px" });
-            $target.appendTo("body");
+            $target.css({ width: opts.width });
+            //            $target.appendTo("body");
             data.onShow.call(target);
         },
         bindMenuItem: function ($menu, itemData, target) {
@@ -129,6 +130,17 @@ sl.create("sl.ui", function () {
             }
             //  $(document).unbind('.menu');
             return false;
+        },
+        hideAllSubMenu: function ($menu) {
+            var _this = this;
+            if (!$menu) return;
+            $menu.find('div.menu-item').each(function () {
+                if (this.$subMenu) {
+                    _this.hideMenu(this.$subMenu);
+                }
+                $(this).removeClass('menu-active');
+            });
+        
         }
 
     };

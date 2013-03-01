@@ -596,6 +596,9 @@ SL().create(function (SL) {
         //把json转换成querying形式 比如{width:100,height:100}=>width=100&height=100
         this.param = function (object) {
             var s = [];
+            /**
+            *@ignore
+            */
             function add(key, value) {
                 value = SL.InstanceOf.Function(value) ? value() : value;
                 s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);

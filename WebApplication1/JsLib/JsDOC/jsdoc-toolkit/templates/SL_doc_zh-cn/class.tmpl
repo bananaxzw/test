@@ -18,7 +18,13 @@
                     var $this = $(this);
                     $this.html("<pre>" + $this.find("pre").html() + "</pre>");
                 })
-            }
+            };
+            var thisPageName = sl.String.trim($("#clssName11").text());
+            $("ul.nav li").each(function () {
+                if (this.className == thisPageName) {
+                    this.className = "current";
+                }
+            });
         });
     </script>
     <style type="text/css">
@@ -40,9 +46,9 @@
                 <div id="content">
                     <!-- ============================== class title ============================ -->
                     <h1 class="classTitle">
-                        {! var classType = ""; if (data.isBuiltin()) { classType += ""; } if (data.isNamespace)
-                        { if (data.is('FUNCTION')) { classType += ""; } classType += ""; } else { classType
-                        += ""; } !} {+classType+}{+data.alias+}
+                        <span id="clssName11">{! var classType = ""; if (data.isBuiltin()) { classType += "";
+                            } if (data.isNamespace) { if (data.is('FUNCTION')) { classType += ""; } classType
+                            += ""; } else { classType += ""; } !} {+classType+}{+data.alias+}</span>
                         <div class='file'>
                             define in:{+new Link().toSrc(data.srcFile)+}.</div>
                     </h1>
@@ -298,19 +304,21 @@
 				</dl>
 				</if>
 			</if>
-                    <!-- ============================== constructor details ====================
-                    <if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))">
+                    <!-- ============================== constructor details ====================-->
+                   <if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))">
 			<div class="details"><a name="constructor"> </a>
-				<div class="sectionTitle">
+				<h3>
 					{+classType+} 详解
-				</div>
+				</h3>
 				
 				<div class="detailTitle fixedFont">
-					<span class="methodType">{!
+					<!--<span class="methodType">{!
 						if (data.isPrivate) output += "&lt;private&gt; ";
 						if (data.isInner) output += "&lt;inner&gt; ";
-					!}</span>
+					!}</span>-->
+                     <label class=" label label-info methodName">
 						<b>{+ data.alias +}</b><if test="classType != '命名空间 '">{+ makeSignature(data.params) +}</if>
+                    </label>
 				</div>
 				
 				
@@ -324,7 +332,7 @@
 				
 				<if test="data.example.length">
 				<for each="example" in="data.example">
-				<pre class="code">{+example+}</pre>
+				<pre name="code" class='js'>{+example+}</pre>
 				</for>
 				</if>
 				
@@ -396,7 +404,7 @@
 					</if>
 
 			</div>
-			</if> -->
+			</if>
                     <!-- ============================== field details ========================== -->
                     <if test="defined(ownProperties) && ownProperties.length">
 				<h3>
@@ -430,7 +438,7 @@
 					
 					<if test="member.example.length">
 					<for each="example" in="member.example">
-					<pre class="code">{+example+}</pre>
+					<pre name="code" class='js'>{+example+}</pre>
 					</for>
 					</if>
 
@@ -606,7 +614,7 @@
 					
 					<if test="member.example.length">
 					<for each="example" in="member.example">
-					<pre class="code">{+example+}</pre>
+					<pre name="code" class='js'>{+example+}</pre>
 					</for>
 					</if>
 					

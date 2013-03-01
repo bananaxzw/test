@@ -90,22 +90,36 @@ sl.create(function () {
         /**
         *@ignore
         */
-        setOffset: function (node, options) {
-
-            var computedStyle = document.defaultView && document.defaultView.getComputedStyle ? document.defaultView.getComputedStyle(node, null) : node.currentStyle;
-            if (/static/.test(css(node, "position"))) {
-                css(node, "position", "relative");
+        setOffset: function (elem, options) {
+            var position = sl.css(elem, "position");
+            if (position === "static") {
+                elem.style.position = "relative";
             }
-            var curOffset = this.getOffset(node);
-            curTop = parseFloats(computedStyle.left) || 0,
-		curLeft = parseInt(computedStyle.left) || 0;
+
+            var curOffset = this.getOffset(elem),
+			curCSSTop = sl.css(elem, "top"),
+			curCSSLeft = sl.css(elem, "left"),
+			calculatePosition = (position === "absolute" || position === "fixed") && (curCSSTop == "auto" || curCSSLeft == "auto"),
+			props = {}, curPosition = {}, curTop, curLeft;
+
+            if (calculatePosition) {
+                curPosition = this.position(elem);
+                curTop = curPosition.top;
+                curLeft = curPosition.left;
+            } else {
+                curTop = parseFloat(curCSSTop) || 0;
+                curLeft = parseFloat(curCSSLeft) || 0;
+            }
 
 
-            var props = {
-                top: (options.top - curOffset.top) + curTop + "px",
-                left: (options.left - curOffset.left) + curLeft + "px"
-            };
-            sl.css(node, props);
+            if (options.top != null) {
+                props.top = (options.top - curOffset.top) + curTop;
+            }
+            if (options.left != null) {
+                props.left = (options.left - curOffset.left) + curLeft;
+            }
+            sl.css(elem, props);
+
         },
         /**
         *获取元素的position属性
@@ -152,7 +166,17 @@ sl.create(function () {
     */
     sl.offset = function (nodes, value) {
         nodes = sl.Convert.convertToArray(nodes, null, sl);
-        return sl.access(nodes, "offset", value, _offset.getOffset, _offset.setOffset, _offset, null);
+        if (!nodes.length) return;
+        if (!!value) {
+            for (var i = 0; i < nodes.length; i++) {
+                _offset.setOffset(nodes[i], value);
+            }
+        }
+        else {
+            return _offset.getOffset(nodes[0]);
+        }
+
+        return sl.access(nodes, value, null, _offset.getOffset, _offset.setOffset, _offset, null);
     }
     sl.position = function (elem) {
         return _offset.position(elem);
@@ -177,7 +201,7 @@ sl.create(function () {
             if (value !== undefined) {
                 if (win) {
                     win.scrollTo(
-						!index ? value : sl.scrollLef(win),
+						!index ? value : sl.scrollLeft(win),
 						 index ? value : sl.scrollTop(win)
 					);
                 }
@@ -196,7 +220,14 @@ sl.create(function () {
         };
         sl[name] = function (nodes, value) {
             nodes = sl.Convert.convertToArray(nodes, null, sl);
-            return sl.access(nodes, name, value, scrollFun[name], scrollFun[name], null, null);
+            if (!nodes.length) return;
+            if (!!value) {
+                scrollFun[name](nodes[i], value);
+            }
+            else {
+                return scrollFun[name](nodes[0]);
+            
+            }
         };
 
     });

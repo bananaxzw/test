@@ -2668,6 +2668,11 @@ SL().create(function (SL) {
 });
 //offset
 sl.create(function () {
+    /**
+    *DOM元素位置处理
+    *@namespace
+    *@name offset
+    */
     function offset() {
         this.init = function () {
             if (this.Initialed) return;
@@ -2703,8 +2708,10 @@ sl.create(function () {
         };
         this.Initialed = false;
     }
-
     offset.prototype = {
+        /**
+        *@ignore
+        */
         bodyOffset: function (body) {
             var top = body.offsetTop, left = body.offsetLeft;
 
@@ -2717,6 +2724,9 @@ sl.create(function () {
 
             return { top: top, left: left };
         },
+        /**
+        *@ignore
+        */
         getOffset: function (node) {
             if ("getBoundingClientRect" in document.documentElement) {
 
@@ -2743,24 +2753,45 @@ sl.create(function () {
 
             }
         },
-        setOffset: function (node, options) {
-
-            var computedStyle = document.defaultView && document.defaultView.getComputedStyle ? document.defaultView.getComputedStyle(node, null) : node.currentStyle;
-            if (/static/.test(css(node, "position"))) {
-                css(node, "position", "relative");
+        /**
+        *@ignore
+        */
+        setOffset: function (elem, options) {
+            var position = sl.css(elem, "position");
+            if (position === "static") {
+                elem.style.position = "relative";
             }
-            var curOffset = this.getOffset(node);
-            curTop = parseFloats(computedStyle.left) || 0,
-		curLeft = parseInt(computedStyle.left) || 0;
+
+            var curOffset = this.getOffset(elem),
+			curCSSTop = sl.css(elem, "top"),
+			curCSSLeft = sl.css(elem, "left"),
+			calculatePosition = (position === "absolute" || position === "fixed") && (curCSSTop == "auto" || curCSSLeft == "auto"),
+			props = {}, curPosition = {}, curTop, curLeft;
+
+            if (calculatePosition) {
+                curPosition = this.position(elem);
+                curTop = curPosition.top;
+                curLeft = curPosition.left;
+            } else {
+                curTop = parseFloat(curCSSTop) || 0;
+                curLeft = parseFloat(curCSSLeft) || 0;
+            }
 
 
-            var props = {
-                top: (options.top - curOffset.top) + curTop + "px",
-                left: (options.left - curOffset.left) + curLeft + "px"
-            };
-            sl.css(node, props);
+            if (options.top != null) {
+                props.top = (options.top - curOffset.top) + curTop;
+            }
+            if (options.left != null) {
+                props.left = (options.left - curOffset.left) + curLeft;
+            }
+            sl.css(elem, props);
+
         },
-
+        /**
+        *获取元素的position属性
+        *@param elem 元素
+        *@return {top:**,left:**}
+        */
         position: function (elem) {
 
             var offsetParent = this.offsetParent(elem), offset = this.getOffset(elem);
@@ -2778,7 +2809,9 @@ sl.create(function () {
                 left: offset.left - parentOffset.left
             };
         },
-
+        /**
+        *@ignore
+        */
         offsetParent: function (elem) {
 
             var offsetParent = elem.offsetParent || document.body;
@@ -2789,18 +2822,42 @@ sl.create(function () {
         }
 
     }
-
     var _offset = new offset();
+    /**
+    *设置或者获取元素的位置 相对于页面
+    *@memberOf offset
+    *@param nodes DOM元素
+    *@param value 位置的值{left:,top:} 当为空时候表示获取值
+    *@return {top:**,left:**}
+    */
     sl.offset = function (nodes, value) {
         nodes = sl.Convert.convertToArray(nodes, null, sl);
-        return sl.access(nodes, "offset", value, _offset.getOffset, _offset.setOffset, _offset, null);
+        if (!nodes.length) return;
+        if (!!value) {
+            for (var i = 0; i < nodes.length; i++) {
+                _offset.setOffset(nodes[i], value);
+            }
+        }
+        else {
+            return _offset.getOffset(nodes[0]);
+        }
+
+        return sl.access(nodes, value, null, _offset.getOffset, _offset.setOffset, _offset, null);
     }
     sl.position = function (elem) {
         return _offset.position(elem);
     };
     var scrollFun = {};
+    /**
+    *设置或者获取元素的scrollLeft
+    *@memberOf offset
+    @name scrollLeft
+    *@param nodes DOM元素
+    *@param value 位置的值{left:,top:} 当为空时候表示获取值
+    *@return {top:**,left:**}
+    */
     sl.each(["scrollLeft", "scrollTop"], function (index, name) {
-        scrollFun[name] = function (elem, nouse, value) {
+        scrollFun[name] = function (elem, value) {
 
             var win = ("scrollTo" in elem && elem.document) ? elem : (elem.nodeType == 9) ? (elem.defaultView || elem.parentWindow) : false;
             if (!elem) {
@@ -2810,7 +2867,7 @@ sl.create(function () {
             if (value !== undefined) {
                 if (win) {
                     win.scrollTo(
-						!index ? value : sl.scrollLef(win),
+						!index ? value : sl.scrollLeft(win),
 						 index ? value : sl.scrollTop(win)
 					);
                 }
@@ -2829,7 +2886,14 @@ sl.create(function () {
         };
         sl[name] = function (nodes, value) {
             nodes = sl.Convert.convertToArray(nodes, null, sl);
-            return sl.access(nodes, name, value, scrollFun[name], scrollFun[name], null, null);
+            if (!nodes.length) return;
+            if (!!value) {
+                scrollFun[name](nodes[i], value);
+            }
+            else {
+                return scrollFun[name](nodes[0]);
+
+            }
         };
 
     });
