@@ -224,9 +224,9 @@ sl.create(function () {
                     var fixAtrrs = sizeParams[i], val = parseFloat(getStyle(elem, d)), isOuter = (n == "outer");
                     if (!sl.InstanceOf.Window(elem)) {
                         sl.each(fixAtrrs, function (f, g) {
-                            val += parseFloat(getStyle(elem, "padding" + g));
+                            val += parseFloat(getStyle(elem, "padding" + g))||0;
                             if (isOuter) {
-                                val += parseFloat(getStyle(elem, "border" + g + "Width"));
+                                val += parseFloat(getStyle(elem, "border" + g + "Width"))||0;
                             }
                         });
                     };

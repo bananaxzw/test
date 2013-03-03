@@ -54,7 +54,7 @@ vertical-align: baseline;
 }
 .container-fluid 
 {
-    
+     height:100%;
 	  *zoom:1;
 }
 .container-fluid:before,.container-fluid:after {
@@ -67,6 +67,7 @@ vertical-align: baseline;
 }
 .row-fluid {
 	  width:100%;
+	  height:100%;
 	*zoom:1;
 }
 .row-fluid:before,.row-fluid:after {
@@ -80,6 +81,7 @@ vertical-align: baseline;
 .row-fluid [class*="span"] {
 	  display:block;
 	width:100%;
+	
 	min-height:30px;
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing:border-box;
@@ -97,12 +99,12 @@ vertical-align: baseline;
 .row-fluid .span10 {
 	  width:82.97872340425532%;
 	*width:82.92553191489361%;
+	height:100%;
 }
 .row-fluid .span2 {
 	  width:14.893617021276595%;
 	*width:14.840425531914894%;
 	height:100%;
-	 background:#F3F3F3;
 }
 .row-fluid .span1 {
 	  width:6.382978723404255%;

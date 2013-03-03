@@ -1113,6 +1113,8 @@
     <Content Include="JsLib\SLDocument.js" />
     <Content Include="JsLib\support.htm" />
     <Content Include="JsLib\throttle.htm" />
+    <Content Include="JsLib\UI\docs\autocomplete.htm" />
+    <Content Include="JsLib\UI\docs\class.htm" />
     <Content Include="JsLib\UI\docs\css\style.css" />
     <Content Include="JsLib\UI\default\SLDialog.css" />
     <Content Include="JsLib\UI\default\waterfall.css" />
