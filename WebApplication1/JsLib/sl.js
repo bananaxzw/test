@@ -2899,8 +2899,7 @@ sl.create(function () {
     });
 });
 //css
-SL().create(function () {
-
+sl.create(function () {
     var colorNameMap = {
         aqua: '#0ff',
         black: '#000',
@@ -3118,9 +3117,9 @@ SL().create(function () {
                     var fixAtrrs = sizeParams[i], val = parseFloat(getStyle(elem, d)), isOuter = (n == "outer");
                     if (!sl.InstanceOf.Window(elem)) {
                         sl.each(fixAtrrs, function (f, g) {
-                            val += parseFloat(getStyle(elem, "padding" + g));
+                            val += parseFloat(getStyle(elem, "padding" + g)) || 0;
                             if (isOuter) {
-                                val += parseFloat(getStyle(elem, "border" + g + "Width"));
+                                val += parseFloat(getStyle(elem, "border" + g + "Width")) || 0;
                             }
                         });
                     };
@@ -3225,6 +3224,16 @@ SL().create(function () {
             } catch (e) { }
         }
     };
+    /**
+    *获取或者设置元素的style样式 
+    *@memberOf css
+    *@function
+    *@name css
+    *@param  nodes 单个DOM或者元素数组
+    *@param style 样式名称 可以是单个样式 例如backgroundColor:red;或者{backgroundColor:red;color:red;}形式
+    *@param value 样式的值 当style不为object并且value为空表示获取样式值 否则则相反
+    *获取时候
+    */
     sl.css = window.css = function (nodes, style, value) {
         nodes = sl.Convert.convertToArray(nodes, null, sl);
         return sl.access(nodes, style, value, getStyle, setStyle);
