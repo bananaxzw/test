@@ -1126,6 +1126,7 @@
     <Content Include="JsLib\UI\dialogElement.htm" />
     <Content Include="JsLib\UI\docs\js\hl-all.js" />
     <Content Include="JsLib\UI\docs\js\style.css" />
+    <Content Include="JsLib\UI\docs\menu.htm" />
     <Content Include="JsLib\UI\docs\UIIndex.htm" />
     <Content Include="JsLib\UI\docs\combobox.htm" />
     <Content Include="JsLib\UI\documentLazy.htm" />

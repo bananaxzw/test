@@ -339,7 +339,7 @@ sl.create("sl.ui", function () {
     this.autocomplete = sl.Class(
     {
         init: function (elem, options) {
-            if (!elem) throw new Error("为设定元素！");
+            if (!elem) throw new Error("未设定元素！");
             var opts = {};
             var state = sl.data(elem, 'CalvinAutoComplete.data');
             if (state) {

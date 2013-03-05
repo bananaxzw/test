@@ -10,7 +10,7 @@ sl.create("sl.ui", function () {
         width: 140,
         autoOpen: false,
         click: function () { },
-        isTopMenuAlwaysOpen:false
+        isTopMenuAlwaysOpen: false
     };
 
     this.menu = sl.Class(
@@ -25,8 +25,8 @@ sl.create("sl.ui", function () {
             $(document).bind('click', function () { menuHelper.hideAllSubMenu($(elem)); });
         },
         /*为contextMenu提供的接口*/
-        _showMenu: function ($menu, pos) {
-            menuHelper.showMenu($menu, pos);
+        showMenu: function (pos) {
+            menuHelper.showMenu($(this.elem), pos);
         },
         hide: function () {
             menuHelper.hideAllMenu($(this.elem));
@@ -123,12 +123,15 @@ sl.create("sl.ui", function () {
         },
         hideAllMenu: function ($target) {
             var data = $target.data("slmenu");
-            // var pts = $.data(target, 'menu').options;
+            var opts =$target.data('slmenu').options;
             this.hideMenu($target);
             if (data.onHide) {
                 data.onHide.call($target.elements[0]);
             }
             //  $(document).unbind('.menu');
+            if (opts.isTopMenuAlwaysOpen) {
+                this.showMenu($target);
+            }
             return false;
         },
         hideAllSubMenu: function ($menu) {
@@ -140,7 +143,7 @@ sl.create("sl.ui", function () {
                 }
                 $(this).removeClass('menu-active');
             });
-        
+
         }
 
     };

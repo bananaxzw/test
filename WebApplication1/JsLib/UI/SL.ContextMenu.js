@@ -19,7 +19,7 @@ sl.create("sl.ui", function () {
             var temp = new sl.ui.menu(elem, options);
             $(document).bind('contextmenu', function (e) {
                 temp.hide();
-                temp._showMenu($(document.getElementById("safsa")), {
+                temp.showMenu({
                     left: e.pageX,
                     top: e.pageY
                 });

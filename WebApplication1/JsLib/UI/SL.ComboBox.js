@@ -11,7 +11,8 @@ sl.create("sl.ui", function () {
     this.combobox = sl.Class(
     {
         init: function (elem, options) {
-            var options = sl.extend({}, defaults, options), $this = $(elem);
+            if (!elem) throw new Error("未设定元素！");
+            var options = sl.extend(true,{}, defaults, options), $this = $(elem);
             if (data = $this.data("CalvinAutoComplete.data")) {
                 this.clearAll(elem);
                 data.ItemsContainer = null, data.TextBoxContainer = null, data.dropdownIcon = null;
