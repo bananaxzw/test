@@ -16,6 +16,7 @@ sl.create("sl.ui", function () {
     this.menu = sl.Class(
     {
         init: function (elem, options) {
+            if (!elem) throw new Error("未设定元素！");
             this.elem = elem;
             var opts = sl.extend({}, defaults, options);
             sl.data(elem, "slmenu", { options: opts });
@@ -123,7 +124,7 @@ sl.create("sl.ui", function () {
         },
         hideAllMenu: function ($target) {
             var data = $target.data("slmenu");
-            var opts =$target.data('slmenu').options;
+            var opts = $target.data('slmenu').options;
             this.hideMenu($target);
             if (data.onHide) {
                 data.onHide.call($target.elements[0]);
