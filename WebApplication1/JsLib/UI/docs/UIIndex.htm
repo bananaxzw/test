@@ -19,10 +19,10 @@
 	}
 	},
 	{ text: 'combobox', click: function () { goto1("combobox.htm"); } },
-    { text: '菜单', sub: [{text:'普通菜单'},{text:'右键菜单'}] },
+    { text: '菜单', sub: [{ text: '普通菜单', click: function () { goto1("menu.htm") } }, { text: '右键菜单', click: function () { goto1("contextmenu.htm"); } }] },
 	{ line: true },
-	{ text: '粘贴', ico: 'paste.gif', click: function (text,value) { alert('粘不了!') } },
-	{ text: 'asfsa', disabled: true },
+	{ text: '选项卡', sub: [{ text: '水平', click: function () { goto1("tab.htm") } }, { text: '垂直', click: function () { alert("尚未完成啊"); } }] },
+	{ text: '基础UI', sub: [{ text: '拖动', click: function () { goto1("drag.htm") } }, { text: '垂直', click: function () { alert("尚未完成啊"); } }] },
 	{ text: '重命名', disabled: true },
 	{ line: true },
 	{ text: '新建', ico: 'add.gif', sub: [

@@ -2,22 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-     <script src="../sl.js" type="text/javascript"></script>
+    <script src="../sl.js" type="text/javascript"></script>
     <script src="../SL.Node.js" type="text/javascript"></script>
     <script src="SL.TAB.js" type="text/javascript"></script>
     <link href="default/tabs.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
         var tt;
         sl.ready(function () {
-
             tt = new sl.ui.tab(document.getElementById("tt"));
-             tt.se
-           // $("#tt").CalvinTabs();
-         
         })
         var index = 0;
         function addTab() {
-    
             index++;
             tt.add({
                 title: 'New Tab ' + index,
@@ -37,19 +32,17 @@
         }
         function SelectedByIndex4() {
             tt.selectAt(4);
-
         }
     
     </script>
 </head>
 <body>
-    <input id="Button1" type="button" value="button"   onclick="addTab();" />
-    <input id="Button2"
-        type="button" value="获取选中信息" onclick='getSelected();' />
-    <input id="Button3" type="button" value="选中第三个"  onclick="SelectedByIndex3();"/>
-    <input id="Button4" type="button" value="选中第④个"  onclick="SelectedByIndex4();"/>
-   <div id="tt" style="width: 700px; height: 250px;">
-        <div title="Tab1" style="padding: 20px; overflow:auto">
+    <input id="Button1" type="button" value="添加" onclick="addTab();" />
+    <input id="Button2" type="button" value="获取选中信息" onclick='getSelected();' />
+    <input id="Button3" type="button" value="选中第三个" onclick="SelectedByIndex3();" />
+    <input id="Button4" type="button" value="选中第④个" onclick="SelectedByIndex4();" />
+    <div id="tt" style="width: 700px; height: 250px;">
+        <div title="Tab1" style="padding: 20px; overflow: auto">
             <p>
                 fsf</p>
             <p>
@@ -76,11 +69,11 @@
         <div title="Tab2" closable="true" style="padding: 20px;" cache="false" href="tabs_href_test.html">
             This is Tab2 with close button.
         </div>
-        <div title="Tab3" iconcls="icon-reload" closable="true" style="padding: 20px;">
-     asfasfsaf
+        <div title="Tab3" iconcls="icon-reload" closable="true" style="padding: 20px;" selected=true>
+            asfasfsaf
         </div>
-        <div title="Tab5 with sub tabs" closable="true" iconcls="icon-cut" style="padding: 10px;">
-           asfsafsa
+        <div title="Tab5 with sub tabs" closable="true" iconcls="icon-cut" style="padding: 10px;" >
+            asfsafsa
         </div>
     </div>
 </body>

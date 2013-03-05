@@ -2888,7 +2888,9 @@ sl.create(function () {
             nodes = sl.Convert.convertToArray(nodes, null, sl);
             if (!nodes.length) return;
             if (!!value) {
-                scrollFun[name](nodes[i], value);
+                for (var i = 0; i < nodes.length; i++) {
+                    scrollFun[name](nodes[i], value);
+                }
             }
             else {
                 return scrollFun[name](nodes[0]);
