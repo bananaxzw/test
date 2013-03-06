@@ -29,6 +29,7 @@
     }
     var j = jQuery.noConflict();
     j(function () {
+        j(document.documentElement).offset();
         j(document).outerHeight();
         alert($("#safsaf").val());
         document.getElementById("Button1");
