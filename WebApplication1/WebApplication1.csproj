@@ -1127,8 +1127,10 @@
     <Content Include="JsLib\UI\dialogElement.htm" />
     <Content Include="JsLib\UI\docs\drag.htm" />
     <Content Include="JsLib\UI\docs\droppable.htm" />
+    <Content Include="JsLib\UI\docs\imageLazyload.htm" />
     <Content Include="JsLib\UI\docs\js\hl-all.js" />
     <Content Include="JsLib\UI\docs\js\style.css" />
+    <Content Include="JsLib\UI\docs\lazyload.htm" />
     <Content Include="JsLib\UI\docs\menu.htm" />
     <Content Include="JsLib\UI\docs\tab.htm" />
     <Content Include="JsLib\UI\docs\UIIndex.htm" />
@@ -1136,6 +1138,7 @@
     <Content Include="JsLib\UI\documentLazy.htm" />
     <Content Include="JsLib\UI\dragContainer.htm" />
     <Content Include="JsLib\UI\droppable.html" />
+    <Content Include="JsLib\UI\HTMLPage1.htm" />
     <Content Include="JsLib\UI\imageLazyLoad1.htm" />
     <Content Include="JsLib\UI\ImagesLazyLoad.htm" />
     <Content Include="JsLib\UI\docs\img\header.png" />
