@@ -131,6 +131,9 @@
     <Compile Include="JsLib\UI\ajaxdata.ashx.cs">
       <DependentUpon>ajaxdata.ashx</DependentUpon>
     </Compile>
+    <Compile Include="JsLib\UI\bottomloaded.ashx.cs">
+      <DependentUpon>bottomloaded.ashx</DependentUpon>
+    </Compile>
     <Compile Include="JsLib\WebForm2.aspx.cs">
       <DependentUpon>WebForm2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1132,6 +1135,7 @@
     <Content Include="JsLib\UI\docs\js\style.css" />
     <Content Include="JsLib\UI\docs\lazyload.htm" />
     <Content Include="JsLib\UI\docs\menu.htm" />
+    <Content Include="JsLib\UI\docs\scrollbottom.htm" />
     <Content Include="JsLib\UI\docs\tab.htm" />
     <Content Include="JsLib\UI\docs\UIIndex.htm" />
     <Content Include="JsLib\UI\docs\combobox.htm" />
@@ -2790,6 +2794,7 @@
     <None Include="JsLib\JsDOC\jsdoc-toolkit\templates\SL_doc_zh-cn\副本 class.tmpl" />
     <None Include="JsLib\JsDOC\SL-doc-config.conf" />
     <Content Include="JsLib\UI\ajaxdata.ashx" />
+    <Content Include="JsLib\UI\bottomloaded.ashx" />
     <None Include="JsLib\UI\default\images\Thumbs.db" />
     <None Include="KITJS\KitJs\.project" />
     <None Include="KITJS\KitJs\.settings\org.eclipse.core.resources.prefs" />

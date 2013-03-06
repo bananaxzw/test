@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
@@ -8,6 +7,15 @@
         {
             height: 400px;
             overflow: auto;
+        }
+        #safsa li
+        {
+            line-height: 40px;
+            height: 40px;
+            width: 70%;
+            background: #d0d0d0;
+            margin-top: 20px;
+            list-style-type: none;
         }
     </style>
 </head>
@@ -111,7 +119,7 @@
         </div>
     </ul>
     <ul id="safsa">
-        <li id="ssssss">fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
+        <li id="ssssss">sfasfF</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
@@ -220,14 +228,28 @@
         $(window).scroll(function () {
             console.log($(document.documentElement).offset().top);
 
-        })
+        });
+
+        var i = 1;
+        var ttt = sl.throttle(10000, function () {
+            $("#Ul1").append("<li>第" + i + "次加载</li> <li>第" + i + "次加载</li>");
+            alert(2);
+            i++;
+        });
         var mm = new sl.ui.bottomload({ container: document.getElementById("Ul1"), onReach: function () {
-            $("#Ul1").append("<li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li> <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>");
+
+            var tt = $("<li>加载中</li>");
+            $("#Ul1").append(tt);
+           
+            ttt();
+            alert(1);
+            // $("#Ul1").remove(tt);
         }
         });
+        var j = 1;
         var tt = new sl.ui.bottomload({ onReach: function () {
-            $("#safsa").append("<li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li> <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>");
-
+            $("#safsa").append("<li>第" + j + "次加载</li> <li>第" + j + "次加载</li>");
+            j++;
         }
         });
       
