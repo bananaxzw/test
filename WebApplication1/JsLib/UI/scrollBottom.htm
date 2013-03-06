@@ -111,7 +111,7 @@
         </div>
     </ul>
     <ul id="safsa">
-        <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
+        <li id="ssssss">fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
         <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>
@@ -216,6 +216,11 @@
         //怪异模式  document.body.scrollHeight
         //标准模式IE document.body.clientHeight
         //标准其他 //标准模式其他  document.body.clientHeight
+
+        $(window).scroll(function () {
+            console.log($(document.documentElement).offset().top);
+
+        })
         var mm = new sl.ui.bottomload({ container: document.getElementById("Ul1"), onReach: function () {
             $("#Ul1").append("<li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li> <li>fsafsafasfsafsaaaaafasssssssssssssssssssssssssssssssssssaaaaaa</li>");
         }
