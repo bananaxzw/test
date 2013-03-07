@@ -6,7 +6,10 @@ sl.create("sl.ui", function () {
     var defaults = {
         LoadRadius: 5, //加载范围
         onReach: function () { },
-        onLoad: function () { },
+        LoadData: function (data) { },
+        LoadError: function (xhr, status, error) { },
+        ajaxRequest: false,
+        ajaxOption: sl.ajaxSettting,
         container: window
     };
     this.bottomload = sl.Class(
@@ -28,16 +31,37 @@ sl.create("sl.ui", function () {
         var scrollheight = ScrollHelper.getScrollRect(this.opts.container).height,
              scrollTop = $(this.opts.container).scrollTop(),
              height = ScrollHelper.getVisiableRect(this.opts.container).height,
-             LoadRadius = this.opts.LoadRadius;
+             LoadRadius = this.opts.LoadRadius, _this = this;
         if ((scrollTop + height - scrollheight) >= LoadRadius || (scrollTop + height - scrollheight) >= -LoadRadius) {
             ++this.page;
-            if (this.opts.onReach) {
-                if (this.loaded) {
-                    this.loaded = false;
-                    this.opts.onReach.apply(this);
-                    this.loaded = true;
+            if (this.loaded) {
+                //同步加载
+                this.setLoadedState(false);
+                this.opts.onReach.apply(this);
+                if (!this.opts.ajaxRequest) {
+                    this.opts.LoadData.apply(this);
+                    this.setLoadedState(true);
+                }
+                else {
+                    var ajaxOptions = sl.extend({}, this.opts.ajaxOption, {
+                        onTimeout: function () {
+                            _this.opts.LoadError.call(_this, xhr, status, "请求超时");
+                            _this.setLoadedState(true);
+                        },
+                        success: function (data, status, xhr) {
+                            _this.opts.LoadData.call(_this, data);
+                            _this.setLoadedState(true);
+                        },
+                        error: function (xhr, status, error) {
+                            _this.opts.LoadError.call(_this, xhr, status, error);
+                            _this.setLoadedState(true);
+                        }
+                    });
+                    sl.ajax(ajaxOptions);
                 }
             }
+
+
         }
     };
 
@@ -75,7 +99,6 @@ sl.create("sl.ui", function () {
             );
             }*/
         }
-
     };
 
 });
