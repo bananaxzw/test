@@ -6,6 +6,7 @@ sl.create("sl.ui", function () {
     var defaults = {
         LoadRadius: 5, //加载范围
         onReach: function () { },
+        onLoad: function () { },
         container: window
     };
     this.bottomload = sl.Class(
@@ -13,10 +14,14 @@ sl.create("sl.ui", function () {
         init: function (options) {
             this.opts = sl.extend({}, defaults, options);
             this.page = 1;
+            this.loaded = true;
             var othis = this;
             $(sl.InstanceOf.BodyOrHtmlOrWindow(this.opts.container) ? window : this.opts.container).scroll(sl.throttle(100, function () {
                 othis.onScroll.apply(othis);
             }, true));
+        },
+        setLoadedState: function (state) {
+            this.loaded = state;
         }
     });
     this.bottomload.prototype.onScroll = function () {
@@ -27,7 +32,11 @@ sl.create("sl.ui", function () {
         if ((scrollTop + height - scrollheight) >= LoadRadius || (scrollTop + height - scrollheight) >= -LoadRadius) {
             ++this.page;
             if (this.opts.onReach) {
-                this.opts.onReach.apply(this);
+                if (this.loaded) {
+                    this.loaded = false;
+                    this.opts.onReach.apply(this);
+                    this.loaded = true;
+                }
             }
         }
     };
