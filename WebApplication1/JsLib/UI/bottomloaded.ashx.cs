@@ -10,11 +10,16 @@ namespace WebApplication1.JsLib.UI
     /// </summary>
     public class bottomloaded : IHttpHandler
     {
+        static int  i = 0;
+
 
         public void ProcessRequest(HttpContext context)
         {
+            System.Threading.Thread.Sleep(2000);
             context.Response.ContentType = "text/plain";
-            context.Response.Write("Hello World");
+            
+            context.Response.Write("<li>"+i+"加载</li><li>"+i+"加载</li>");
+            i++;
         }
 
         public bool IsReusable

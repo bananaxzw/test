@@ -225,10 +225,10 @@
         //标准模式IE document.body.clientHeight
         //标准其他 //标准模式其他  document.body.clientHeight
 
-        $(window).scroll(function () {
-            console.log($(document.documentElement).offset().top);
+        //        $(window).scroll(function () {
+        //            console.log($(document.documentElement).offset().top);
 
-        });
+        //        });
 
         var i = 1;
         var ttt = sl.throttle(10000, function () {
@@ -240,17 +240,26 @@
 
             var tt = $("<li>加载中</li>");
             $("#Ul1").append(tt);
-           
+
             ttt();
             alert(1);
             // $("#Ul1").remove(tt);
         }
         });
         var j = 1;
-        var tt = new sl.ui.bottomload({ onReach: function () {
-            $("#safsa").append("<li>第" + j + "次加载</li> <li>第" + j + "次加载</li>");
-            j++;
-        }
+
+        var tt111 = $("<li>加载中</li>");
+        var tt = new sl.ui.bottomload(
+        { onReach: function () {
+
+            $("#safsa").append(tt111);
+        },
+            LoadData: function (data) {
+                $("#safsa").append(data);
+                $(tt111).remove();
+            },
+            ajaxRequest: true,
+            ajaxOption: { url: "bottomloaded.ashx" }
         });
       
     </script>
