@@ -2,7 +2,7 @@
 /// <reference path="../SL.Node.js" />
 /// <reference path="SL.Mask.js" />
 
-sl.create("sl.ui",function () {
+sl.create("sl.ui", function () {
     var Defaults = {
         title: "",
         footer: "",
@@ -11,7 +11,7 @@ sl.create("sl.ui",function () {
         showFooter: true,
         zIndex: 1000,
         showClose: true,
-        autoShow: true,
+        autoShow: false,
         centerX: true,
         centerY: true,
         showOverlay: true,
@@ -41,6 +41,9 @@ sl.create("sl.ui",function () {
             DialogHelper.createMask(elem);
             DialogHelper.wrapDialog(elem);
             DialogHelper.setDialogStyle(elem);
+            if (!options.autoShow) {
+                this.close();
+            }
         },
         close: function () {
             DialogHelper.close(this.elem);
@@ -91,9 +94,6 @@ sl.create("sl.ui",function () {
                 dialogContent.append(dialogFooter);
             }
             $dialog.append(dialogContent);
-            if (!opts.autoShow) {
-                $dialog.hide();
-            }
             $(elem).append($dialog);
             dialogData.$dialog = $dialog;
         },
@@ -104,6 +104,7 @@ sl.create("sl.ui",function () {
                 var mask = new sl.ui.masker(dialogData.container, { baseZ: opts.zIndex++, overlayCSS: opts.overlayCSS });
                 dialogData.mask = mask;
             }
+
         },
         setDialogStyle: function (elem) {
             var dialogData = sl.data(elem, "sldialog");
