@@ -1128,6 +1128,7 @@
     <Content Include="JsLib\UI\demisionWindow.htm" />
     <Content Include="JsLib\UI\dialog.htm" />
     <Content Include="JsLib\UI\dialogElement.htm" />
+    <Content Include="JsLib\UI\docs\dialog.htm" />
     <Content Include="JsLib\UI\docs\drag.htm" />
     <Content Include="JsLib\UI\docs\droppable.htm" />
     <Content Include="JsLib\UI\docs\imageLazyload.htm" />
@@ -1135,6 +1136,7 @@
     <Content Include="JsLib\UI\docs\js\style.css" />
     <Content Include="JsLib\UI\docs\lazyload.htm" />
     <Content Include="JsLib\UI\docs\menu.htm" />
+    <Content Include="JsLib\UI\docs\resizeableDemo.htm" />
     <Content Include="JsLib\UI\docs\scrollbottom.htm" />
     <Content Include="JsLib\UI\docs\tab.htm" />
     <Content Include="JsLib\UI\docs\UIIndex.htm" />
