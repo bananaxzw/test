@@ -236,24 +236,26 @@
             alert(2);
             i++;
         });
-        var mm = new sl.ui.bottomload({ container: document.getElementById("Ul1"), onReach: function () {
-
-            var tt = $("<li>加载中</li>");
-            $("#Ul1").append(tt);
-
-            ttt();
-            alert(1);
-            // $("#Ul1").remove(tt);
-        }
+        var waitingContent = $("<li>加载中...........</li>");
+        var mm = new sl.ui.bottomload({ container: document.getElementById("Ul1"),
+            onReach: function () {
+                $("#Ul1").append(waitingContent);
+            },
+            LoadData: function (data) {
+                $("#Ul1").append(data);
+                $(waitingContent).remove();
+            },
+            ajaxRequest: true,
+            ajaxOption: { url: "bottomloaded.ashx" }
         });
         var j = 1;
 
-        var tt111 = $("<li>加载中</li>");
+        var tt111 = $("<li>加载中...........</li>");
         var tt = new sl.ui.bottomload(
-        { onReach: function () {
-
-            $("#safsa").append(tt111);
-        },
+        {
+            onReach: function () {
+                $("#safsa").append(tt111);
+            },
             LoadData: function (data) {
                 $("#safsa").append(data);
                 $(tt111).remove();
