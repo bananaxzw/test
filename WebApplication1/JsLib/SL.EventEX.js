@@ -140,7 +140,7 @@ sl.create(function () {
         *@param  elem DOM元素
         *@param types 事件类型"click"  "click mouseover"
         *@param handler 事件处理函数
-        *@param data  事件的额外数据 可以在event.extendData中获取到
+        *@param data  事件的额外数据 可以在event.data中获取到
         */
         addEvent: function (elem, types, handler, data, selector) {
             var elemData, eventHandle, events,
@@ -536,7 +536,7 @@ sl.create(function () {
                     //3.命名空间和触发的命名空间一致
                     if (run_all || (!event.namespace && !handleObj.namespace) || event.namespace_re && event.namespace_re.test(handleObj.namespace)) {
 
-                        event.extendData = handleObj.data;
+                        event.data = handleObj.data;
                         event.handleObj = handleObj;
 
                         ret = ((specialEvent[handleObj.origType] || {}).handle || handleObj.handler)

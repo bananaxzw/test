@@ -372,6 +372,7 @@
     <Content Include="CalvinUI\CSS\icons\sum.png" />
     <Content Include="CalvinUI\CSS\icons\tip.png" />
     <Content Include="CalvinUI\CSS\icons\undo.png" />
+    <Content Include="CalvinUI\CSS\QQ.css" />
     <Content Include="CalvinUI\CSS\tablecss.css" />
     <Content Include="CalvinUI\CSS\tablesorter.css" />
     <Content Include="CalvinUI\dragContainer.htm" />
@@ -404,6 +405,7 @@
     <Content Include="CalvinUI\JS\jquery.min.js" />
     <Content Include="CalvinUI\JS\jquery.tablesorter.js" />
     <Content Include="CalvinUI\JS\json2.js" />
+    <Content Include="CalvinUI\JS\QQInput.js" />
     <Content Include="CalvinUI\JS\table.js" />
     <Content Include="CalvinUI\JS\tablejs.htm" />
     <Content Include="CalvinUI\JS\table_cellindex.htm" />
@@ -413,6 +415,7 @@
     <Content Include="CalvinUI\menu.htm" />
     <Content Include="CalvinUI\MenuButton.htm" />
     <Content Include="CalvinUI\panelDemo.html" />
+    <Content Include="CalvinUI\QQInput.htm" />
     <Content Include="CalvinUI\resizeableDemo.htm" />
     <Content Include="CalvinUI\tabDemo.htm" />
     <Content Include="CalvinUI\tableSorter.htm" />

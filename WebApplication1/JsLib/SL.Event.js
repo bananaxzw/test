@@ -37,10 +37,10 @@ SL().create(function (SL) {
         *@example 
         * var tt = document.getElementById("sff");
         * SL().Event.addEvent(tt, "click", function (event) {
-        *    console.log(event.extendData.name);
+        *    console.log(event.data.name);
         *}, { "name": "xuzhiwei" });
         *SL().Event.addEvent(tt, "click", function (event) {
-        *    console.log(event.extendData.name);
+        *    console.log(event.data.name);
         *}, { "name": "xuzhiwei1" });
         *function see() {
         *    alert("i see you!");
@@ -83,7 +83,7 @@ SL().create(function (SL) {
                 //遍历已经缓存到元素的事件
                 for (var i in handlers) {
                     var handler = handlers[i]["handler"];
-                    event.extendData = handlers[i]["data"];
+                    event.data = handlers[i]["data"];
                     var ret = handler.apply(this, !!arguments.length ? arguments : [event]);
 
                     if (ret !== undefined) {

@@ -356,7 +356,7 @@ sl.create("sl.ui", function () {
         * @param tab 要选中的tab头
         */
         selectTab: function (event) {
-            var $this = event.extendData.tab, target = event.extendData.target;
+            var $this = event.data.tab, target = event.data.target;
             var data = sl.data(target, "tabs"), tabs = $('ul.tabs', header);
             var header = data.header, TabOpt = sl.data($this.elements[0], "tabs.tab");
             $('.tabs-selected', tabs).removeClass('tabs-selected');
@@ -413,7 +413,7 @@ sl.create("sl.ui", function () {
         */
         onClose: function (event) {
             event.preventDefault();
-            var target = event.extendData.target;
+            var target = event.data.target;
             var eventTab = event.target.parentNode;
             eventHelper.closeTab(target, eventTab);
             event.stopPropagation();
@@ -451,7 +451,7 @@ sl.create("sl.ui", function () {
         },
 
         onScrollLeft: function (event) {
-            var target = event.extendData.target;
+            var target = event.data.target;
             eventHelper.scrollLeft(target);
             event.stopPropagation();
         },
@@ -470,7 +470,7 @@ sl.create("sl.ui", function () {
             wrap.scrollLeft(pos);
         },
         onScrollRight: function (event) {
-            var target = event.extendData.target;
+            var target = event.data.target;
             eventHelper.scrollRight(target);
             event.stopPropagation();
         },

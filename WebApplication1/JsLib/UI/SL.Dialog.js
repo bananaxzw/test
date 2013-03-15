@@ -112,14 +112,14 @@ sl.create("sl.ui", function () {
             //IE6的话 可以采用setExpression来居中消息   其他的可以采用fiexed属性来居中
             if (sl.Browser.ie == 6.0 && full) {
                 $dialog.css("position", 'absolute');
-                $dialog.elements[0].style.setExpression('top', '(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (document.documentElement.scrollTop||document.body.scrollTop) + "px"');
-                $dialog.elements[0].style.setExpression('left', '(document.documentElement.clientWidth || document.body.clientWidth) / 2 - (this.offsetWidth / 2) + (document.documentElement.scrollLeft||document.body.scrollLeft) + "px"');
+                $dialog.get(0).style.setExpression('top', '(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (document.documentElement.scrollTop||document.body.scrollTop) + "px"');
+                $dialog.get(0).style.setExpression('left', '(document.documentElement.clientWidth || document.body.clientWidth) / 2 - (this.offsetWidth / 2) + (document.documentElement.scrollLeft||document.body.scrollLeft) + "px"');
             }
             else if (full) {
                 $dialog.addClass('Dialogfull');
             }
             else {
-                StyleHelper.center($dialog.elements[0], opts.centerX, opts.centerY);
+                StyleHelper.center($dialog.get(0), opts.centerX, opts.centerY);
             }
 
 

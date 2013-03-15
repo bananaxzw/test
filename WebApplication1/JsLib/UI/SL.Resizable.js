@@ -56,12 +56,12 @@ sl.create("sl.ui",function () {
     };
     var eventHelper = {
         beginResize: function (event) {
-            sl.data(event.extendData.target, 'resizable').options.onStartResize.call(event.extendData.target, event);
+            sl.data(event.data.target, 'resizable').options.onStartResize.call(event.data.target, event);
             return false;
         },
         onResize: function (event) {
-            sl.data(event.extendData.target, 'resizable').options.onResize.call(event.extendData.target, event);
-            var resizeData = event.extendData, options = sl.data(resizeData.target, 'resizable').options, height, width;
+            sl.data(event.data.target, 'resizable').options.onResize.call(event.data.target, event);
+            var resizeData = event.data, options = sl.data(resizeData.target, 'resizable').options, height, width;
             //拖拉后的高度
 
             if (resizeData.dir.indexOf('w') != -1) {
@@ -108,7 +108,7 @@ sl.create("sl.ui",function () {
             eventHelper.applySize(event);
         },
         stopResize: function (event) {
-            sl.data(event.extendData.target, 'resizable').options.onStopResize.call(event.extendData.target, event);
+            sl.data(event.data.target, 'resizable').options.onStopResize.call(event.data.target, event);
             eventHelper.onResize(event);
             eventHelper.applySize(event);
             $(document).unbind('mousedown');
@@ -119,7 +119,7 @@ sl.create("sl.ui",function () {
         },
         //最后应用长宽
         applySize: function (event) {
-            var resizeData = event.extendData;
+            var resizeData = event.data;
             var target = resizeData.target;
             //            if ($.boxModel == true) {
             $(target).css({
