@@ -152,7 +152,8 @@ sl.create("sl.ui", function () {
         * @return 返回选中元素的jq对象
         */
         getSelectedItem: function ($itemContainer) {
-            var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer.elements[0]);
+            if (!$itemContainer) return;
+            var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer.get(0));
             if ($SelectedItem.length != 0) {
                 return $SelectedItem.eq(0);
             }
@@ -177,12 +178,12 @@ sl.create("sl.ui", function () {
                 if (data == null || data.ItemsContainer == null) return;
 
                 var $itemContainer = data.ItemsContainer;
-                var $items = $(">li", $itemContainer.elements[0]);
+                var $items = $(">li", $itemContainer.get(0));
                 var itemsCount = $items.length;
-                var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer.elements[0]);
-                var SelectIndex = $items.index($SelectedItem.elements[0]);
+                var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer.get(0));
+                var SelectIndex = $items.index($SelectedItem.get(0));
                 switch (event.keyCode) {
-                    //向上                                                                                                                                    
+                    //向上                                                                                                                                     
                     case 38:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
 
@@ -190,7 +191,7 @@ sl.create("sl.ui", function () {
                             $SelectedItem.prev().addClass("ui-menu-itemHover");
                         }
                         break;
-                    //向下                                                                                                                                 
+                    //向下                                                                                                                                  
                     case 40:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
                         //没有选中的项
@@ -207,7 +208,7 @@ sl.create("sl.ui", function () {
                     default:
                         break;
                 }
-                var $newSelectedItem = $(">li.ui-menu-itemHover", $itemContainer.elements[0]).eq(0);
+                var $newSelectedItem = $(">li.ui-menu-itemHover", $itemContainer.get(0)).eq(0);
                 if ($newSelectedItem.length != 0) {
                     $this.val($newSelectedItem.data("MenuItem.Data").text);
                 }
@@ -230,7 +231,7 @@ sl.create("sl.ui", function () {
                         }
                         MenuItemHelper.RemoveMenuItems(textBox);
                         break;
-                    //删除键                                                                       
+                    //删除键                                                                        
                     case 8:
                         var minLength = opts.min;
                         if ($this.val().length >= minLength) {

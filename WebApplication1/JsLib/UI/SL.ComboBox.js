@@ -50,7 +50,7 @@ sl.create("sl.ui", function () {
                 $MenuItem.trigger("selected", [ItemData]);
                 $MenuItem.parent().hide();
                 ItemData.Selected = true;
-                MenuItemHelper.RemoveMenuItems($textBox.elements[0]);
+                MenuItemHelper.RemoveMenuItems($textBox.get(0));
             });
 
 
@@ -73,10 +73,10 @@ sl.create("sl.ui", function () {
                 if ((data == null || data.ItemsContainer == null) && (dropDownIconData == null || dropDownIconData.AllMenusItems == null || dropDownIconData.AllMenusItems.is(":hidden"))) return;
 
                 var $itemContainer = data.ItemsContainer || dropDownIconData.AllMenusItems;
-                var $items = $(">li", $itemContainer.elements[0]);
+                var $items = $(">li", $itemContainer.get(0));
                 var itemsCount = $items.length;
-                var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer.elements[0]);
-                var SelectIndex = $items.index($SelectedItem.elements[0]);
+                var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer.get(0));
+                var SelectIndex = $items.index($SelectedItem.get(0));
                 switch (event.keyCode) {
                     //向上                                                                                                                                                                                    
                     case 38:
@@ -105,7 +105,7 @@ sl.create("sl.ui", function () {
                     default:
                         break;
                 }
-                var $newSelectedItem = $(">li.ui-menu-itemHover", $itemContainer.elements[0]).eq(0);
+                var $newSelectedItem = $(">li.ui-menu-itemHover", $itemContainer.get(0)).eq(0);
                 if ($newSelectedItem.length != 0) {
                     $this.val($newSelectedItem.data("MenuItem.Data").text);
                 }
@@ -117,7 +117,7 @@ sl.create("sl.ui", function () {
                  $dropdownIcon = data.dropdownIcon,
                  dropdownIconData = $dropdownIcon.data("AllMenusItems"),
                  $textBoxContainer = data.TextBoxContainer,
-                 StyleInfo = GetElementStyle($textBoxContainer.elements[0]),
+                 StyleInfo = GetElementStyle($textBoxContainer.get(0)),
                  options = data.options;
 
                 switch (event.keyCode) {
@@ -217,7 +217,7 @@ sl.create("sl.ui", function () {
         * @return 返回选中元素的jq对象
         */
         getSelectedItem: function ($itemContainer) {
-            var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer.elements[0]);
+            var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer.get(0));
             if ($SelectedItem.length != 0) {
                 return $SelectedItem.eq(0);
             }
@@ -360,7 +360,7 @@ sl.create("sl.ui", function () {
         $ContainerSpan.append($dropdownIcon);
         $textbox.data("CalvinAutoComplete.data").TextBoxContainer = $ContainerSpan;
         $textbox.data("CalvinAutoComplete.data").dropdownIcon = $dropdownIcon;
-        var StyleInfo = GetElementStyle($ContainerSpan.elements[0]);
+        var StyleInfo = GetElementStyle($ContainerSpan.get(0));
         var $ItemsContainerAll = MenuItemHelper.GenrateMenuItems(textbox, options.source, StyleInfo.height, StyleInfo.width, StyleInfo.top, StyleInfo.left);
         $dropdownIcon.data("AllMenusItems").AllMenusItems = $ItemsContainerAll;
         $ItemsContainerAll.toggle();

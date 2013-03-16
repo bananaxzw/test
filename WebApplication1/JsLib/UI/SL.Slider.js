@@ -17,18 +17,18 @@ sl.create("sl.ui",function () {
     }
     var eventHelper = {
         onsliderClick: function (e) {
-            var opts = sl.data(e.extendData.target, 'SLSlider').options;
+            var opts = sl.data(e.data.target, 'SLSlider').options;
             //if
         },
         beginDrag: function (e) {
             //预留接口
         },
         onDrag: function (e) {
-            var opts = sl.data(e.extendData.target, 'SLSlider').options;
+            var opts = sl.data(e.data.target, 'SLSlider').options;
             eventHelper.drag(e);
-            if (opts.onDrag.call(e.extendData.target, e) != false) {
-                eventHelper.applyPostion(e.extendData.target, e.extendData.top, e.extendData.left);
-                eventHelper.setBarDisplay(e.extendData.$bar, opts.axis == "v" ? e.extendData.top : e.extendData.left, opts.axis);
+            if (opts.onDrag.call(e.data.target, e) != false) {
+                eventHelper.applyPostion(e.data.target, e.data.top, e.data.left);
+                eventHelper.setBarDisplay(e.data.$bar, opts.axis == "v" ? e.data.top : e.data.left, opts.axis);
             }
             return false;
         },
@@ -39,7 +39,7 @@ sl.create("sl.ui",function () {
             /// <param name="e"></param>
             /// <returns type=""></returns>
             eventHelper.drag(e);
-            eventHelper.applyPostion(e.extendData.target, e.extendData.top, e.extendData.left);
+            eventHelper.applyPostion(e.data.target, e.data.top, e.data.left);
             $(document).unbind("mousedown");
             $(document).unbind("mousemove");
             $(document).unbind("mouseup");
@@ -51,8 +51,8 @@ sl.create("sl.ui",function () {
             /// 无容器的移动 这里只是获取e的位置信息 然后applyDrag应用这个位置信息
             /// </summary>
             /// <param name="e"></param>
-            var opts = sl.data(e.extendData.target, 'SLSlider').options;
-            var dragData = e.extendData;
+            var opts = sl.data(e.data.target, 'SLSlider').options;
+            var dragData = e.data;
             var left = dragData.startLeft + e.pageX - dragData.startX;
             var top = dragData.startTop + e.pageY - dragData.startY;
             if (opts.deltaX != null && opts.deltaX != undefined) {
@@ -62,10 +62,10 @@ sl.create("sl.ui",function () {
                 top = e.pageY + opts.deltaY;
             }
             //如果父元素不是body就加上滚动条
-            if (e.extendData.parent != document.body) {
+            if (e.data.parent != document.body) {
                 if (sl.boxModel == true) {
-                    left += $(e.extendData.parent).scrollLeft();
-                    top += $(e.extendData.parent).scrollTop();
+                    left += $(e.data.parent).scrollLeft();
+                    top += $(e.data.parent).scrollTop();
                 }
             }
             //如果只允许水平或者垂直 只单单设置top或者left

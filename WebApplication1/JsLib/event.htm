@@ -25,31 +25,31 @@
 //        console.log("out");
 //    });
     var mm = new SL();
-//    SL().Event.addEvent(tt, "click", function (event) {
-//        console.log(event.extendData.name);
-//    }, { "name": "xuzhiwei" });
-//    SL().Event.addEvent(tt, "click", function (event) {
-//        console.log(1);
-//       // console.log(event.extendData.name);
-//    });
+    SL().Event.addEvent(tt, "click", function (event) {
+        console.log(event.data.name);
+    }, { "name": "xuzhiwei" });
+    SL().Event.addEvent(tt, "click", function (event) {
+        console.log(1);
+       // console.log(event.data.name);
+    });
 //    SL().Event.addEvent(tt, "click.name", function (event) {
 //        console.log(2);
-//        // console.log(event.extendData.name);
+//        // console.log(event.data.name);
     //    });
     var i = 0;
     SL().Event.addEvent(tt, "click.name", function (event) {
         console.log(i++);
-        // console.log(event.extendData.name);
+        // console.log(event.data.name);
     });
 //    SL().Event.addEvent(tt, "mouseover.name1", function (event) {
 //        console.log("over");
-//        // console.log(event.extendData.name);
+//        // console.log(event.data.name);
 //    });
    // SL().Event.addEvent(tt, "click.name1", see);
 //    sl.Event.removeEvent(tt, ".name1");
 //    sl.Event.removeEvent(tt, "click");
 //    SL().Event.addEvent(tt, "click11", function (event) {
-//        console.log(event.extendData.name);
+//        console.log(event.data.name);
 //    }, { "name": "xuzhiwei1" });
     function see() {
         alert("i see you!");

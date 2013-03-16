@@ -2,7 +2,7 @@
 /// <reference path="../SL.Node.js" />
 /// <reference path="SL.Mask.js" />
 
-sl.create("sl.ui",function () {
+sl.create("sl.ui", function () {
     var Defaults = {
         title: "",
         footer: "",
@@ -11,7 +11,7 @@ sl.create("sl.ui",function () {
         showFooter: true,
         zIndex: 1000,
         showClose: true,
-        autoShow: true,
+        autoShow: false,
         centerX: true,
         centerY: true,
         showOverlay: true,
@@ -41,6 +41,9 @@ sl.create("sl.ui",function () {
             DialogHelper.createMask(elem);
             DialogHelper.wrapDialog(elem);
             DialogHelper.setDialogStyle(elem);
+            if (!options.autoShow) {
+                this.close();
+            }
         },
         close: function () {
             DialogHelper.close(this.elem);
@@ -91,9 +94,6 @@ sl.create("sl.ui",function () {
                 dialogContent.append(dialogFooter);
             }
             $dialog.append(dialogContent);
-            if (!opts.autoShow) {
-                $dialog.hide();
-            }
             $(elem).append($dialog);
             dialogData.$dialog = $dialog;
         },
@@ -104,6 +104,7 @@ sl.create("sl.ui",function () {
                 var mask = new sl.ui.masker(dialogData.container, { baseZ: opts.zIndex++, overlayCSS: opts.overlayCSS });
                 dialogData.mask = mask;
             }
+
         },
         setDialogStyle: function (elem) {
             var dialogData = sl.data(elem, "sldialog");
@@ -111,14 +112,14 @@ sl.create("sl.ui",function () {
             //IE6的话 可以采用setExpression来居中消息   其他的可以采用fiexed属性来居中
             if (sl.Browser.ie == 6.0 && full) {
                 $dialog.css("position", 'absolute');
-                $dialog.elements[0].style.setExpression('top', '(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (document.documentElement.scrollTop||document.body.scrollTop) + "px"');
-                $dialog.elements[0].style.setExpression('left', '(document.documentElement.clientWidth || document.body.clientWidth) / 2 - (this.offsetWidth / 2) + (document.documentElement.scrollLeft||document.body.scrollLeft) + "px"');
+                $dialog.get(0).style.setExpression('top', '(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (document.documentElement.scrollTop||document.body.scrollTop) + "px"');
+                $dialog.get(0).style.setExpression('left', '(document.documentElement.clientWidth || document.body.clientWidth) / 2 - (this.offsetWidth / 2) + (document.documentElement.scrollLeft||document.body.scrollLeft) + "px"');
             }
             else if (full) {
                 $dialog.addClass('Dialogfull');
             }
             else {
-                StyleHelper.center($dialog.elements[0], opts.centerX, opts.centerY);
+                StyleHelper.center($dialog.get(0), opts.centerX, opts.centerY);
             }
 
 
