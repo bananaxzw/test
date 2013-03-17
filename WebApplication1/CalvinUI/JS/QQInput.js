@@ -11,7 +11,8 @@
             + "<b>" + name + "</b> <span>&lt;" + mail + "&gt;</span>"
              + "<span class='semicolon'>;</span>"
              + "<a class='addr_del' href='javascript:;' name='del'></a>"
-+ "</div>";
++ "</div>"
++ "<span style='float: left; width:6px; overflow: hidden;' class='cusorPosition'>&nbsp;</span>";
             $(container).prepend(str);
 
         }
@@ -22,10 +23,17 @@
     $.fn.MailInput = function (options, param) {
 
 
+        var _this = this;
 
+        this.delegate("div", "click", function (e) {
+           // alert(e);
+        });
+        this.delegate("span.cusorPosition", "click", function (e) {
+            $(".cusorPosition").show();
 
-        this.delegate("div", "click", function () {
-            alert("saf");
+            $(this).hide().after($(".addr_text").css("width","20px").val(''));
+            e.stopPropagation();
+
         });
         if (typeof options === "string") {
             switch (options.toUpperCase()) {
