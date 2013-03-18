@@ -12,7 +12,7 @@
         $(document).ready(function () {
             //alert($(".mm").data(""));
             $("#basic").CalvinAutoComplete({ min: 2, source: ["许志伟1", "许志伟2", "许志伟3", "许志伟4", "许志伟5"] });
-            $("#Text1").CalvinAutoComplete({ min: 1,
+            $("#Text1").CalvinAutoComplete({styleInfo:{width:250}, min: 1,
                 source: [{ "text": "许志伟1", "value": "沙发上" }, { "text": "许志伟2", "value": "3" }, { "text": "许志伟3", "value": "3"}]
             , selected: function (event, ui) {
                 alert(ui.text);

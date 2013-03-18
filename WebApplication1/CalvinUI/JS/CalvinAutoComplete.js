@@ -38,12 +38,15 @@
         * @param {textBox} textbox DOM元素
         */
         GetTextBoxStyle: function (textBox) {
-            var $textBox = $(textBox);
-            var styleInfo;
-            if (styleInfo = $textBox.data("styleInfo")) {
-                return styleInfo;
+            var $textBox = $(textBox),
+            offset = $textBox.offset(),
+            opts = $.data(textBox, 'CalvinAutoComplete.data').options,
+            styleInfo;
+            if (!opts.dynamicStyle) {
+                if (styleInfo = $textBox.data("styleInfo")) {
+                    return styleInfo;
+                }
             }
-            var offset = $textBox.offset();
             styleInfo = { left: offset.left, top: offset.top, width: $textBox.width(), height: $textBox.outerHeight() };
 
             $textBox.data("styleInfo", styleInfo);
@@ -74,7 +77,7 @@
                     data: params,
                     success: function (data) {
                         opts.source = data;
-                        var $items = MenuItemHelper._GenrateMenuItems(textBox, otherHelper.FilterOptionSouces(opts,textBox.value), height, width, top, left);
+                        var $items = MenuItemHelper._GenrateMenuItems(textBox, otherHelper.FilterOptionSouces(opts, textBox.value), height, width, top, left);
                         $loading.hide();
                         return $items;
                     },
@@ -87,7 +90,7 @@
 
             }
             else {
-                var $items = MenuItemHelper._GenrateMenuItems(textBox, otherHelper.FilterOptionSouces(opts,textBox.value), height, width, top, left);
+                var $items = MenuItemHelper._GenrateMenuItems(textBox, otherHelper.FilterOptionSouces(opts, textBox.value), height, width, top, left);
                 $loading.hide();
                 return $items;
             }
@@ -104,6 +107,7 @@
         * @param  {left } 产生自动补全的textbox的left属性
         */
         _GenrateMenuItems: function (textBox, SouceArray, height, width, top, left) {
+            var opts = $.data(textBox, 'CalvinAutoComplete.data').options;
             MenuItemHelper.RemoveMenuItems(textBox);
             if (SouceArray == null || !SouceArray.length) return;
             var $ItemsContainer = $("<ul class='ui-autocomplete ui-menu'></ul>");
@@ -133,6 +137,7 @@
             });
             //设置只能提示选项的位置
             $ItemsContainer.css({ "left": left + "px", "width": width + "px", "top": (top + height) + "px" });
+            $ItemsContainer.css(opts.styleInfo);
             $ItemsContainer.appendTo("body");
             $(textBox).data("CalvinAutoComplete.data").ItemsContainer = $ItemsContainer;
             return $ItemsContainer;
@@ -159,6 +164,7 @@
         * @return 返回选中元素的jq对象
         */
         getSelectedItem: function ($itemContainer) {
+            if (!$itemContainer) return;
             var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer[0]);
             if ($SelectedItem.length != 0) {
                 return $SelectedItem.eq(0);
@@ -189,7 +195,7 @@
                 var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer[0]);
                 var SelectIndex = $items.index($SelectedItem[0]);
                 switch (event.keyCode) {
-                    //向上                                                                                                                       
+                    //向上                                                                                                                                    
                     case 38:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
 
@@ -197,7 +203,7 @@
                             $SelectedItem.prev().addClass("ui-menu-itemHover");
                         }
                         break;
-                    //向下                                                                                                                    
+                    //向下                                                                                                                                 
                     case 40:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
                         //没有选中的项
@@ -237,7 +243,7 @@
                         }
                         MenuItemHelper.RemoveMenuItems(textBox);
                         break;
-                    //删除键                                                          
+                    //删除键                                                                       
                     case 8:
                         var minLength = opts.min;
                         if ($this.val().length >= minLength) {
@@ -302,7 +308,7 @@
         * @description 根据指定的key 过滤options.sources数组 以便再生成菜单
         * @param {Key} 值
         **/
-        FilterOptionSouces: function (opts,Key) {
+        FilterOptionSouces: function (opts, Key) {
             if (opts.source == null || opts.source.length == 0)
                 return null;
             var fileterArray = new Array();
@@ -354,14 +360,14 @@
             var opts = {};
             var $this = $(this);
             var state = $.data(this, 'CalvinAutoComplete.data');
-        
+
             if (state) {
                 // htmlHelper.destroy(this);
-                $.extend(opts,state.options, options);
+                $.extend(opts, state.options, options);
                 state.options = opts;
             }
             else {
-                 $.extend(opts,defaults, options);
+                $.extend(opts, defaults, options);
                 $this.data("CalvinAutoComplete.data", { options: opts, ItemsContainer: null });
                 //移除现有的Items元素
                 MenuItemHelper.RemoveMenuItems(this);
