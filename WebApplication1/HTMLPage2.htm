@@ -107,19 +107,51 @@
                 alert(e.srcElement.nodeName);
             }
             document.getElementById("sf").onclick = function (e) {
-                alert(e.srcElement.nodeName+"safsaf");
+                alert(e.srcElement.nodeName + "safsaf");
             }
             document.getElementById("Text1").onmouseover = function () {
                 alert(window.event.srcElement.nodeName + "safsaf");
             }
-        
-         })
+            alert($("#Text2").val().length);
+
+        })
          function mm(value) {
              window.event;
          }
     </script>
 </head>
-<body><select id="Select1" >
+<body><script>
+String.prototype._cutString = function(len) {
+    var str = this;
+    var l = str.length;
+    var rel = [];
+    var tl = 0;
+    for (var i = 0; i < l && tl < len; i++) {
+        rel[i] = str[i];
+        if (str.charCodeAt(i) < 27 || str.charCodeAt(i) > 126) {            
+            tl += 2;
+        } else {
+            tl++;
+        }
+    }
+    return rel.join("");
+}
+var DEFAULT_LENGTH = 20;
+function lengthValidate() {
+        var len = DEFAULT_LENGTH - G("inputDemo").value._getLength();
+        if (len < 0) {
+            G("inputDemo").value = G("inputDemo").value._cutString(C_LINE_F_LENGTH);
+            G("inputDemo").maxLength = G("inputDemo").value.length - 1;
+            len = 0;
+        } else {
+            G("inputDemo").maxLength = DEFAULT_LENGTH;
+        }
+        G("inputDemoInformation").innerHTML = "还可以输入" + len + "个字符";
+}
+/**********************/</script>
+<input type="text" id="inputDemo" onkeypress="lengthValidate()" /><span id="inputDemoInformation"></span>
+    <input id="Text2" type="text"  value="许志伟sas"/>
+<select id="Select1" >
 <option>safs</option>
 <option>safs</option>
 </select>

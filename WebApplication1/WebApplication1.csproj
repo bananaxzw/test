@@ -378,6 +378,7 @@
     <Content Include="CalvinUI\dragContainer.htm" />
     <Content Include="CalvinUI\draggableDemo.htm" />
     <Content Include="CalvinUI\HTMLPage1.htm" />
+    <Content Include="CalvinUI\HTMLPage2.htm" />
     <Content Include="CalvinUI\ImagesLazyLoad.htm" />
     <Content Include="CalvinUI\jquery.tipsy.js" />
     <Content Include="CalvinUI\jquery.tipTip.js" />
@@ -406,6 +407,7 @@
     <Content Include="CalvinUI\JS\jquery.tablesorter.js" />
     <Content Include="CalvinUI\JS\json2.js" />
     <Content Include="CalvinUI\JS\QQInput.js" />
+    <Content Include="CalvinUI\JS\SircMailInpt.js" />
     <Content Include="CalvinUI\JS\table.js" />
     <Content Include="CalvinUI\JS\tablejs.htm" />
     <Content Include="CalvinUI\JS\table_cellindex.htm" />
@@ -417,6 +419,7 @@
     <Content Include="CalvinUI\panelDemo.html" />
     <Content Include="CalvinUI\QQInput.htm" />
     <Content Include="CalvinUI\resizeableDemo.htm" />
+    <Content Include="CalvinUI\sircMail.htm" />
     <Content Include="CalvinUI\tabDemo.htm" />
     <Content Include="CalvinUI\tableSorter.htm" />
     <Content Include="CalvinUI\tablesorter.js" />
@@ -2838,7 +2841,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>63065</DevelopmentServerPort>
+          <DevelopmentServerPort>49249</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
