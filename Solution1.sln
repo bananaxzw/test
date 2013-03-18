@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{4748B8C0-EB67-46D7-9214-BE66D43384D0}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SL", "..\SL\", "{A162A8C8-97E4-445B-9F34-3A219A46BDA6}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SL", "..\SL\", "{C4DEC357-E8D4-4E7F-8775-A73FEAC857EA}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/SL"
@@ -21,6 +21,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SL", "..\SL\", "{A162A8C8-9
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "11097"
+		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
 Global
@@ -33,10 +34,10 @@ Global
 		{4748B8C0-EB67-46D7-9214-BE66D43384D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4748B8C0-EB67-46D7-9214-BE66D43384D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4748B8C0-EB67-46D7-9214-BE66D43384D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A162A8C8-97E4-445B-9F34-3A219A46BDA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A162A8C8-97E4-445B-9F34-3A219A46BDA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A162A8C8-97E4-445B-9F34-3A219A46BDA6}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{A162A8C8-97E4-445B-9F34-3A219A46BDA6}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{C4DEC357-E8D4-4E7F-8775-A73FEAC857EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4DEC357-E8D4-4E7F-8775-A73FEAC857EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4DEC357-E8D4-4E7F-8775-A73FEAC857EA}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4DEC357-E8D4-4E7F-8775-A73FEAC857EA}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
