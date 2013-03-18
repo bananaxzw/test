@@ -25,7 +25,7 @@
         .addr_base
         {
             height: 16px;
-            margin: 1px 3px 1px 3px;
+            margin: 1px 0px 1px 0px;
             cursor: default;
             color: #a0a0a0;
         }
@@ -42,6 +42,36 @@
         {
             background: #528bcb;
         }
+        .addr_text
+        {
+
+            border:0px;
+            cursor: text;
+            display: block;
+            float: left;
+            height: 16px;
+            width: 25px;
+        }
+        .addr_del
+        {
+            border-collapse: separate;
+            color: #1E5494;
+            cursor: pointer;
+            display: inline;
+            font-family: Tahoma;
+            font-size: 12px;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: normal;
+            height: auto;
+            line-height: normal;
+            outline-color: #1E5494;
+            outline-style: none;
+            outline-width: 0px;
+            text-decoration: none;
+            white-space: nowrap;
+            width: 10px;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -49,28 +79,67 @@
 
                 $("#toAreaCtrl").MailInput("ADD", { name: "许志伟", mail: "bananaxzw@qq.com" });
             });
-
+            $(".cusorPosition").click(function () { alert(1); });
 
         });
+
+        /**
+        * 获取光标所在的字符位置
+        * @param obj 要处理的控件, 支持文本域和输入框
+        * @author hotleave
+        */
+
+        (function ($) {
+            $.fn.extend({
+                insertAtCaret: function (myValue) {
+                    var $t = $(this)[0];
+                    if (document.selection) {
+                        this.focus();
+                        sel = document.selection.createRange();
+                        sel.text = myValue;
+                        this.focus();
+                    }
+                    else
+                        if ($t.selectionStart || $t.selectionStart == '0') {
+                            var startPos = $t.selectionStart;
+                            var endPos = $t.selectionEnd;
+                            var scrollTop = $t.scrollTop;
+                            $t.value = $t.value.substring(0, startPos) + myValue + $t.value.substring(endPos, $t.value.length);
+                            this.focus();
+                            $t.selectionStart = startPos + myValue.length;
+                            $t.selectionEnd = startPos + myValue.length;
+                            $t.scrollTop = scrollTop;
+                        }
+                        else {
+                            this.value += myValue;
+                            this.focus();
+                        }
+                }
+            })
+        })(jQuery);
     
     </script>
 </head>
 <body>
+    <div>
+        asfsafsafasfaf</div>
     <input id="Button1" type="button" value="button" />
     <div style="cursor: text;" id="toAreaCtrl" class="noime div_txt">
-        <div style="color: rgb(160, 160, 160); padding-top: 1px; display: none; position: absolute;">
+        <!-- <div style="color: rgb(160, 160, 160); padding-top: 1px; display: none; position: absolute;">
         </div>
-        <div style="float: left; white-space: nowrap;" class="addr_base  addr_select fn_list"
+       <div style="float: left; white-space: nowrap;" class="addr_base  addr_select fn_list"
             title="263980949@qq.com">
-            <b>陈雷</b> <span>&lt;263980949<span class="domain">@qq.com</span>&gt;</span> <span
-                class="semicolon">;</span> <a class="addr_del" href="javascript:;" name="del">
+            <b>陈雷</b><span>&lt;263980949<span class="domain">@qq.com</span>&gt;</span> <span
+                class="semicolon">;</span><a class="addr_del" href="javascript:;" name="del">
             </a>
         </div>
+        <span style="float: left; width: 2px; overflow: hidden;" class="cusorPosition">&nbsp;</span>
         <div style="float: left; white-space: nowrap;" class="addr_base addr_normal" title="466296581@qq.com">
             <b>梁伟</b> <span>&lt;466296581<span class="domain">@qq.com</span>&gt;</span><span
                 class="semicolon">;</span> <a class="addr_del" href="javascript:;" name="del">
             </a>
         </div>
+        <span style="float: left; width: 2px; overflow: hidden;" class="cusorPosition">&nbsp;</span>-->
         <div style="border: currentColor; width: 134px; overflow: hidden; float: left;" class="addr_text">
             <input accesskey="t" style="border: currentColor; width: 100%; -webkit-appearance: none;"
                 tabindex="1" type="input" autocomplete="off" ime-mode="disabled">
