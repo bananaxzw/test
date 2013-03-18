@@ -52,6 +52,10 @@
             height: 16px;
             width: 25px;
         }
+        .addr_over
+        {
+           background:#e0ecf9;  
+        }
         .addr_del
         {
             border-collapse: separate;
@@ -74,6 +78,21 @@
         }
     </style>
     <script type="text/javascript">
+
+        String.prototype._getLength = function () {
+            var str = this;
+            var len = str.length;
+            var reLen = 0;
+            for (var i = 0; i < len; i++) {
+                if (str.charCodeAt(i) < 27 || str.charCodeAt(i) > 126) {
+                    // 全角    
+                    reLen += 2;
+                } else {
+                    reLen++;
+                }
+            }
+            return reLen;
+        };
         $(document).ready(function () {
             $("#Button1").click(function () {
 
@@ -140,13 +159,12 @@
             </a>
         </div>
         <span style="float: left; width: 2px; overflow: hidden;" class="cusorPosition">&nbsp;</span>-->
-        <div style="border: currentColor; width: 134px; overflow: hidden; float: left;" class="addr_text">
+        <div style="border: currentColor; width:25px; overflow: hidden; float: left;" class="addr_text">
             <input accesskey="t" style="border: currentColor; width: 100%; -webkit-appearance: none;"
                 tabindex="1" type="input" autocomplete="off" ime-mode="disabled">
             <div style="margin: 0px; padding: 0px; border: currentColor; width: 1px; height: 1px;
                 line-height: normal; overflow: auto; font-family: Tahoma; font-size: 12px; font-weight: 400;
                 word-spacing: normal; white-space: nowrap;">
-                ggdsgsdgsdgsdgsdgWW
             </div>
         </div>
         <div style="margin: 0px; padding: 0px; border: currentColor; clear: both;" unselectable="on">

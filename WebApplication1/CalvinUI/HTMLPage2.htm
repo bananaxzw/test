@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+<script>
+    /**
+    * 字符串求长度(全角) 
+    */
+    String.prototype._getLength = function () {
+        var str = this;
+        var len = str.length;
+        var reLen = 0;
+        for (var i = 0; i < len; i++) {
+            if (str.charCodeAt(i) < 27 || str.charCodeAt(i) > 126) {
+                // 全角    
+                reLen += 2;
+            } else {
+                reLen++;
+            }
+        }
+        return reLen;
+    }
+String.prototype._cutString = function(len) {
+    var str = this;
+    var l = str.length;
+    var rel = [];
+    var tl = 0;
+    for (var i = 0; i < l && tl < len; i++) {
+        rel[i] = str[i];
+        if (str.charCodeAt(i) < 27 || str.charCodeAt(i) > 126) {            
+            tl += 2;
+        } else {
+            tl++;
+        }
+    }
+    return rel.join("");
+}
+function G(id) {
+    return document.getElementById(id);
+}
+var DEFAULT_LENGTH = 20;
+function lengthValidate() {
+        var len = DEFAULT_LENGTH - G("inputDemo").value._getLength();
+        if (len < 0) {
+            G("inputDemo").value = G("inputDemo").value._cutString(C_LINE_F_LENGTH);
+            G("inputDemo").maxLength = G("inputDemo").value.length - 1;
+            len = 0;
+        } else {
+            G("inputDemo").maxLength = DEFAULT_LENGTH;
+        }
+        G("inputDemoInformation").innerHTML = "还可以输入" + len + "个字符";
+}
+</script>
+/**********************/
+<input type="text" id="inputDemo" onkeypress="lengthValidate()" /><span id="inputDemoInformation"></span>
+</body>
+
+</html>

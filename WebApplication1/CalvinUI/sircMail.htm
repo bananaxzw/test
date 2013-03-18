@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="CSS/default/autoComplete.css" rel="stylesheet" type="text/css" />
+    <script src="../JsLib/jq1.72.js" type="text/javascript"></script>
+    <script src="JS/SircMailInpt.js" type="text/javascript"></script>
+    <script src="JS/CalvinAutoComplete.js" type="text/javascript"></script>
+    <style type="text/css">
+        body
+        {
+            font: normal 12px Verdana;
+        }
+        .div_txt
+        {
+            border: 1px solid #c3c3c3;
+            border-top: 1px solid #7c7c7c;
+            border-left: 1px solid #9a9a9a;
+            padding: 1px;
+            width: auto;
+            height: auto;
+            _height: 16px;
+            min-height: 18px;
+            font-family: Tahoma;
+            cursor: text;
+        }
+        .addr_base
+        {
+            height: 16px;
+            margin: 1px 3px 1px 3px;
+            cursor: default;
+            color: #a0a0a0;
+        }
+        .addr_base b
+        {
+            color: #000;
+            font-weight: normal;
+        }
+        .addr_select, .addr_select span, .addr_select b
+        {
+            color: #fff;
+        }
+        .fn_list
+        {
+            background: #528bcb;
+        }
+        .addr_text
+        {
+            border: 0px;
+            cursor: text;
+            display: block;
+            float: left;
+            height: 16px;
+            width:28px;
+        }
+        .addr_over
+        {
+            background: #e0ecf9;
+        }
+        .addr_error span, .addr_error b
+        {
+            color: red;
+        }
+        .addr_del
+        {
+            border-collapse: separate;
+            color: #1E5494;
+            cursor: pointer;
+            display: inline;
+            font-family: Tahoma;
+            font-size: 12px;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: normal;
+            height: auto;
+            line-height: normal;
+            outline-color: #1E5494;
+            outline-style: none;
+            outline-width: 0px;
+            text-decoration: none;
+            white-space: nowrap;
+            width: 10px;
+        }
+        .intput_name
+        {
+            -webkit-appearance: none;
+            font-size: 12px;
+            height: 14px;
+            margin: 2px 0x 2px 0px;
+            padding-left: 5px;
+            width: 100%;
+            border: 0px;
+            word-spacing: 0px;
+        }
+    </style>
+    <script type="text/javascript">
+
+        String.prototype._getLength = function () {
+            var str = this;
+            var len = str.length;
+            var reLen = 0;
+            for (var i = 0; i < len; i++) {
+                if (str.charCodeAt(i) < 27 || str.charCodeAt(i) > 126) {
+                    // 全角    
+                    reLen += 2;
+                } else {
+                    reLen++;
+                }
+            }
+            return reLen;
+        };
+        $(document).ready(function () {
+            $("#Button1").click(function () {
+
+                $(".intput_name").MailInput("ADD", { name: "财政厅", mail: "bananaxzw@qq.com" });
+
+            });
+            $("#Button2").click(function () {
+
+               console.dir($(".intput_name").MailInput("GetValues"));
+
+            });
+            $(".intput_name").MailInput();
+
+        });
+
+        /**
+        * 获取光标所在的字符位置
+        * @param obj 要处理的控件, 支持文本域和输入框
+        * @author hotleave
+        */
+
+        (function ($) {
+            $.fn.extend({
+                insertAtCaret: function (myValue) {
+                    var $t = $(this)[0];
+                    if (document.selection) {
+                        this.focus();
+                        sel = document.selection.createRange();
+                        sel.text = myValue;
+                        this.focus();
+                    }
+                    else
+                        if ($t.selectionStart || $t.selectionStart == '0') {
+                            var startPos = $t.selectionStart;
+                            var endPos = $t.selectionEnd;
+                            var scrollTop = $t.scrollTop;
+                            $t.value = $t.value.substring(0, startPos) + myValue + $t.value.substring(endPos, $t.value.length);
+                            this.focus();
+                            $t.selectionStart = startPos + myValue.length;
+                            $t.selectionEnd = startPos + myValue.length;
+                            $t.scrollTop = scrollTop;
+                        }
+                        else {
+                            this.value += myValue;
+                            this.focus();
+                        }
+                }
+            })
+        })(jQuery);
+    
+    </script>
+</head>
+<body>
+    <input id="Button1" type="button" value="添加" />
+    <input id="Button2" type="button" value="获取" />
+    <input class="intput_name" accesskey="t" tabindex="1" type='text' />
+</body>
+</html>
