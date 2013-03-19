@@ -47,12 +47,10 @@ SL().create(function (SL) {
             if (elem === document) return [];
             var n = elem.parentNode.firstChild;
             var r = [];
-
             for (; n; n = n.nextSibling) {
                 if (n.nodeType == 1 && n != elem)
                     r.push(n);
             }
-
             return r;
         },
         /**

@@ -200,7 +200,7 @@
                 var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer[0]);
                 var SelectIndex = $items.index($SelectedItem[0]);
                 switch (event.keyCode) {
-                    //向上                                                                                                                                         
+                    //向上                                                                                                                                          
                     case 38:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
 
@@ -208,7 +208,7 @@
                             $SelectedItem.prev().addClass("ui-menu-itemHover");
                         }
                         break;
-                    //向下                                                                                                                                      
+                    //向下                                                                                                                                       
                     case 40:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
                         //没有选中的项
@@ -248,7 +248,7 @@
                         }
                         MenuItemHelper.RemoveMenuItems(textBox);
                         break;
-                    //删除键                                                                            
+                    //删除键                                                                             
                     case 8:
                         var minLength = opts.min;
                         if ($this.val().length >= minLength) {
@@ -281,13 +281,14 @@
             var ItemData = $MenuItem.data("MenuItem.Data");
             $MenuItem.bind("selected", opts.selected);
             //设置item点击的事件 默认事件自动填写text框
-            $MenuItem.bind("click", function () {
+            $MenuItem.bind("click", function (e) {
                 $textBox.val(ItemData.text);
                 $MenuItem.trigger("selected", [ItemData]);
                 if (opts.MenuHideAuto) {
                     $MenuItem.parent().hide();
                 }
                 ItemData.Selected = true;
+                e.stopPropagation();
 
             });
         }
