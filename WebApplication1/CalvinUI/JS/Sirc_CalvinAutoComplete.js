@@ -1,19 +1,4 @@
-﻿/// <reference path="jquery-1.4.1-vsdoc.js" />
-/// <reference path="../../JsLib/json2.js" />
-
-
-/********************************************************************************************
-* 文件名称:	CalvinAutoComplete.js
-* 设计人员:	许志伟 
-* 设计时间:	
-* 功能描述:	AutoComplete
-* 注意事项：如果变量前面有带$表示的是JQ对象
-*
-*注意：允许你使用该框架 但是不允许修改该框架 有发现BUG请通知作者 切勿擅自修改框架内容
-*
-********************************************************************************************/
-
-
+﻿
 (function () {
     var styleHelper = {
         /**
@@ -66,17 +51,17 @@
             var $loading = GenerateLoading(textBox);
             $loading.show();
             var key = textBox.value;
-            // var params = JSON.stringify($.extend({ "key": key }, opts.ajaxOption.extendData));
-            var params = $.param($.extend({ "key": key }, opts.ajaxOption.extendData));
+            //var params = JSON.stringify($.extend({ "key": key }, opts.ajaxOption.extendData));
+            //var params = $.param($.extend({ "key": key }, opts.ajaxOption.extendData));
             if (opts.dynamicSource) {
                 var xmlhttp = $.ajax({
                     type: "POST",
                     url: opts.ajaxOption.url,
-                    //contentType: "application/json",
+                    contentType: "application/json",
                     dataType: "json",
-                    data: params,
+                    data: '{"key":"' + key + '"}',
                     success: function (data) {
-                        opts.source = data;
+                        opts.source = data.length ? data : data.d;
                         var $items = MenuItemHelper._GenrateMenuItems(textBox, otherHelper.FilterOptionSouces(opts, textBox.value), height, width, top, left);
                         $loading.hide();
                         return $items;
@@ -140,9 +125,7 @@
             });
             //设置只能提示选项的位置
             $ItemsContainer.css({ "left": left + "px", "width": width + "px", "top": (top + height) + "px" });
-            if (opts.styleInfo) {
-                $ItemsContainer.css(opts.styleInfo);
-            }
+            $ItemsContainer.css(opts.styleInfo);
             $ItemsContainer.appendTo("body");
             $(textBox).data("CalvinAutoComplete.data").ItemsContainer = $ItemsContainer;
             return $ItemsContainer;
@@ -200,7 +183,7 @@
                 var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer[0]);
                 var SelectIndex = $items.index($SelectedItem[0]);
                 switch (event.keyCode) {
-                    //向上                                                                                                                                         
+                    //向上                                                                                                                                                
                     case 38:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
 
@@ -208,7 +191,7 @@
                             $SelectedItem.prev().addClass("ui-menu-itemHover");
                         }
                         break;
-                    //向下                                                                                                                                      
+                    //向下                                                                                                                                             
                     case 40:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
                         //没有选中的项
@@ -248,7 +231,7 @@
                         }
                         MenuItemHelper.RemoveMenuItems(textBox);
                         break;
-                    //删除键                                                                            
+                    //删除键                                                                                   
                     case 8:
                         var minLength = opts.min;
                         if ($this.val().length >= minLength) {
@@ -291,7 +274,6 @@
 
             });
         }
-
     };
     function GenerateLoading(target) {
         var $loadingHtml;
@@ -309,7 +291,7 @@
         var styleInfo = styleHelper.GetTextBoxStyle(target);
         $loadingHtml.css({ "left": styleInfo.left + "px", "width": styleInfo.width + "px", "top": (styleInfo.top + styleInfo.height) + "px" });
         return $loadingHtml;
-    }
+    };
     var otherHelper = {
 
         /**
@@ -361,7 +343,7 @@
         }
     };
 
-    var defaults = { MenuHideAuto: true, min: 1, source: [], selected: function (event, item) { }, dynamicSource: false, ajaxOption: { url: "", extendData: {}} };
+    var defaults = { MenuHideAuto: true, min: 1, source: [], selected: function (event, item) { }, dynamicSource: false, ajaxOption: { url: "", extendData: {}, error: function () { } } };
 
     $.fn.CalvinAutoComplete = function (options, param) {
 

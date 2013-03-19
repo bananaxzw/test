@@ -287,6 +287,7 @@
     <Content Include="CalvinUI\CSS\default\images\datagrid_sort_desc.gif" />
     <Content Include="CalvinUI\CSS\default\images\datagrid_title_bg.png" />
     <Content Include="CalvinUI\CSS\default\images\datebox_arrow.png" />
+    <Content Include="CalvinUI\CSS\default\images\Icons.png" />
     <Content Include="CalvinUI\CSS\default\images\layout_button_down.gif" />
     <Content Include="CalvinUI\CSS\default\images\layout_button_left.gif" />
     <Content Include="CalvinUI\CSS\default\images\layout_button_right.gif" />
@@ -334,6 +335,7 @@
     <Content Include="CalvinUI\CSS\default\images\ui-bg_glass_75_e6e6e6_1x400.png" />
     <Content Include="CalvinUI\CSS\default\images\validatebox_pointer.gif" />
     <Content Include="CalvinUI\CSS\default\images\validatebox_warning.png" />
+    <Content Include="CalvinUI\CSS\default\input.css" />
     <Content Include="CalvinUI\CSS\default\layout.css" />
     <Content Include="CalvinUI\CSS\default\linkbutton.css" />
     <Content Include="CalvinUI\CSS\default\menu.css" />
@@ -359,6 +361,7 @@
     <Content Include="CalvinUI\CSS\icons\edit_remove.png" />
     <Content Include="CalvinUI\CSS\icons\filesave.png" />
     <Content Include="CalvinUI\CSS\icons\help.png" />
+    <Content Include="CalvinUI\CSS\icons\Icons.png" />
     <Content Include="CalvinUI\CSS\icons\no.png" />
     <Content Include="CalvinUI\CSS\icons\ok.png" />
     <Content Include="CalvinUI\CSS\icons\pencil.png" />
@@ -391,6 +394,8 @@
     <Content Include="CalvinUI\JS\CalvinDraggable.js" />
     <Content Include="CalvinUI\JS\CalvinDroppable.js" />
     <Content Include="CalvinUI\JS\CalvinImageLazyLoad.js" />
+    <Content Include="CalvinUI\CalvinInput.htm" />
+    <Content Include="CalvinUI\JS\CalvinInput.js" />
     <Content Include="CalvinUI\JS\CalvinLayout.js" />
     <Content Include="CalvinUI\JS\CalvinLazyLoad.js" />
     <Content Include="CalvinUI\JS\CalvinMenu.js" />
@@ -408,6 +413,7 @@
     <Content Include="CalvinUI\JS\json2.js" />
     <Content Include="CalvinUI\JS\QQInput.js" />
     <Content Include="CalvinUI\JS\SircMailInpt.js" />
+    <Content Include="CalvinUI\JS\Sirc_CalvinAutoComplete.js" />
     <Content Include="CalvinUI\JS\table.js" />
     <Content Include="CalvinUI\JS\tablejs.htm" />
     <Content Include="CalvinUI\JS\table_cellindex.htm" />
