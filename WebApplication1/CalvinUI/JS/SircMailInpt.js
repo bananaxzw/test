@@ -21,7 +21,7 @@
             input = null;
         }
 
-    }
+    };
 
     function WrapText(textbox) {
         var str = "<div class='div_txt'>" +
@@ -29,7 +29,7 @@
         + "</div>"
         + "</div>";
         return $(textbox).wrapAll(str).parent().parent();
-    }
+    };
 
     function GetCollectValue(textBox) {
         var values = [], $this, name = "";
@@ -37,16 +37,16 @@
             $this = $(this);
             if (!$this.hasClass("addr_error")) {
                 var name = $("b.addr_name", this).text();
-                values.push({ id: this.addr, name: name});
+                values.push({ id: this.addr, name: name });
 
             }
 
         });
         return values;
 
-    }
+    };
 
-    var Defaluts = { data: [] };
+    var Defaluts = { data: [], url: "", min: 1 };
 
     var EventHelper = {
         setInputEvent: function ($text) {
@@ -116,7 +116,7 @@
                     return;
             }
 
-        }
+        };
         return this.each(function () {
             var opts = {};
             var $this = $(this);
@@ -133,8 +133,16 @@
                 $this.data("MailInput.data", { options: opts, $Mail_Container: $Mail_Container });
                 $this.CalvinAutoComplete({
                     dynamicStyle: true,
-                    styleInfo: { width: 250 }, min: 1,
-                    source: [{ "text": "省公安厅", "value": "1fsfasfasf" }, { "text": "省财政厅", "value": "3safasf" }, { "text": "省国税", "value": "3safas"}],
+                    styleInfo: { width: 250 },
+                    min: opts.min,
+                    dynamicSource: true,
+                    ajaxOption: {
+                        url: "../MailService/MailService.asmx/GetAllUserByPinyin",
+                        extendData: {},
+                        error: function (xhr, $loading) {
+                            alert("搜索发生错误");
+                        }
+                    },
                     selected: function (event, ui) {
                         ItemHepler.AddUser($this[0], ui.text, ui.value);
                         $this.val("");
@@ -145,7 +153,7 @@
             }
         });
 
-
-    }
+    };
 
 })();
+

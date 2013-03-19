@@ -1,0 +1,48 @@
+﻿        .lm_sbar
+        {
+            border-bottom: 1px solid #ccc;
+            padding: 7px 6px 4px;
+            _padding-left: 3px;
+            height: 22px;
+            line-height: 11px;
+        }
+        .lm_sbar .lm_sopen
+        {
+            background: url(images/Icons.png) 0 -312px no-repeat;
+            width: 19px;
+            height: 20px;
+            padding: 0;
+            *margin-top:1px;
+            border: none;
+            float: right;
+        }
+          .lm_sbar .lm_sclose
+        {
+            background: url(images/Icons.png) 0 -336px no-repeat;
+            width: 19px;
+            height: 20px;
+            padding: 0;
+            *margin-top:1px;
+            border: none;
+            float: right;
+        }
+
+        .lm_sbar div
+        {
+            *float: right;
+            overflow: hidden;
+        }
+        .lm_sbar .txt
+        {
+            border-right: medium none;
+            margin: 0;
+            color: #a0a0a0;
+            width: 100%;
+            height: 18px;
+            border: 1px solid #c3c3c3;
+            border-top: 1px solid #7c7c7c;
+            border-left: 1px solid #9a9a9a;
+            outline: none;
+            line-height: 170%;
+            padding: 0 0 0 2px;
+        }
