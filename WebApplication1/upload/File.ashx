@@ -12,6 +12,7 @@ public class File_WebHandler : IHttpHandler
 
     public void ProcessRequest(HttpContext context)
     {
+        System.Threading.Thread.Sleep(5000);
         int iTotal = context.Request.Files.Count;
 
         if (iTotal == 0)
@@ -30,7 +31,7 @@ public class File_WebHandler : IHttpHandler
                 {
                     //保存文件
                     file.SaveAs(System.Web.HttpContext.Current.Server.MapPath("./file/" + Path.GetFileName(file.FileName)));
-
+                    _msg = file.FileName;
                     //这里可以根据实际设置其他限制
                     if (++iCount > UploadFileLimit)
                     {

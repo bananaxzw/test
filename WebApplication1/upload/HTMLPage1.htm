@@ -4,7 +4,8 @@
     <title></title>
     <script src="../JsLib/jq1.72.js" type="text/javascript"></script>
     <script type="text/javascript">
-        function Finish(msg) { alert(msg); location.href = location.href; }
+        function Finish(msg) { $("#afas").append(msg); }
+        
        
     </script>
     <style>
@@ -30,12 +31,21 @@
     </style>
 </head>
 <body>
+    <ul id="afas">
+    </ul>
     <form action="File.ashx" enctype="multipart/form-data" method="post" target="iframeUpload">
     <iframe name="iframeUpload" src="" width="350" height="35" frameborder="0" scrolling="no"
         style="display: NONE"></iframe>
-    <a hidefocus class="addfileA" id="aComposeAttach" href="#">&nbsp;<input hidefocus
-        class="addfileI" type="file" size="1" name="FF" onchange="this.form.submit()"></a>
-    <input type="submit" value="提交">
+    <a class="addfileA" id="aComposeAttach" href="#">&nbsp;<input class="addfileI" type="file"
+        size="1" name="FF"></a>
+    <input type="submit" value="提交" />
     </form>
+    <script type="text/javascript">
+
+        $(".addfileA").change(function () {
+            $("#afas").html("sfsafsafaf");
+            this.form.submit();
+        });
+    </script>
 </body>
 </html>
