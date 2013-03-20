@@ -160,6 +160,13 @@
       <DependentUpon>OFFSETSCROLL.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ueditor\WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ueditor\WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+    </Compile>
     <Compile Include="UpDownkey.aspx.cs">
       <DependentUpon>UpDownkey.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -193,6 +200,7 @@
     <Folder Include="JQ\1.7\src\sizzle\" />
     <Folder Include="JsLib\anim\" />
     <Folder Include="JSUntil\js容易遗忘收集\" />
+    <Folder Include="upload\file\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AutoCompete\ajaxComplete.htm" />
@@ -2707,7 +2715,49 @@
     <Content Include="tip\输入框提示.htm" />
     <Content Include="tip\输入框提示_files\tip.js" />
     <Content Include="tip\输入框提示_files\tip_arrow.gif" />
+    <Content Include="ueditor\editor_all_min.js" />
+    <Content Include="ueditor\editor_config.js" />
+    <Content Include="ueditor\lang\zh-cn\images\copy.png" />
+    <Content Include="ueditor\lang\zh-cn\images\imglabel.png" />
+    <Content Include="ueditor\lang\zh-cn\images\localimage.png" />
+    <Content Include="ueditor\lang\zh-cn\images\music.png" />
+    <Content Include="ueditor\lang\zh-cn\images\upload.png" />
+    <Content Include="ueditor\lang\zh-cn\zh-cn.js" />
+    <Content Include="ueditor\themes\default\css\ueditor.css" />
+    <Content Include="ueditor\themes\default\dialogbase.css" />
+    <Content Include="ueditor\themes\default\images\anchor.gif" />
+    <Content Include="ueditor\themes\default\images\arrow.png" />
+    <Content Include="ueditor\themes\default\images\button-bg.gif" />
+    <Content Include="ueditor\themes\default\images\cancelbutton.gif" />
+    <Content Include="ueditor\themes\default\images\cursor_h.gif" />
+    <Content Include="ueditor\themes\default\images\cursor_h.png" />
+    <Content Include="ueditor\themes\default\images\cursor_v.gif" />
+    <Content Include="ueditor\themes\default\images\cursor_v.png" />
+    <Content Include="ueditor\themes\default\images\dialog-title-bg.png" />
+    <Content Include="ueditor\themes\default\images\filescan.png" />
+    <Content Include="ueditor\themes\default\images\highlighted.gif" />
+    <Content Include="ueditor\themes\default\images\icons-all.gif" />
+    <Content Include="ueditor\themes\default\images\icons.gif" />
+    <Content Include="ueditor\themes\default\images\icons.png" />
+    <Content Include="ueditor\themes\default\images\lock.gif" />
+    <Content Include="ueditor\themes\default\images\neweditor-tab-bg.png" />
+    <Content Include="ueditor\themes\default\images\pagebreak.gif" />
+    <Content Include="ueditor\themes\default\images\scale.png" />
+    <Content Include="ueditor\themes\default\images\spacer.gif" />
+    <Content Include="ueditor\themes\default\images\sparator_v.png" />
+    <Content Include="ueditor\themes\default\images\toolbar_bg.png" />
+    <Content Include="ueditor\themes\default\images\unhighlighted.gif" />
+    <Content Include="ueditor\themes\default\images\upload.png" />
+    <Content Include="ueditor\themes\default\images\videologo.gif" />
+    <Content Include="ueditor\themes\default\images\word.gif" />
+    <Content Include="ueditor\themes\default\images\wordpaste.png" />
+    <Content Include="ueditor\themes\iframe.css" />
+    <Content Include="ueditor\WebForm1.aspx" />
     <Content Include="UpDownkey.aspx" />
+    <Content Include="upload\FileUpload.htm" />
+    <Content Include="upload\HTMLPage1.htm" />
+    <Content Include="upload\img\fu_btn.gif" />
+    <Content Include="upload\img\loading.gif" />
     <Content Include="WebService1.asmx" />
     <Content Include="XMLOP.aspx" />
     <Content Include="xuzhiwei.js" />
@@ -2834,6 +2884,7 @@
     <None Include="mass\bananaxzw-mass-Framework-08192df\libs\fabric\README.md" />
     <None Include="mass\bananaxzw-mass-Framework-08192df\README.md" />
     <None Include="mass\bananaxzw-mass-Framework-08192df\src\doc\public\styles\switchable\Thumbs.db" />
+    <Content Include="upload\File.ashx" />
     <None Include="新建文本文档.bat" />
   </ItemGroup>
   <ItemGroup>
