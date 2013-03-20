@@ -17,6 +17,11 @@
 
     var _$ = window.$;
     //链式操作
+    /**
+    * @description 链式操作
+    * @class
+    * @name chain
+    */
     function chain(selector, context) {
         // (""), (null), or (undefined)
         if (!selector) {
@@ -67,13 +72,21 @@
     chain.prototype = {
         //暂存dom元素
         elements: [],
+        /**
+        * @ignore
+        */
         name: "SL.CHAIN",
+        /**
+        * @ignore
+        */
         newChain: function (selector, context) {
             var _chain = new chain(selector, context);
             _chain.previousChain = this;
             return _chain;
         },
-
+        /**
+        * @ignore
+        */
         isChain: function (o) {
             return o != null && sl.InstanceOf.Object(o) && o.name == "SL.CHAIN";
         },
@@ -106,11 +119,9 @@
         first: function () {
             return this.eq(0);
         },
-
         last: function () {
             return this.eq(-1);
         },
-
         slice: function () {
             return this.pushStack(Array.prototype.slice.apply(this.elements, arguments));
         },
@@ -212,12 +223,17 @@
             })
             return ret;
         },
+        /**
+        *在每个匹配的元素之前插入内容
+        */
         before: function () {
             return this.domManipulation(arguments, false, function (fragment) {
                 sl.Dom.insertBefore(fragment, this);
             })
         },
-
+        /**
+        *把所有匹配的元素插入到另一个、指定的元素元素集合的前面
+        */
         insertBefore: function () {
             var args = arguments;
             var _this = this;
@@ -226,11 +242,17 @@
                     _this.newChain(args[i])["before"](this);
             });
         },
+        /**
+        *在每个匹配的元素之后插入内容
+        */
         after: function () {
             return this.domManipulation(arguments, false, function (fragment) {
                 sl.Dom.insertAfter(fragment, this);
             })
         },
+        /**
+        *把所有匹配的元素插入到另一个、指定的元素元素集合的后面
+        */
         insertAfter: function () {
             var args = arguments;
             var _this = this;
@@ -240,11 +262,17 @@
             });
 
         },
+        /**
+        *向每个匹配的元素内部追加内容
+        */
         append: function () {
             return this.domManipulation(arguments, true, function (fragment) {
                 sl.Dom.append(fragment, this);
             })
         },
+        /**
+        *把所有匹配的元素追加到另一个、指定的元素元素集合中
+        */
         appendTo: function () {
             var args = arguments;
             var _this = this;
@@ -253,11 +281,17 @@
                     _this.newChain(args[i])["append"](this);
             });
         },
+        /**
+        *向每个匹配的元素内部前置内容
+        */
         prepend: function () {
             return this.domManipulation(arguments, true, function (fragment) {
                 sl.Dom.appendFirstChild(fragment, this);
             })
         },
+        /**
+        *把所有匹配的元素前置到另一个、指定的元素元素集合中
+        */
         prependTo: function () {
             var args = arguments;
             var _this = this;
@@ -266,6 +300,9 @@
                     _this.newChain(args[i])["prepend"](this);
             });
         },
+        /**
+        *将所有匹配的元素用单个元素包裹起来
+        */
         wrapAll: function (html) {
             if (this.elements[0]) {
 
@@ -286,6 +323,9 @@
 
             return this;
         },
+        /**
+        *将每一个匹配的元素的子内容(包括文本节点)用一个HTML结构包裹起来
+        */
         wrapInner: function (html) {
             var _this = this;
             return this.each(function () {
@@ -298,6 +338,9 @@
                 }
             });
         },
+        /**
+        *把所有匹配的元素用其他元素的结构化标记包裹起来
+        */
         wrap: function (html) {
             var _this = this;
             return this.each(function () {
@@ -307,22 +350,30 @@
         attr: function (key, value) {
             return sl.access(this.elements, key, value, sl.attr.getAttr, sl.attr.setAttr, null, this);
         },
-
         removeAttr: function (name) {
             return this.each(function () {
                 sl.attr.removeAttr(this, name);
             });
         },
+        /**
+        *为每个匹配的元素添加指定的类名
+        */
         addClass: function (classNames) {
             return this.each(function () {
                 sl.attr.addClass(this, classNames);
             });
         },
+        /**
+        *从所有匹配的元素中删除全部或者指定的类。
+        */
         removeClass: function (classNames) {
             return this.each(function () {
                 sl.attr.removeClass(this, classNames);
             });
         },
+        /**
+        *检查当前的元素是否含有某个特定的类，如果有，则返回true
+        */
         hasClass: function (className) {
             sl.each(this.elements, function (i, d) {
                 if (sl.attr.hasClass(d, className)) {
@@ -331,6 +382,9 @@
             });
             return false;
         },
+        /**
+        *如果存在（不存在）就删除（添加）一个类
+        */
         toggleClass: function (className) {
             return this.each(function () {
                 sl.attr.toggleClass(this, className);
@@ -395,6 +449,12 @@
                 sl.removeData(this, key);
             });
         },
+        /**
+        *获取匹配元素在当前视口的相对偏移
+        *@memberOf chain.prototype
+        *@function
+        *@name offset
+        */
         offset: function () {
             if (this.elements.length) {
                 return sl.offset(this.elements, arguments[0]);
@@ -428,6 +488,12 @@
 
             return { top: top, bottom: bottom, left: left, right: right };
         },
+        /**
+        *获取匹配元素相对父元素的偏移
+        *@memberOf chain.prototype
+        *@function
+        *@name position
+        */
         position: function () {
 
             if (!this.elements[0]) {
@@ -438,7 +504,6 @@
         serialize: function () {
             return sl.param(this.serializeArray());
         },
-
         serializeArray: function () {
             var _this = this;
             var newChain = this.map(function () {
@@ -461,9 +526,69 @@
 					{ name: elem.name, value: val.replace(rCRLF, "\r\n") };
             });
         }
-
     };
+    /**
+    *父节点
+    *@memberOf chain.prototype
+    *@function
+    *@name parent
+    */
 
+    /**
+    *所有祖先节点
+    *@memberOf chain.prototype
+    *@function
+    *@name parents
+    */
+
+    /**
+    *取得一个包含匹配的元素集合中每一个元素紧邻的后面同辈元素
+    *@memberOf chain.prototype
+    *@function
+    *@name next
+    */
+
+    /**
+    *取得一个包含匹配的元素集合中每一个元素紧邻的前一个同辈元素
+    *@memberOf chain.prototype
+    *@function
+    *@name prev
+    */
+
+    /**
+    *查找当前元素之后所有的同辈元素
+    *@memberOf chain.prototype
+    *@function
+    *@name nextAll
+    */
+
+    /**
+    *查找当前元素之前所有的同辈元素
+    *@memberOf chain.prototype
+    *@function
+    *@name prevAll
+    */
+
+    /**
+    *取得一个包含匹配的元素集合中每一个元素的所有唯一同辈元素的元素集合
+    *@memberOf chain.prototype
+    *@function
+    *@name siblings
+    */
+
+    /**
+    *取得一个包含匹配的元素集合中每一个元素的所有子元素的元素集合
+    *@memberOf chain.prototype
+    *@function
+    *@name children
+    */
+
+    /**
+    *查找匹配元素内部所有的子节点（包括文本节点）
+    *@memberOf chain.prototype
+    *@function
+    *@name contents
+    */
     sl.each({
         parent: function (elem) { return elem.parentNode; },
         parents: function (elem) { return sl.Dom.dir(elem, "parentNode"); },
@@ -484,6 +609,42 @@
             return this.pushStack(sl.Array.deleteRepeater(ret));
         };
     });
+    /**
+    *取得第一个匹配元素当前计算的宽度值
+    *@memberOf chain.prototype
+    *@function
+    *@name width
+    */
+    /**
+    *取得第一个匹配元素当前计算的高度值
+    *@memberOf chain.prototype
+    *@function
+    *@name height
+    */
+    /**
+    *获取第一个匹配元素内部区域宽度（包括补白、不包括边框）
+    *@memberOf chain.prototype
+    *@function
+    *@name innerWidth
+    */
+    /*
+    *获取第一个匹配元素内部区域高度（包括补白、不包括边框）
+    *@memberOf chain.prototype
+    *@function
+    *@name innerHeight
+    */
+    /**
+    *获取第一个匹配元素外部宽度（默认包括补白和边框）
+    *@memberOf chain.prototype
+    *@function
+    *@name outerWidth
+    */
+    /**
+    *获取第一个匹配元素外部高度（默认包括补白和边框）
+    *@memberOf chain.prototype
+    *@function
+    *@name outerHeight
+    */
     sl.each(["width", "height", "innerWidth", "innerHeight", "outerWidth", "outerHeight"], function (index, name) {
         chain.prototype[name] = function (value) {
             var val = sl.css(this.elements, name, value);
@@ -502,6 +663,18 @@
 	        return fn && this.bind(name, fn);
 	    };
 	});
+	/**
+	*获取匹配元素相对滚动条左侧的偏移
+	*@memberOf chain.prototype
+	*@function
+	*@name scrollLeft
+	*/
+	/**
+	*获取匹配元素相对滚动条顶部的偏移
+	*@memberOf chain.prototype
+	*@function
+	*@name scrollTop
+	*/
     sl.each(["scrollLeft", "scrollTop"], function (index, name) {
         chain.prototype[name] = function (value) {
             return sl[name](this.elements, value);
@@ -510,7 +683,6 @@
     function innerFind(selector, nodes) {
         //element
         var resultNodes = [], length;
-
         for (i = 0, l = nodes.length; i < l; i++) {
             length = resultNodes.length;
             sl.select(selector, nodes[i], resultNodes);
