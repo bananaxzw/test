@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../JsLib/jq1.72.js" type="text/javascript"></script>
+    <link href="uploadify.css" rel="stylesheet" type="text/css" />
+    <script src="jquery.uploadify.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(function () {
+                $("#uploadify").uploadify({
+                    'auto': false,
+                    'swf': 'uploadify.swf',
+                    'uploader': 'Handler1.ashx',
+                    'itemTemplate': '<div id="${fileID}" class="uploadify-queue-item">\
+                    <div class="cancel">\
+                        <a href="javascript:$(\'#${instanceID}\').uploadify(\'cancel\', \'${fileID}\')">X</a>\
+                    </div>\
+                    <span class="fileName">${fileName} (${fileSize})</span><span class="data"></span>\
+                </div>',
+                    'onUploadComplete': function (file) {
+                        alert('The file ' + file.name + ' finished processing.');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="fileQueue">
+    </div>
+    <input type="file" name="uploadify" id="uploadify" />
+    <p>
+        <a href="javascript:$('#uploadify').uploadify('upload','*')">Upload Files</a> <a
+            href="javascript:$('#uploadify').uploadifyClearQueue()">Cancel All Uploads</a>
+    </p>
+</body>
+</html>
