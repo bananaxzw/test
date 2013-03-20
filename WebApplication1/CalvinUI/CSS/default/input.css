@@ -30,6 +30,8 @@
         .lm_sbar div
         {
             *float: right;
+            height: 20px;
+            *height:21px;
             overflow: hidden;
         }
         .lm_sbar .txt
@@ -43,6 +45,5 @@
             border-top: 1px solid #7c7c7c;
             border-left: 1px solid #9a9a9a;
             outline: none;
-            line-height: 170%;
             padding: 0 0 0 2px;
         }

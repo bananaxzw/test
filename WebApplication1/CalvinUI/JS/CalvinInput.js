@@ -28,8 +28,8 @@
                     $text.val(opts.DefaultText).css("color", "#a0a0a0");
                 }
             });
-            //点击清楚原来文字
-            $text.click(function () {
+            //点击 原来文字
+            $text.focus(function () {
                 if (this.value == opts.DefaultText) {
                     this.value = "";
                     this.style.color = "#000";
