@@ -39,6 +39,11 @@ if (!window.CalvinBase || !CalvinBase.init) {//初始化检测
 
 
         Array.prototype.remove = function (dx) {
+        	/// <summary>
+        	/// 
+        	/// </summary>
+        	/// <param name="dx"></param>
+        	/// <returns type=""></returns>
             if (isNaN(dx) || dx > this.length) { return false; }
             this.splice(dx, 1);
         }
