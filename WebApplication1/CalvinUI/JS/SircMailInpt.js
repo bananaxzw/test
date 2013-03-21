@@ -15,12 +15,14 @@
     var rName = /[;]/g;
     var ItemHepler = {
         AddUser: function (input, name, id) {
-            name = name.replace(rName, "");
-            if (!name) return;
-            var str = "<div style='float: left; white-space: nowrap;' class='addr_base " + (id ? "addr_normal" : "addr_error") + "'" + "addr='" + id + "'>" + "<b class='addr_name'>" + name + "</b>" + "<span class='semicolon'>;</span>" + "<a class='addr_del' href='javascript:;' name='del'></a>" + "</div>";
-            var $UserAddr = $(str);
-            $(input.parentNode).before($UserAddr);
-            EventHelper.BindUserAddrEvent($UserAddr);
+            if (!CheckExist(id, name, input)) {
+                name = name.replace(rName, "");
+                if (!name) return;
+                var str = "<div style='float: left; white-space: nowrap;' class='addr_base " + (id ? "addr_normal" : "addr_error") + "'" + "addr='" + id + "'>" + "<b class='addr_name'>" + name + "</b>" + "<span class='semicolon'>;</span>" + "<a class='addr_del' href='javascript:;' name='del'></a>" + "</div>";
+                var $UserAddr = $(str);
+                $(input.parentNode).before($UserAddr);
+                EventHelper.BindUserAddrEvent($UserAddr);
+            }
             input = null
         }
     };
@@ -30,6 +32,19 @@
         return $(textbox).wrapAll(str).parent().parent()
     };
 
+    function CheckExist(value, name, textBox) {
+        var isE = false;
+        $("div.addr_base", $(textBox).data("MailInput.data").$Mail_Container).each(function () {
+            var namee = $("b.addr_name", this).text(), id = this.getAttribute("addr");
+            if (id == value || name == namee) {
+                isE = true;
+                return false;
+            }
+        });
+        return isE;
+    }
+
+
     function GetCollectValue(textBox) {
         var values = [],
 			$this, name = "";
@@ -38,7 +53,7 @@
             if (!$this.hasClass("addr_error")) {
                 var name = $("b.addr_name", this).text();
                 values.push({
-                    id: this.addr,
+                    id: this.getAttribute("addr"),
                     name: name
                 })
             }
@@ -70,6 +85,7 @@
             })
         },
         BindUserAddrEvent: function ($UserAddr) {
+            //地址单击
             $UserAddr.click(function (e) {
                 $("div.addr_base").removeClass("addr_select fn_list");
                 $(this).removeClass("addr_over");
@@ -85,6 +101,7 @@
             }, function () {
                 $(this).removeClass("addr_over")
             });
+            //分号字符
             $UserAddr.keyup(function (e) {
                 var keyCode = e.keyCode;
                 if (keyCode == 8 || keyCode == 46) {

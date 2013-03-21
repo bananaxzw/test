@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" ValidateRequest="false" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="WebApplication1.ueditor.WebForm1" %>
+﻿<%@ Page Language="C#" ValidateRequest="false" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs"
+    Inherits="WebApplication1.ueditor.WebForm1" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -15,9 +16,12 @@
 </head>
 <body>
     <form id="form1" runat="server">
-    <asp:Button ID="Button1" runat="server" Text="Button" onclick="Button1_Click" />
+    safsaafasfasf<br />
+    safsaafasfasf<br />
+    safsaafasfasf<br />
+    <asp:Button ID="Button1" runat="server" Text="Button" OnClick="Button1_Click" />
     <div>
-    <textarea id="safsa" runat=server></textarea>
+        <textarea id="safsa" runat="server"></textarea>
         <script id="editor" type="text/plain">这里可以书写，编辑器的初始内容</script>
     </div>
     <div class="clear">
@@ -158,7 +162,7 @@
                 domUtils.removeAttributes(btn, ["disabled"]);
             }
         }
-</script>
+    </script>
     </form>
 </body>
 </html>
