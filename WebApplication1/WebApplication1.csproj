@@ -411,6 +411,7 @@
     <Content Include="CalvinUI\JS\CalvinComboBox.js" />
     <Content Include="CalvinUI\JS\CalvinDraggable.js" />
     <Content Include="CalvinUI\JS\CalvinDroppable.js" />
+    <Content Include="CalvinUI\JS\CalvinFileUploader.js" />
     <Content Include="CalvinUI\JS\CalvinImageLazyLoad.js" />
     <Content Include="CalvinUI\CalvinInput.htm" />
     <Content Include="CalvinUI\JS\CalvinInput.js" />
@@ -2766,6 +2767,13 @@
     <Content Include="UpDownkey.aspx" />
     <Content Include="upload\Change Log.txt" />
     <Content Include="upload\FileUpload.htm" />
+    <Content Include="upload\html （iframe）\images\bg.gif" />
+    <Content Include="upload\html （iframe）\images\icon.gif" />
+    <Content Include="upload\html （iframe）\images\skin.gif" />
+    <Content Include="upload\html （iframe）\index.html" />
+    <Content Include="upload\html （iframe）\style\common.css" />
+    <Content Include="upload\html （iframe）\style\style.css" />
+    <Content Include="upload\html （iframe）\write.html" />
     <Content Include="upload\HTMLPage1.htm" />
     <Content Include="upload\HTMLPage2.htm" />
     <Content Include="upload\img\fu_btn.gif" />
@@ -2905,6 +2913,7 @@
     <None Include="mass\bananaxzw-mass-Framework-08192df\src\doc\public\styles\switchable\Thumbs.db" />
     <Content Include="upload\File.ashx" />
     <Content Include="upload\Handler1.ashx" />
+    <None Include="upload\html （iframe）\images\thumbs.idb" />
     <None Include="新建文本文档.bat" />
   </ItemGroup>
   <ItemGroup>

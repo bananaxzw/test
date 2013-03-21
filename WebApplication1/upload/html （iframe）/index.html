@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>政务通系统邮箱</title>
+    <link type="text/css" rel="stylesheet" href="style/common.css" />
+    <link type="text/css" rel="stylesheet" href="style/style.css" />
+	<script type="text/javascript">
+        window.onload = function () {
+            document.getElementById("height_auto").style.height ="100%";
+        }
+    </script>
+
+</head>
+<body onLoad="setHeight()" style="overflow: hidden;">
+<table id="height_auto" cellpadding="0" cellspacing="0" width="100%" border="0">
+    <tr>
+        <td id="email_left" valign="top">
+            <div></div>
+            <ul id="email_left_btn">
+            	<li id="btn_receiver"><a href="#">收 信</a></li>
+                <li id="btn_wletter"><a href="#">写 信</a></li>
+            </ul>
+            <ul id="email_left_list">
+            	<li><a href="#">收件箱（3）</a></li>
+                <li><a href="#">草稿箱（1）</a></li>
+                <li><a href="#">已发送</a></li>
+                <li><a href="#">文件中心</a></li>
+            </ul>
+        </td>
+        <td valign="top" id="right_h">
+        <iframe src="write.html" name="rightFrame" frameborder="0" scrolling="no" id="rightFrame" style="width:100%; height:100%"></iframe>
+        </td>
+    </tr>
+</table>
+</body>
+</html> 
+<script type="text/javascript">
+	var rightDiv = document.getElementById('right_h');
+
+    var h = document.body.offsetHeight;
+    function setHeight() {
+		rightDiv .style.height = (h) + "px";
+
+    }
+</script>
