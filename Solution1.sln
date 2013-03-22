@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebAppli
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SL", "..\SL\", "{C4DEC357-E8D4-4E7F-8775-A73FEAC857EA}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
 		Debug.AspNetCompiler.VirtualPath = "/SL"
 		Debug.AspNetCompiler.PhysicalPath = "..\SL\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\SL\"

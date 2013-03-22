@@ -26,30 +26,7 @@
 	{ text: '延迟加载', sub: [{ text: '页面元素延迟', click: function () { goto1("lazyload.htm") } }, { text: '滚动底部加载', click: function () { goto1("scrollbottom.htm") } }, { text: '图片延迟加载', click: function () { goto1("imageLazyload.htm"); } }] },
 	{ line: true },
 	{ text: '对话框', click: function () { goto1("dialog.htm"); } },
-	{ text: '新建', ico: 'add.gif', sub: [
-				{ text: '文件夹', ico: 'folder.gif', click: function () { alert('过几天吧!') } },
-				{ text: '快捷方式', disabled: true },
-				{ line: true },
-				{ text: '公文包' },
-				{ text: 'safsaf', ico: 'word.gif' },
-				{ text: '文本文档' },
-				{ text: 'safsaf' },
-				{ text: 'asfsa' },
-				{ text: '更多格式', ico: 'more.gif', sub: [
-							{ text: '许志伟', click: function () { alert('许志伟!') } },
-							{ text: '许志伟' },
-							{ text: 'asfsa', sub: [
-								{ text: 'asf', sub: [{ text: '许志伟' }, { text: '待续...'}] },
-								{ text: 'asf' },
-								{ text: 'asf' },
-								{ text: 'asfsaf' }
-							]
-							}
-						]
-				}
-			]
-	},
-	{ text: 'asfsaf', click: function () { alert('怎么这么多要求!') } }
+	{ text: '继续更新中··', click: function () { alert('怎么这么多要求!') } }
 ];
         sl.ready(function () {
             var mm = new sl.ui.fixedtop(document.getElementById("nav"), { top: 0 });
