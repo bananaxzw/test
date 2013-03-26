@@ -42,7 +42,7 @@
             }
         });
         return isE;
-    }
+    };
 
 
     function GetCollectValue(textBox) {
