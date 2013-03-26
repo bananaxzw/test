@@ -2,45 +2,52 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-    <style type="text/css">
-    .calvinInput{
-	display:inline-block;
-	white-space:nowrap;
-	font-size:12px;
-	margin:0;
-	padding:0;
-	border:1px solid #A4BED4;
-	background:#fff;
-}
-.calvinInput-text{
-	font-size:12px;
-	border:0px;
-	line-height:20px;
-	height:20px;
-	padding:0px;
-	*height:18px;
-	*line-height:18px;
-	_height:18px;
-	_line-height:18px;
-}
-.combo-arrow{
-	background:#E0ECF9 url('images/combo_arrow.gif') no-repeat 3px 4px;
-	width:18px;
-	height:20px;
-	overflow:hidden;
-	display:inline-block;
-	vertical-align:top;
-	cursor:pointer;
-	opacity:0.6;
-	filter:alpha(opacity=60);
-}
-
+    <link rel="stylesheet" type="text/css" href="CSS/default/icons.css" />
+    <script src="../JsLib/jq1.72.js" type="text/javascript"></script>
+    <script src="JS/CalvinInput_.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".ui-input-text").CalvinInput();
+        });
     
+    </script>
+    <style type="text/css">
+    .ui-input-container
+    {
+	    display:inline-block;
+	    white-space:nowrap;
+	    font-size:12px;
+	    margin:0;
+	    padding:0;
+	    border:1px solid #A4BED4;
+	    background:#fff;
+    }
+    .ui-input-text
+    {
+	    font-size:12px;
+	    border:0px;
+	    line-height:20px;
+	    height:20px;
+	    padding:0px;
+	    *height:18px;
+	    *line-height:18px;
+	    _height:18px;
+	    _line-height:18px;
+    }
+    .ui-input-icon
+    {
+	    width:16px;
+	    height:16px;
+	    overflow:hidden;
+	    display:inline-block;
+	    cursor:pointer;
+	    opacity:0.6;
+	    filter:alpha(opacity=60);
+	    vertical-align:middle;
+    }
     </style>
 </head>
 <body>
-    <span class="combo" jquery1364129624677="20">
-        <input id="Text1" class="combo-text" value="asgggggggggggggggggggggggggg" type="text">
-        <span jquery1364129624677="21"><span class="combo-arrow"></span></span></span>
+        <input  type="text"  class="ui-input-text"/>
 </body>
 </html>

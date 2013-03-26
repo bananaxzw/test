@@ -1,19 +1,24 @@
 ﻿/// <reference path="jquery-1.4.1-vsdoc.js" />
 /// <reference path="../../JsLib/jq1.72.js" />
 /// <reference path="CalvinAutoComplete.js" />
+/********************************************************************************************
+* 文件名称:	
+* 设计人员:	许志伟 
+* 设计时间:	
+* 功能描述:	
+* 注意事项：
+*
+*注意：允许你使用该框架 但是不允许修改该框架 有发现BUG请通知作者 切勿擅自修改框架内容
+*
+********************************************************************************************/
 (function () {
 
     function WrapText(textbox) {
-        var str = "<div class='lm_sbar'>" +
-            "<div>" +
-           "</div>" +
-        "</div>";
-        $(textbox).wrapAll(str);
-        return $(textbox).parent().parent().prepend("<input type='button' class='lm_btn lm_sopen' />");
+        var str = " <span class='ui-input-container'>" +
+        "</span>";
+        $(textbox).addClass("ui-input-text").wrapAll(str);
+        return $(textbox).parent().append("<span class='icon-container'><span class='ui-input-icon ui-icon ui-icon-search'></span></span>");
     };
-
-
-
     var Defaluts = { DefaultText: "" };
 
     var EventHelper = {
@@ -22,9 +27,9 @@
             var opts = $text.data("CalvinInput.data").options,
             $container = $text.data("CalvinInput.data").$Input_Container;
             //点击删除按钮 清理文字 还原样式
-            $("input.lm_btn", $container).click(function () {
-                if ($(this).hasClass("lm_sclose")) {
-                    $(this).addClass("lm_sopen").removeClass("lm_sclose");
+            $("span.ui-input-icon", $container).click(function () {
+                if ($(this).hasClass("ui-icon-circle-close")) {
+                    $(this).addClass("ui-icon-search").removeClass("ui-icon-circle-close");
                     $text.val(opts.DefaultText).css("color", "#a0a0a0");
                 }
             });
@@ -45,7 +50,7 @@
             //有字母 出现删除
             $text.keyup(function () {
                 if (this.value != opts.DefaultText && $.trim(this.value) != "") {
-                    $("input.lm_btn", $container).removeClass("lm_sopen").addClass("lm_sclose");
+                    $("span.ui-input-icon", $container).removeClass("ui-icon-search").addClass("ui-icon-circle-close");
                 }
 
             });
@@ -54,23 +59,11 @@
 
 
     $.fn.CalvinInput = function (options, param) {
-        if (typeof options === "string") {
-            switch (options.toUpperCase()) {
-                case "ADD":
-                    ItemHepler.AddUser(this[0], param.name, param.mail);
-                    return;
-                case "GETVALUES":
-                    return GetCollectValue(this[0]);
-                    return;
-            }
-
-        };
         return this.each(function () {
             var opts = {},
              $this = $(this),
              state = $.data(this, 'CalvinInput.data');
-
-            $this.css("color", "#a0a0a0").addClass("txt");
+            $this.css("color", "#a0a0a0");
             if (state) {
                 $.extend(opts, state.options, options);
                 state.options = opts;

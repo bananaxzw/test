@@ -287,6 +287,7 @@
     <Content Include="CalvinUI\CSS\default\datebox.css" />
     <Content Include="CalvinUI\CSS\default\dialog.css" />
     <Content Include="CalvinUI\CSS\default\easyui.css" />
+    <Content Include="CalvinUI\CSS\default\icons.css" />
     <Content Include="CalvinUI\CSS\default\images\accordion_collapse.png" />
     <Content Include="CalvinUI\CSS\default\images\accordion_expand.png" />
     <Content Include="CalvinUI\CSS\default\images\ajax-loader.gif" />
@@ -352,6 +353,11 @@
     <Content Include="CalvinUI\CSS\default\images\ui-bg_glass_65_ffffff_1x400.png" />
     <Content Include="CalvinUI\CSS\default\images\ui-bg_glass_75_dadada_1x400.png" />
     <Content Include="CalvinUI\CSS\default\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="CalvinUI\CSS\default\images\ui-icons_222222_256x240.png" />
+    <Content Include="CalvinUI\CSS\default\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="CalvinUI\CSS\default\images\ui-icons_454545_256x240.png" />
+    <Content Include="CalvinUI\CSS\default\images\ui-icons_888888_256x240.png" />
+    <Content Include="CalvinUI\CSS\default\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="CalvinUI\CSS\default\images\validatebox_pointer.gif" />
     <Content Include="CalvinUI\CSS\default\images\validatebox_warning.png" />
     <Content Include="CalvinUI\CSS\default\input.css" />
