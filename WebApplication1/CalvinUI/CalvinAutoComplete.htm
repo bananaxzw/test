@@ -23,7 +23,7 @@
         //        var tt = "许";
         //        alert(new RegExp(".*" + tt + ".*", "g").test("许"));
         $(function () {
-            $("#ajax").CalvinAutoComplete({ min: 1, dynamicSource: true, ajaxOption: { url: "Handler1.ashx", extendData: { name: "xuzhiwei", age: 11}} });
+            $("#ajax").CalvinAutoComplete({ min: 1, dynamicSource: true, ajaxOption: { url: "Handler1.ashx", data: { name: "xuzhiwei", age: 11}} });
         });
     </script>
 </head>
