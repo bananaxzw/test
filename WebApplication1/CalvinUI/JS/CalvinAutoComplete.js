@@ -66,17 +66,20 @@
             var $loading = GenerateLoading(textBox);
             $loading.show();
             var key = textBox.value;
-            // var params = JSON.stringify($.extend({ "key": key }, opts.ajaxOption.extendData));
-            var params = $.param($.extend({ "key": key }, opts.ajaxOption.extendData));
+            if (/json/.test(opts.ajaxOption.contentType)) {
+                params = JSON.stringify($.extend({ "key": key }, opts.ajaxOption.data));
+            } else {
+                params = $.param($.extend({ "key": key }, opts.ajaxOption.data));
+            }
             if (opts.dynamicSource) {
                 var xmlhttp = $.ajax({
                     type: "POST",
                     url: opts.ajaxOption.url,
-                    //contentType: "application/json",
+                    contentType: opts.ajaxOption.contentType,
                     dataType: "json",
                     data: params,
                     success: function (data) {
-                        opts.source = data;
+                        opts.source = data ? (data.d ? data.d : data) : null;
                         var $items = MenuItemHelper._GenrateMenuItems(textBox, otherHelper.FilterOptionSouces(opts, textBox.value), height, width, top, left);
                         $loading.hide();
                         return $items;
@@ -89,8 +92,6 @@
                         return null;
                     }
                 });
-
-
             }
             else {
                 var $items = MenuItemHelper._GenrateMenuItems(textBox, otherHelper.FilterOptionSouces(opts, textBox.value), height, width, top, left);
@@ -200,7 +201,7 @@
                 var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer[0]);
                 var SelectIndex = $items.index($SelectedItem[0]);
                 switch (event.keyCode) {
-                    //向上                                                                                                                                           
+                    //向上                                                                                                                                             
                     case 38:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
 
@@ -208,7 +209,7 @@
                             $SelectedItem.prev().addClass("ui-menu-itemHover");
                         }
                         break;
-                    //向下                                                                                                                                        
+                    //向下                                                                                                                                          
                     case 40:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
                         //没有选中的项
@@ -248,7 +249,7 @@
                         }
                         MenuItemHelper.RemoveMenuItems(textBox);
                         break;
-                    //删除键                                                                              
+                    //删除键                                                                                
                     case 8:
                         var minLength = opts.min;
                         if ($this.val().length >= minLength) {
@@ -320,9 +321,12 @@
         * @param {Key} 值
         **/
         FilterOptionSouces: function (opts, Key) {
-            if (opts.source == null || opts.source.length == 0)
+            if (opts.source == null || opts.source.length == 0) {
                 return null;
-            if (opts.dynamicSource) return opts.source;
+            }
+            if (opts.dynamicSource) {
+                return opts.source;
+            }
             var fileterArray = new Array();
 
             $.each(opts.source, function (t, d) {
@@ -364,7 +368,7 @@
         }
     };
 
-    var defaults = { min: 1, source: [], selected: function (event, item) { }, dynamicSource: false, ajaxOption: { url: "", extendData: {} }, AutoInput: true, MenuHideAuto: true };
+    var defaults = { min: 1, source: [], selected: function (event, item) { }, dynamicSource: false, ajaxOption: $.ajaxSettings, AutoInput: true, MenuHideAuto: true };
 
     $.fn.CalvinAutoComplete = function (options, param) {
 
@@ -391,3 +395,9 @@
         });
     };
 })();
+
+
+/*********************************
+@2013-03-07修改ajax获取数据
+
+***************************************/
