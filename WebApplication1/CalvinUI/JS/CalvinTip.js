@@ -18,7 +18,7 @@
         var html = "<div  class='tooltip tooltip-" + options.arrow + "'>" +
         "<div class='tooltip-arrow tooltip-arrow-" + options.arrow.charAt(0) + "'>" +
         "</div>" +
-        "<div class='tooltip-inner'>" +
+        "<div class='tooltip-inner'>" +"内容哈哈哈哈哈哈啊哈"+
          "</div>" +
         "</div>";
         var $toolTip = $(html);
@@ -31,7 +31,8 @@
             var cacheData = $.data(elem, "CalvinToolTip.data"),
              $element = $(elem),
              $tip = cacheData.$toolTip,
-             arrow = cacheData.options.arrow;
+             arrow = cacheData.options.arrow,
+             options = cacheData.options;
 
 
             var pos = $.extend({}, $element.offset(), {
@@ -46,16 +47,16 @@
             var tp;
             switch (arrow.charAt(0)) {
                 case 'n':
-                    tp = { top: pos.top + pos.height + this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2 };
+                    tp = { top: pos.top + pos.height + options.offset, left: pos.left + pos.width / 2 - actualWidth / 2 };
                     break;
                 case 's':
-                    tp = { top: pos.top - actualHeight - this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2 };
+                    tp = { top: pos.top - actualHeight - options.offset, left: pos.left + pos.width / 2 - actualWidth / 2 };
                     break;
                 case 'e':
-                    tp = { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth - this.options.offset };
+                    tp = { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth - options.offset };
                     break;
                 case 'w':
-                    tp = { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width + this.options.offset };
+                    tp = { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width + options.offset };
                     break;
             }
 
@@ -66,12 +67,13 @@
                     tp.left = pos.left + pos.width / 2 - actualWidth + 15;
                 }
             }
+            $tip.css(tp);
 
         }
 
     }
 
-    var defaults = {
+    var Defaluts = {
         className: null,
         delayIn: 0,
         delayOut: 0,
@@ -104,7 +106,7 @@
                 var $toolTip = formtoolTip(opts);
                 this.value = opts.DefaultText;
                 $this.data("CalvinToolTip.data", { options: opts, $toolTip: $toolTip });
-                EventHelper.setInputEvent($this);
+                ItemHelper.show(this);
             }
         });
     };
