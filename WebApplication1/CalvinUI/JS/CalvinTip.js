@@ -14,12 +14,86 @@
 (function () {
 
 
+    function formtoolTip(options) {
+        var html = "<div  class='tooltip tooltip-" + options.arrow + "'>" +
+        "<div class='tooltip-arrow tooltip-arrow-" + options.arrow.charAt(0) + "'>" +
+        "</div>" +
+        "<div class='tooltip-inner'>" +
+         "</div>" +
+        "</div>";
+        var $toolTip = $(html);
+        $(document.body).append($toolTip);
+        return $toolTip;
+    }
+    var ItemHelper =
+    {
+        show: function (elem) {
+            var cacheData = $.data(elem, "CalvinToolTip.data"),
+             $element = $(elem),
+             $tip = cacheData.$toolTip,
+             arrow = cacheData.options.arrow;
 
-    $.fn.CalvinInput = function (options, param) {
+
+            var pos = $.extend({}, $element.offset(), {
+                width: elem.offsetWidth,
+                height: elem.offsetHeight
+            });
+
+            var actualWidth = $tip[0].offsetWidth,
+                    actualHeight = $tip[0].offsetHeight;
+
+
+            var tp;
+            switch (arrow.charAt(0)) {
+                case 'n':
+                    tp = { top: pos.top + pos.height + this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2 };
+                    break;
+                case 's':
+                    tp = { top: pos.top - actualHeight - this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2 };
+                    break;
+                case 'e':
+                    tp = { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth - this.options.offset };
+                    break;
+                case 'w':
+                    tp = { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width + this.options.offset };
+                    break;
+            }
+
+            if (arrow.length == 2) {
+                if (arrow.charAt(1) == 'w') {
+                    tp.left = pos.left + pos.width / 2 - 15;
+                } else {
+                    tp.left = pos.left + pos.width / 2 - actualWidth + 15;
+                }
+            }
+
+        }
+
+    }
+
+    var defaults = {
+        className: null,
+        delayIn: 0,
+        delayOut: 0,
+        fade: false,
+        fallback: '',
+        arrow: 'n',
+        html: false,
+        live: false,
+        offset: 0,
+        opacity: 0.8,
+        title: 'title',
+        trigger: 'hover',
+        show: false,
+        hide: ""
+
+    };
+
+    $.fn.CalvinToolTip = function (options, param) {
         return this.each(function () {
             var opts = {},
              $this = $(this),
-             state = $.data(this, 'CalvinInput.data');
+             state = $.data(this, 'CalvinToolTip.data');
             $this.css("color", "#a0a0a0");
             if (state) {
                 $.extend(opts, state.options, options);
@@ -27,13 +101,12 @@
             }
             else {
                 $.extend(opts, Defaluts, options);
-                var $Input_Container = WrapText(this);
+                var $toolTip = formtoolTip(opts);
                 this.value = opts.DefaultText;
-                $this.data("CalvinInput.data", { options: opts, $Input_Container: $Input_Container });
+                $this.data("CalvinToolTip.data", { options: opts, $toolTip: $toolTip });
                 EventHelper.setInputEvent($this);
             }
         });
-
     };
 
 })();

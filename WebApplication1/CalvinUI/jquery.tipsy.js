@@ -208,7 +208,7 @@
         delayOut: 0,
         fade: false,
         fallback: '',
-        gravity: 'n',
+        gravity: 'nw',
         html: false,
         live: false,
         offset: 0,
