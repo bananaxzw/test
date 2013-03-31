@@ -7,12 +7,17 @@
     <script src="JS/CalvinTip.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
-            $("#safsaf").CalvinToolTip();
-        })
+            $("#safsaf").CalvinToolTip({content:"提示文字"});
+            $("#sfsaf").CalvinToolTip({ arrow: "nw", content: "提示文字", opacity: 50 });
+            $("#sfsaf").CalvinToolTip("hide");
+        });
     </script>
 </head>
 <body>
     <div id="safsaf">
         sasfasfasf</div>
+      <form>
+      <input type=text  id="sfsaf"/>
+      </form>
 </body>
 </html>
