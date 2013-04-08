@@ -14,7 +14,7 @@
 ********************************************************************************************/
 
 (function () {
-    $.fn.CalvinMenubutton = function (options,params) {
+    $.fn.CalvinMenubutton = function (options, params) {
         var defaults = {
             disabled: false,
             plain: true,
@@ -76,8 +76,8 @@
                     top: btn.offset().top + btn.outerHeight()
                 });
                 btn.blur();
-            }
-        }
+            };
+        };
 
         options = options || {};
         return this.each(function () {
