@@ -64,7 +64,7 @@
                 var data = $.data(target, 'panel');
                 var $panel = data.panel;
                 //  var dragHandle = $("div.panel-header", $panel);
-                $panel.CalvinDraggable({ handle: "div.panel-header", containment: $panel[0].parentNode });
+                $panel.CalvinDraggable({ handle: "div.panel-header", containment: $panel.get(0).parentNode });
 
             },
             setResizeable: function (target) {
@@ -431,18 +431,18 @@
         if (typeof options === "string") {
             //没有初始化之前直接调用.CalvinPanel("open"); 要先初始化下
             if (!this.data("panel")) {
-                $(this[0]).CalvinPanel();
+                $(this.get(0)).CalvinPanel();
             }
             switch (options.toUpperCase()) {
 
                 case 'OPTIONS':
-                    return $.data(this[0], 'panel').options;
+                    return $.data(this.get(0), 'panel').options;
                 case 'PANEL':
-                    return $.data(this[0], 'panel').panel;
+                    return $.data(this.get(0), 'panel').panel;
                 case "GETHEADER":
-                    return $.data(this[0], 'panel').panel.find('>div.panel-header');
+                    return $.data(this.get(0), 'panel').panel.find('>div.panel-header');
                 case "GETBODY":
-                    return $.data(this[0], 'panel').panel.find('>div.panel-body');
+                    return $.data(this.get(0), 'panel').panel.find('>div.panel-body');
                 case 'OPEN':
                     return this.each(function () {
                         eventHelper.openPanel(this);
