@@ -628,6 +628,8 @@
     <Content Include="easyJS\docs\selector\query.html" />
     <Content Include="easyJS\docs\selector\unique.html" />
     <Content Include="easyJS\docs\support\index.html" />
+    <Content Include="easyJS\JScript1.js" />
+    <Content Include="easyJS\s.htm" />
     <Content Include="easyJS\src\ajax.js" />
     <Content Include="easyJS\src\anim.js" />
     <Content Include="easyJS\src\attr.js" />
@@ -1058,6 +1060,7 @@
     <Content Include="JsLib\requirejs\NewFolder1\xuzhiwei.js" />
     <Content Include="JsLib\requirejs\my\Person.js" />
     <Content Include="JsLib\requirejs\require.htm" />
+    <Content Include="JsLib\sizzle1.4.js" />
     <Content Include="JsLib\SL.AJAXEX.js" />
     <Content Include="JsLib\SL.CSSOLD.js" />
     <Content Include="JsLib\SL.Dom - 副本.js" />
