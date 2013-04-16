@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-    <script src="sizzle.js" type="text/javascript"></script>
+<!--    <script src="sizzle.js" type="text/javascript"></script>-->
+    <script src="sizzle1.4.js" type="text/javascript"></script>
     <script src="jq1.72.js" type="text/javascript"></script>
     <script type="text/javascript">
     
@@ -11,16 +12,16 @@
 </head>
 <body>
 <div id="s">
-<div class="safsa" id="fff">safasfsafaf<Li></Li></div>
+<div class="safsa" id="fff">safasfsafaf<ul><li>asgs</li></ul></div>
 </div>
-<div class="safsa"></div>
+<div class="safsa1"><ul><li>asgs1</li></ul></div>
 
 <script type="text/javascript">
     Sizzle.selectors.filter.PSEUDO.me = function (elem) {
         return elem.id == true;
     }
     console.log(Sizzle.contains(document.documentElement, document.body));
-    Sizzle("#fff li");
+    Sizzle("div.safsa  ul > li");
 // var s=   Sizzle("div:me");
 //    var object = [];
 //    var tt = Sizzle(".safsa",null,object);
