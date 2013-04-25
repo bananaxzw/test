@@ -1051,6 +1051,7 @@
     <Content Include="JsLib\JsDOC\jsdoc-toolkit\templates\SL_doc_zh-cn\static\header.html" />
     <Content Include="JsLib\JsDOC\jsdoc-toolkit\templates\SL_doc_zh-cn\static\index.html" />
     <Content Include="JsLib\JsDOC\jsdoc-toolkit\templates\SL_doc_zh-cn\static\style.css" />
+    <Content Include="JsLib\lastestSizzle.js" />
     <Content Include="JsLib\load.htm" />
     <Content Include="JsLib\requirejs\my\increment.js" />
     <Content Include="JsLib\requirejs\my\math.js" />
