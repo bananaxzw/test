@@ -576,7 +576,7 @@
                 return match;
             }
         },
-
+        //伪类 属性过滤器 在filter.PSEUDO中用到
         filters: {
             enabled: function (elem) {
                 return elem.disabled === false && elem.type !== "hidden";
@@ -652,6 +652,7 @@
                 return (/input|select|textarea|button/i).test(elem.nodeName);
             }
         },
+        //子元素过滤器 在filter.Pos中用到
         setFilters: {
             first: function (elem, i) {
                 return i === 0;
@@ -685,6 +686,7 @@
                 return match[3] - 0 === i;
             }
         },
+        //过滤器
         filter: {
             PSEUDO: function (elem, match, i, array) {
                 var name = match[1],
@@ -835,7 +837,8 @@
 	    return "\\" + (num - 0 + 1);
 	};
 
-    for (var type in Expr.match) {
+	for (var type in Expr.match) {
+	    //每个字符串后面都增加了一个判断，用来确保匹配结果，末尾不包含)或者}
         Expr.match[type] = new RegExp(Expr.match[type].source + (/(?![^\[]*\])(?![^\(]*\))/.source));
         Expr.leftMatch[type] = new RegExp(/(^(?:.|\r|\n)*?)/.source + Expr.match[type].source.replace(/\\(\d+)/g, fescape));
     }
