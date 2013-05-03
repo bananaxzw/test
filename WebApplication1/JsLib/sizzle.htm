@@ -3,7 +3,8 @@
 <head>
     <title></title>
 <!--    <script src="sizzle.js" type="text/javascript"></script>-->
-    <script src="sizzle1.4.js" type="text/javascript"></script>
+<!--    <script src="sizzle1.4.js" type="text/javascript"></script>-->
+    <script src="lastestSizzle.js" type="text/javascript"></script>
     <script src="jq1.72.js" type="text/javascript"></script>
     <script type="text/javascript">
     
@@ -21,7 +22,8 @@
         return elem.id == true;
     }
     console.log(Sizzle.contains(document.documentElement, document.body));
-    Sizzle("div.safsa  ul > li");
+    Sizzle("div.safsa  ul>li");
+    Sizzle("div.safsa  ul:first-child");
 // var s=   Sizzle("div:me");
 //    var object = [];
 //    var tt = Sizzle(".safsa",null,object);
