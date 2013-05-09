@@ -57,7 +57,9 @@
                 }
             }
         } while (m);
-
+        /*自左向右，判断标准就是存在关系选择符同时有位置选择符，
+        因为如果只是类似div#test的选择表达式，
+        就不存在顺序的问题。*/
         if (parts.length > 1 && origPOS.exec(selector)) {
 
             if (parts.length === 2 && Expr.relative[parts[0]]) {
@@ -80,6 +82,7 @@
             }
 
         } else {
+            //其他，自右向左
             // Take a shortcut and set the context if the root selector is an ID
             // (but not if it'll be faster if the inner selector is an ID)
             if (!seed && parts.length > 1 && context.nodeType === 9 && !contextXML &&
@@ -92,6 +95,7 @@
             }
 
             if (context) {
+                //关系选择符“+”和“~”表示的是同层级的关系，因此，context【查找范围】会被设置成context.parentNode
                 ret = seed ?
 				{ expr: parts.pop(), set: makeArray(seed)} :
 				Sizzle.find(parts.pop(), parts.length === 1 && (parts[0] === "~" || parts[0] === "+") && context.parentNode ? context.parentNode : context, contextXML);

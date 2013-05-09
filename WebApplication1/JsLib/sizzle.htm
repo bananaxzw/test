@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-<!--    <script src="sizzle.js" type="text/javascript"></script>-->
-<!--    <script src="sizzle1.4.js" type="text/javascript"></script>-->
+    <!--    <script src="sizzle.js" type="text/javascript"></script>-->
+    <!--    <script src="sizzle1.4.js" type="text/javascript"></script>-->
     <script src="lastestSizzle.js" type="text/javascript"></script>
     <script src="jq1.72.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -12,38 +12,53 @@
     </script>
 </head>
 <body>
-<div id="s">
-<div class="safsa" id="fff">safasfsafaf<ul><li>asgs</li></ul></div>
-</div>
-<div class="safsa1"><ul><li>asgs1</li></ul></div>
+    <div id="s">
+        <div class="safsa" id="fff">
+            safasfsafaf<ul>
+                <li>asgs</li></ul>
+        </div>
+    </div>
+    <div>
+        <p>
+            safsa</p>
+    </div>
+    <p>
+        safsa</p>
+    <div class="safsa1">
+        <ul>
+            <li id="tttttt">asgs1</li></ul>
+    </div>
+    <script type="text/javascript">
+        Sizzle.selectors.filter.PSEUDO.me = function (elem) {
+            return elem.id == true;
+        }
+        console.log(Sizzle.contains(document.documentElement, document.body));
+        //Sizzle("div#s div#fff");
+        Sizzle("div#s .safsa");
 
-<script type="text/javascript">
-    Sizzle.selectors.filter.PSEUDO.me = function (elem) {
-        return elem.id == true;
-    }
-    console.log(Sizzle.contains(document.documentElement, document.body));
-    Sizzle("div.safsa  ul>li");
-    Sizzle("div.safsa  ul:first-child");
-// var s=   Sizzle("div:me");
-//    var object = [];
-//    var tt = Sizzle(".safsa",null,object);
-//    var context = Sizzle("#s")[0];
-//    var tt1 = Sizzle(".safsa", context);
-//    var matchResult = Sizzle.matchesSelector(tt1[0], ".safsa");
-  var matchs = Sizzle.matches(".safsa", [document.getElementById("fff")]);
-  var matchs1 = Sizzle.matchesSelector(document.getElementById("fff"),".safsa");
+        Sizzle("div.safsa");
+        Sizzle("div>p");
+        Sizzle("div.safsa  ul>li");
+        Sizzle("div.safsa  ul:first-child");
+        // var s=   Sizzle("div:me");
+        //    var object = [];
+        //    var tt = Sizzle(".safsa",null,object);
+        //    var context = Sizzle("#s")[0];
+        //    var tt1 = Sizzle(".safsa", context);
+        //    var matchResult = Sizzle.matchesSelector(tt1[0], ".safsa");
+        var matchs = Sizzle.matches(".safsa", [document.getElementById("fff")]);
+        var matchs1 = Sizzle.matchesSelector(document.getElementById("fff"), ".safsa");
 
 
-//    var ss= Sizzle.selectors.find.CLASS(".safsa");
+        //    var ss= Sizzle.selectors.find.CLASS(".safsa");
 
 
-    var mm = $("<div><div id='sfsfggds'>sff</div><div>");
-    var tt = $("#fff");
-    var tt = $("#fff", $("<div><div id='sfsfggds'>sff</div></div><div class='sfs'></div>"));
-    console.log(mm);
+        var mm = $("<div><div id='sfsfggds'>sff</div><div>");
+        var tt = $("#fff");
+        var tt = $("#fff", $("<div><div id='sfsfggds'>sff</div></div><div class='sfs'></div>"));
+        console.log(mm);
 
  
-</script>
+    </script>
 </body>
- 
 </html>
