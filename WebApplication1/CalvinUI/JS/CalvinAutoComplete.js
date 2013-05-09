@@ -63,8 +63,9 @@
 
         GenrateMenuItems: function (textBox, height, width, top, left) {
             var opts = $.data(textBox, 'CalvinAutoComplete.data').options;
-            var $loading = GenerateLoading(textBox);
-            $loading.show();
+            var $loading = loadingHelper.GenerateLoading(textBox);
+            //$loading.show();
+            loadingHelper.showLoading(textBox);
             var key = textBox.value;
             if (/json/.test(opts.ajaxOption.contentType)) {
                 params = JSON.stringify($.extend({ "key": key }, opts.ajaxOption.data));
@@ -81,7 +82,13 @@
                     success: function (data) {
                         opts.source = data ? (data.d ? data.d : data) : null;
                         var $items = MenuItemHelper._GenrateMenuItems(textBox, otherHelper.FilterOptionSouces(opts, textBox.value), height, width, top, left);
-                        $loading.hide();
+                        if (!opts.source || opts.source.length == 0) {
+                            loadingHelper.showNullDataLoading(textBox);
+                            setTimeout(function () { $loading.hide(); }, 1000);
+                        }
+                        else {
+                            $loading.hide();
+                        }
                         return $items;
                     },
                     error: function (xhr) {
@@ -201,7 +208,7 @@
                 var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer[0]);
                 var SelectIndex = $items.index($SelectedItem[0]);
                 switch (event.keyCode) {
-                    //向上                                                                                                                                             
+                    //向上                                                                                                                                                          
                     case 38:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
 
@@ -209,7 +216,7 @@
                             $SelectedItem.prev().addClass("ui-menu-itemHover");
                         }
                         break;
-                    //向下                                                                                                                                          
+                    //向下                                                                                                                                                       
                     case 40:
                         styleHelper.RemoveItemHoverStyle($itemContainer);
                         //没有选中的项
@@ -249,7 +256,7 @@
                         }
                         MenuItemHelper.RemoveMenuItems(textBox);
                         break;
-                    //删除键                                                                                
+                    //删除键                                                                                             
                     case 8:
                         var minLength = opts.min;
                         if ($this.val().length >= minLength) {
@@ -294,6 +301,40 @@
                 e.stopPropagation();
 
             });
+        }
+
+    };
+
+    var loadingHelper = {
+        GenerateLoading: function (target) {
+            var $loadingHtml;
+            if ($(target).data("CalvinAutoCompleteLoading")) {
+                $loadingHtml = $(target).data("CalvinAutoCompleteLoading");
+            }
+            else {
+                $loadingHtml = $("<div id='CalvinAutoCompleteLoading' class='autoCompleteLoading'></div>");
+                $loadingHtml.appendTo("body");
+                $(target).data("CalvinAutoCompleteLoading", $loadingHtml);
+
+            }
+
+            $loadingHtml.html("");
+            var styleInfo = styleHelper.GetTextBoxStyle(target);
+            $loadingHtml.css({ "left": styleInfo.left + "px", "width": styleInfo.width + "px", "top": (styleInfo.top + styleInfo.height) + "px" });
+            return $loadingHtml;
+        },
+        showLoading: function (target) {
+            var $loadingHtml = $(target).data("CalvinAutoCompleteLoading");
+            $loadingHtml.html("");
+            $loadingHtml.removeClass("autoCompleteNullData").addClass("autoCompleteLoading");
+            $loadingHtml.show();
+
+        },
+        showNullDataLoading: function (target) {
+            var $loadingHtml = $(target).data("CalvinAutoCompleteLoading");
+            $loadingHtml.html("未能检索到数据!");
+            $loadingHtml.removeClass("autoCompleteLoading").addClass("autoCompleteNullData");
+            $loadingHtml.show();
         }
 
     };
