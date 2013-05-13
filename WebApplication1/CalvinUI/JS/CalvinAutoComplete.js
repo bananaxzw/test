@@ -152,6 +152,9 @@
                 $ItemsContainer.css(opts.styleInfo);
             }
             $ItemsContainer.appendTo("body");
+            var iframeLayer = $('<iframe style="position:absolute; z-index:-1;border:none;margin:0;padding:0;width:100%;top:0;left:0;" src="about:blank"></iframe>').css("opacity", 0);
+            iframeLayer.height($ItemsContainer.height());
+            $ItemsContainer.append(iframeLayer);
             $(textBox).data("CalvinAutoComplete.data").ItemsContainer = $ItemsContainer;
             return $ItemsContainer;
         },

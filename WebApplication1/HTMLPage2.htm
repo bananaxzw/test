@@ -44,6 +44,15 @@
 <div id="sfsa">fasfasfsafsafasfaf</div>
 </body>
   <script type="text/javascript">
+      var tt = document.getElementById("sf");
+      var ll = $("#sf");
+      function hhh() {
+          tt = null;
+          ll = null;
+      }
+      hhh();
+
+
       document.getElementById("sfsa").attachEvent("onclick", function (e) {
           alert(e.srcElement.id);
       });
