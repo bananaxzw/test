@@ -77,7 +77,6 @@
             return false;
         },
         onDrag: function (e) {
-
             var opts = $.data(e.data.target, 'draggable').options;
             if (opts.containment) {
                 eventHelper.moveInContainment(e);
@@ -174,7 +173,7 @@
                     proxy.remove();
                 }
                 $.data(e.data.target, 'draggable').proxy = null;
-            }
+            };
 
             function checkDrop() {
                 var data = $.data(e.data.target, 'draggable');
@@ -198,7 +197,7 @@
                     }
                 });
                 return dropped;
-            }
+            };
 
             $(document).unbind('.draggable');
             return false;
@@ -219,10 +218,10 @@
             });
         },
         drag: function (e) {
-        	/// <summary>
+            /// <summary>
             /// 无容器的移动 这里只是获取e的位置信息 然后applyDrag应用这个位置信息
-        	/// </summary>
-        	/// <param name="e"></param>
+            /// </summary>
+            /// <param name="e"></param>
             var opts = $.data(e.data.target, 'draggable').options;
 
             var dragData = e.data;
@@ -254,10 +253,10 @@
         },
 
         moveInContainment: function (e) {
-        	/// <summary>
+            /// <summary>
             /// 有容器的移动 这里只是获取e的位置信息 然后applyDrag应用这个位置信息
-        	/// </summary>
-        	/// <param name="e"></param>
+            /// </summary>
+            /// <param name="e"></param>
             var data = $.data(e.data.target, 'draggable');
             var opts = data.options;
             var containment = opts.containment;
@@ -357,10 +356,10 @@
                 //计算目标区划 和 限制区划
                 function computeArea(constrain, target) {
                     var areas = CalvinBase.domHelper.getElementsArea(constrain, target);
-                    data.ConstrainArea = areas[0]; 
+                    data.ConstrainArea = areas[0];
                     data.targetArea = areas[1];
                 }
-            }
+            };
 
             function onMouseMove(e) {
                 if (checkArea(e)) {
@@ -368,7 +367,7 @@
                 } else {
                     $(this).css('cursor', 'default');
                 }
-            }
+            };
 
             // 鼠标是不是在手柄的可拖动区域
             function checkArea(e) {
@@ -389,7 +388,7 @@
                     return false;
                 }
                 return false;
-            }
+            };
 
 
 

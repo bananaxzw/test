@@ -5,11 +5,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-      <script src="JS/jquery.min.js" type="text/javascript"></script>
+   <script src="JS/jquery.min.js" type="text/javascript"></script>
     <script src="JS/CalvinBase.js" type="text/javascript"></script>
-        <script src="JS/CalvinPanel.js" type="text/javascript"></script>
-    <script src="JS/CalvinUIBlock.js" type="text/javascript"></script>
-      <link href="CSS/default/panel.css" rel="stylesheet" type="text/css" />
+    <script src="JS/CalvinDialog.js" type="text/javascript"></script>
+    <link href="CSS/default/dialog_.css" rel="stylesheet" type="text/css" />
       <script type="text/javascript">
           $(document).ready(function () {
             //  $("#safsaf").CalvinUIBlock("close");
