@@ -15,7 +15,16 @@
     <div id="s">
         <div class="safsa" id="fff">
             safasfsafaf<ul>
-                <li>asgs</li></ul>
+                <li name="sfsf">许志伟asgs</li>
+                <li name="sfsf">许志伟asgs</li>
+                <li name="sfsf">许志伟asgs</li>
+                <li name="sfsf">许志伟asgs</li>
+                <li name="sfsf">许志伟asgs</li>
+                <li name="sfsf">许志伟asgs</li>
+                <li name="sfsf">许志伟asgs</li>
+                <li name="sfsf">许志伟asgs</li>
+                <li name="sfsf">许志伟asgs</li>
+                </ul>
         </div>
     </div>
     <div>
@@ -33,7 +42,14 @@
             return elem.id == true;
         }
         console.log(Sizzle.contains(document.documentElement, document.body));
-        //Sizzle("div#s div#fff");
+        Sizzle("div#fff");
+        Sizzle("li:nth-child(2n+1)");
+        Sizzle("li:eq(2)");
+        Sizzle("li:nth(2)");
+        Sizzle("li:gt(2)");
+        Sizzle("li[name='sfsf']");
+        Sizzle("li:contains('许志伟asgs')");
+        Sizzle("div>p");
         Sizzle("div#s .safsa");
 
         Sizzle("div.safsa");
