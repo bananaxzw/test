@@ -685,7 +685,7 @@
             nth: function (elem, i, match) {
                 return match[3] - 0 === i;
             },
-
+            //[true,:eq(2),eq,2]
             eq: function (elem, i, match) {
                 return match[3] - 0 === i;
             }
@@ -747,6 +747,7 @@
                         return true;
 
                     case "nth":
+                        //nth-child(2n+1)=>[0,nth,2,1]
                         var first = match[2],
 						last = match[3];
 
@@ -756,7 +757,7 @@
 
                         var doneName = match[0],
 						parent = elem.parentNode;
-
+                        //给元素添加索引 用了缓存功能速度
                         if (parent && (parent.sizcache !== doneName || !elem.nodeIndex)) {
                             var count = 0;
 

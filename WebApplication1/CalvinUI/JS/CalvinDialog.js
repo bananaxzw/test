@@ -28,10 +28,7 @@
             showClose: true,
             //关闭
             closed: false,
-
-
             draggable: true,
-
             blockElement: window,
 
             //遮罩层的中间消息的样式
