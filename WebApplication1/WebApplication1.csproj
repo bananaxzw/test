@@ -279,6 +279,7 @@
     <Content Include="CalvinUI\CalvinInput_.htm" />
     <Content Include="CalvinUI\Calvintooltip.htm" />
     <Content Include="CalvinUI\CSS\default\accordion.css" />
+    <Content Include="CalvinUI\CSS\default\accordion_.css" />
     <Content Include="CalvinUI\CSS\default\autoComplete.css" />
     <Content Include="CalvinUI\CSS\default\calendar.css" />
     <Content Include="CalvinUI\CSS\default\combo.css" />
@@ -414,6 +415,7 @@
     <Content Include="CalvinUI\jquery.tipTip.js" />
     <Content Include="CalvinUI\jquery.tipTip.minified.js" />
     <Content Include="CalvinUI\JS\CalvinAccordion.js" />
+    <Content Include="CalvinUI\JS\CalvinAccrodionNew.js" />
     <Content Include="CalvinUI\JS\CalvinAutoComplete.js" />
     <Content Include="CalvinUI\JS\CalvinBase.js" />
     <Content Include="CalvinUI\JS\CalvinButton.js" />
