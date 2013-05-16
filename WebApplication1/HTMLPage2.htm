@@ -4,7 +4,7 @@
     <title></title>
     <script type="text/javascript">
     </script>
-    <script src="JsLib/jq1.72.js" type="text/javascript"></script>
+    <script src="jquery-1.4.1-vsdoc.js" type="text/javascript"></script>
     <script type="text/javascript">
      
     </script>
@@ -32,10 +32,12 @@
             margin-bottom: -3000px;
             padding-bottom: 3000px;
         }
-        #safsa
+        #sfsa
         {
              height:400px;
              overflow:auto;
+             background-color:#EDAA00;
+             position:relative;
             }
     </style>
   
@@ -44,21 +46,25 @@
 <div id="sfsa">fasfasfsafsafasfaf</div>
 </body>
   <script type="text/javascript">
-      var tt = document.getElementById("sf");
-      var ll = $("#sf");
-      function hhh() {
-          tt = null;
-          ll = null;
-      }
-      hhh();
-
-
-      document.getElementById("sfsa").attachEvent("onclick", function (e) {
-          alert(e.srcElement.id);
-      });
-      document.body.attachEvent("onclick", function (e) {
-          alert(e.srcElement.id);
+      $(function () {
+          $("#sfsa").animate({"left":"200px" }, 400);
 
       });
+//      var tt = document.getElementById("sf");
+//      var ll = $("#sf");
+//      function hhh() {
+//          tt = null;
+//          ll = null;
+//      }
+//      hhh();
+
+
+//      document.getElementById("sfsa").attachEvent("onclick", function (e) {
+//          alert(e.srcElement.id);
+//      });
+//      document.body.attachEvent("onclick", function (e) {
+//          alert(e.srcElement.id);
+
+//      });
     </script>
 </html>
