@@ -19,12 +19,29 @@
 
     var defaults = {};
     var panelHelper = {
+        initPanels: function (elem) {
+            var $panels = panelHelper.getPanels(elem), i = 0;
+            //展开一个
+            $.each($panels, function () {
+                if (i != 0) {
+                    $(this).removeClass("AccordionPanelOpen").addClass("AccordionPanelClosed");
+                    $(".AccordionPanelContent", this).hide();
+                }
+                else {
+                    $(this).removeClass("AccordionPanelClosed").addClass("AccordionPanelOpen");
+                    $(".AccordionPanelContent", this).show();
+                }
+                ++i;
+            });
+            eventHelper.bindEevents(elem);
+
+        },
         getPanels: function (elem) {
             var data = $(elem).data("CalvinAccordion.data");
             if (data.panels) {
                 return data.panels;
             }
-            var $panels = $("AccordionPanel", elem);
+            var $panels = $(".AccordionPanel", elem);
             $(elem).data("CalvinAccordion.data").panels = $panels;
             return $panels;
         },
@@ -43,12 +60,15 @@
             return $("div.AccordionPanelOpen", elem);
         },
         openPanel: function (elem, panel) {
-            var $openedPanel = panelHelper.getOpenedPanel(elem);
-            if (openedPanel[0] == panel) {
+            var $openedPanel = panelHelper.getOpenedPanel(elem), $panel = $(panel);
+            if ($openedPanel[0] == panel) {
                 return;
             } else {
-                $openedPanel.removeClass("AccordionPanelOpen")
-            
+                $openedPanel.removeClass("AccordionPanelOpen").addClass("AccordionPanelClosed");
+                $(".AccordionPanelContent", $openedPanel[0]).hide();
+                $panel.removeClass("AccordionPanelClosed").addClass("AccordionPanelOpen");
+                $(".AccordionPanelContent", panel).show();
+
             }
         }
     };
@@ -59,11 +79,13 @@
             $.each(panelHelper.getPanels(elem), function () {
 
                 $(".AccordionPanelTab", this).click(function () {
+                    panelHelper.openPanel(elem, this.parentNode);
+                }).hover(function () {
+                    $(this).addClass("AccordionPanelTabHover");
 
-
+                }, function () {
+                    $(this).removeClass("AccordionPanelTabHover");
                 });
-
-
             });
 
         }
@@ -81,8 +103,8 @@
             }
             else {
                 $.extend(opts, defaults, options);
-                $this.data("CalvinAccordion.data", { options: opts, panels: panelHelper.getPanels(this) });
-
+                $this.data("CalvinAccordion.data", { options: opts, panels: null });
+                panelHelper.initPanels(this);
             }
         });
     };

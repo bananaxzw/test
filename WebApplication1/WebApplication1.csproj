@@ -272,6 +272,7 @@
     <Content Include="callAndApply.htm" />
     <Content Include="CalvinBrowserHepler.js" />
     <Content Include="CalvinEventutil.js" />
+    <Content Include="CalvinUI\accordionNew.htm" />
     <Content Include="CalvinUI\accrodionPanel.htm" />
     <Content Include="CalvinUI\button.htm" />
     <Content Include="CalvinUI\CalvinAutoComplete.htm" />
@@ -639,6 +640,7 @@
     <Content Include="easyJS\src\data.js" />
     <Content Include="easyJS\src\easy.js" />
     <Content Include="easyJS\src\event.js" />
+    <Content Include="easyJS\src\JScript1.js" />
     <Content Include="easyJS\src\lang-patch.js" />
     <Content Include="easyJS\src\lang.js" />
     <Content Include="easyJS\src\node.js" />

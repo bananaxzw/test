@@ -4,8 +4,14 @@
     <title></title>
     <script src="../jquery-1.6.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-        var gg = {"ff":"safs"};
-        console.log(gg.length);
+        var gg = { a: { b: 2} };
+        console.log(gg);
+
+        (function () { 
+        var aaa=bbb=1;
+        })();
+        console.log(aaa);
+        console.log(bbb);
     </script>
 </head>
 <body>
