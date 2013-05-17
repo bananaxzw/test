@@ -47,9 +47,17 @@
 </body>
   <script type="text/javascript">
       $(function () {
-          $("#sfsa").animate({"left":"200px" }, 400);
-
+          $("#sfsa").animate({ "left": "200px" }, 400);
+          console.log($("#sfsa").width());
       });
+
+      var tt = { ami: null }, hh = [];
+      for (var i = 0; i < 10; i++) {
+          tt.ami = i;
+          hh.push(tt);
+
+      }
+      console.log(hh);
 //      var tt = document.getElementById("sf");
 //      var ll = $("#sf");
 //      function hhh() {

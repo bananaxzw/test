@@ -70,7 +70,8 @@ ul{ list-style:none; }
 var $ = function(){
 	return document.getElementById(arguments[0]);
 };
-
+$("box1").style.height = "10px";
+$("box1").style.height = "";
 var callback = function(){
 	alert( 'I am is callback' );
 };
