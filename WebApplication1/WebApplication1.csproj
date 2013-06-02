@@ -409,6 +409,7 @@
     <Content Include="CalvinUI\CSS\tablesorter.css" />
     <Content Include="CalvinUI\dragContainer.htm" />
     <Content Include="CalvinUI\draggableDemo.htm" />
+    <Content Include="CalvinUI\fixedtableheader.htm" />
     <Content Include="CalvinUI\HTMLPage1.htm" />
     <Content Include="CalvinUI\HTMLPage2.htm" />
     <Content Include="CalvinUI\ImagesLazyLoad.htm" />
@@ -684,6 +685,21 @@
     <Content Include="easyJS\tools\combo.js" />
     <Content Include="easyJS\tools\compress.js" />
     <Content Include="FireBugConsole.htm" />
+    <Content Include="Fixed-Header-Table-master\.gitignore" />
+    <Content Include="Fixed-Header-Table-master\css\defaultTheme.css" />
+    <Content Include="Fixed-Header-Table-master\demo\css\960.css" />
+    <Content Include="Fixed-Header-Table-master\demo\css\demo.css" />
+    <Content Include="Fixed-Header-Table-master\demo\css\myTheme.css" />
+    <Content Include="Fixed-Header-Table-master\demo\css\reset.css" />
+    <Content Include="Fixed-Header-Table-master\demo\demo.html" />
+    <Content Include="Fixed-Header-Table-master\demo\demo.js" />
+    <Content Include="Fixed-Header-Table-master\demo\demo2.htm" />
+    <Content Include="Fixed-Header-Table-master\demo\images\bg.png" />
+    <Content Include="Fixed-Header-Table-master\demo\js\demo.js" />
+    <Content Include="Fixed-Header-Table-master\demo\test.html" />
+    <Content Include="Fixed-Header-Table-master\jquery.fixedheadertable.js" />
+    <Content Include="Fixed-Header-Table-master\jquery.fixedheadertable.min.js" />
+    <Content Include="Fixed-Header-Table-master\lib\jquery.mousewheel.js" />
     <Content Include="FixedPosition.htm" />
     <Content Include="HTMLPage1.htm" />
     <Content Include="HTMLPage2.htm" />
@@ -2868,6 +2884,7 @@
     <Content Include="Web.config" />
     <Content Include="CalvinUI\Handler1.ashx" />
     <Content Include="JsLib\Handler1.ashx" />
+    <None Include="Fixed-Header-Table-master\README.md" />
     <None Include="JQ\1.3\test\data\echoQuery.php" />
     <None Include="JQ\1.3\test\data\json.php" />
     <None Include="JQ\1.3\test\data\jsonp.php" />
