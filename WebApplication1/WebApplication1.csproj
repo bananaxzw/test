@@ -425,6 +425,7 @@
     <Content Include="CalvinUI\JS\CalvinDraggable.js" />
     <Content Include="CalvinUI\JS\CalvinDroppable.js" />
     <Content Include="CalvinUI\JS\CalvinFileUploader.js" />
+    <Content Include="CalvinUI\JS\CalvinFixTableHeader.js" />
     <Content Include="CalvinUI\JS\CalvinImageLazyLoad.js" />
     <Content Include="CalvinUI\CalvinInput.htm" />
     <Content Include="CalvinUI\JS\CalvinInput.js" />
@@ -694,6 +695,7 @@
     <Content Include="Fixed-Header-Table-master\demo\demo.html" />
     <Content Include="Fixed-Header-Table-master\demo\demo.js" />
     <Content Include="Fixed-Header-Table-master\demo\demo2.htm" />
+    <Content Include="Fixed-Header-Table-master\demo\demo3.htm" />
     <Content Include="Fixed-Header-Table-master\demo\images\bg.png" />
     <Content Include="Fixed-Header-Table-master\demo\js\demo.js" />
     <Content Include="Fixed-Header-Table-master\demo\test.html" />
