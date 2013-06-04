@@ -38,20 +38,26 @@
 
             var $this = $(table), $theader, $tbody, $headerTable, $wrapper;
             $theader = $("thead", table);
-            $headerTable = $this.clone();
+            $headerTable = $this.clone(); //克隆头部
             $("tbody", $headerTable).remove(); //移除标头的tbody内容
-            $wrapper = $this.wrap("<div class='fht-table-wrapper'><div class='fht-tbody'></div></div>").parent().parent();
-            $wrapper.append($headerTable);
-            $headerTable.wrap("<div class='fht-thead'></div>");
+            $wrapper = $this.wrap("<div class='fht-table-wrapper' style='height:100%;width:100%;display:block;'><div class='fht-tbody'></div></div>").parent().parent();
+            $wrapper.prepend($headerTable);
+            $headerTable.wrap("<div class='fht-thead'></div>"); //包裹header
 
 
 
 
         }
 
+        var helpers =
+       {
+       
+       }
+
+
         return this.each(function () {
-            var _this = this;
-            $this = $(this);
+            var _this = this,
+            $this = $(this),
             state = $.data(this, 'fixedHeaderTable'),
             opts;
 
@@ -61,10 +67,9 @@
                 state.options = opts;
             }
             else {
-
                 opts = $.extend(defaults, options);
                 $.data(this, "fixedHeaderTable", { options: opts });
-
+                init(this);
             }
 
         });

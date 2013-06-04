@@ -278,6 +278,7 @@
     <Content Include="CalvinUI\CalvinAutoComplete.htm" />
     <Content Include="CalvinUI\CalvinComboBox.htm" />
     <Content Include="CalvinUI\CalvinInput_.htm" />
+    <Content Include="CalvinUI\CalvintableHeader.htm" />
     <Content Include="CalvinUI\Calvintooltip.htm" />
     <Content Include="CalvinUI\CSS\default\accordion.css" />
     <Content Include="CalvinUI\CSS\default\accordion_.css" />
@@ -290,6 +291,7 @@
     <Content Include="CalvinUI\CSS\default\datebox.css" />
     <Content Include="CalvinUI\CSS\default\dialog.css" />
     <Content Include="CalvinUI\CSS\default\easyui.css" />
+    <Content Include="CalvinUI\CSS\default\fixTableHeader.css" />
     <Content Include="CalvinUI\CSS\default\icons.css" />
     <Content Include="CalvinUI\CSS\default\images\accordion_collapse.png" />
     <Content Include="CalvinUI\CSS\default\images\accordion_expand.png" />

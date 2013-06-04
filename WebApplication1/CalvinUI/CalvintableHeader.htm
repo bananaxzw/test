@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="CSS/default/fixTableHeader.css" rel="stylesheet" type="text/css" />
+    <script src="JS/jquery.min.js" type="text/javascript"></script>
+    <script src="JS/CalvinFixTableHeader.js" type="text/javascript"></script>
+</head>
+<body>
+    <div style="height: 100px; overflow: auto;">
+        <table id='tt'>
+            <thead>
+                <tr>
+                    <th>
+                        名称
+                    </th>
+                    <th>
+                        语法
+                    </th>
+                    <th>
+                        说明
+                    </th>
+                    <th>
+                        例子
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Simple attribute Selector
+                    </td>
+                    <td>
+                        [attr]
+                    </td>
+                    <td>
+                        选择具有此属性的元素
+                    </td>
+                    <td>
+                        blockquote[title] {
+                        <br />
+                        color: red }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        attribute Value Selector
+                    </td>
+                    <td>
+                        [attr="value"]
+                    </td>
+                    <td>
+                        选出属性值精确等于给出值的元素
+                    </td>
+                    <td>
+                        h2[align="left"] {
+                        <br />
+                        cursor: hand }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        "Begins-with" attribute Value Selector
+                    </td>
+                    <td>
+                        [attr^="value"]
+                    </td>
+                    <td>
+                        选出属性值以给出值开头的元素
+                    </td>
+                    <td>
+                        h2[align^="right"] {
+                        <br />
+                        cursor: hand }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        "Ends-with" attribute Value Selector
+                    </td>
+                    <td>
+                        [attr$="value"]
+                    </td>
+                    <td>
+                        选出属性值以给出值结尾的元素
+                    </td>
+                    <td>
+                        div[class$="vml"]{<br />
+                        cursor: hand}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Substring-match attribute Value Selector
+                    </td>
+                    <td>
+                        [attr*="value"]
+                    </td>
+                    <td>
+                        选出属性值包含给出值的元素
+                    </td>
+                    <td>
+                        div[class*="grid"]{<br />
+                        float:left}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        One-Of-Many Attribute Value Selector
+                    </td>
+                    <td>
+                        [attr~="value"]
+                    </td>
+                    <td>
+                        原元素的属性值为多个单词，给出值为其中一个。
+                    </td>
+                    <td>
+                        li[class~="last"]{<br />
+                        padding-left:2em}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Hyphen Attribute Value Selector
+                    </td>
+                    <td>
+                        [attr|="value"]
+                    </td>
+                    <td>
+                        原元素的属性值等于给出值，或者以给出值加“-”开头
+                    </td>
+                    <td>
+                        span[lang|="en"]{
+                        <br />
+                        color:green}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        反选属性值选择器
+                    </td>
+                    <td>
+                        [attr!="value"]
+                    </td>
+                    <td>
+                        非标准，jQuery中出现的
+                    </td>
+                    <td>
+                        span[class!="red"]{<br />
+                        color:green}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        反选属性值选择器
+                    </td>
+                    <td>
+                        [attr!="value"]
+                    </td>
+                    <td>
+                        非标准，jQuery中出现的
+                    </td>
+                    <td>
+                        span[class!="red"]{<br />
+                        color:green}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        反选属性值选择器
+                    </td>
+                    <td>
+                        [attr!="value"]
+                    </td>
+                    <td>
+                        非标准，jQuery中出现的
+                    </td>
+                    <td>
+                        span[class!="red"]{<br />
+                        color:green}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        反选属性值选择器
+                    </td>
+                    <td>
+                        [attr!="value"]
+                    </td>
+                    <td>
+                        非标准，jQuery中出现的
+                    </td>
+                    <td>
+                        span[class!="red"]{<br />
+                        color:green}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        反选属性值选择器
+                    </td>
+                    <td>
+                        [attr!="value"]
+                    </td>
+                    <td>
+                        非标准，jQuery中出现的
+                    </td>
+                    <td>
+                        span[class!="red"]{<br />
+                        color:green}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+
+        $('#tt').CalvinfixedHeaderTable();
+    </script>
+</body>
+</html>
