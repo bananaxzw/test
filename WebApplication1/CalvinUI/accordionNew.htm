@@ -7,7 +7,7 @@
     <link href="CSS/default/accordion_.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <div style="width: 400px; float: left; height: 900px;">
+    <div style="width: 400px; float: left; height: 100%;">
         <div class="Accordion" id="sampleAccordion" tabindex="0">
             <div class="AccordionPanel">
                 <div class="AccordionPanelTab">
@@ -63,7 +63,7 @@
     </div>
     <script language="JavaScript" type="text/javascript">
         $(document).ready(function () {
-            $("#sampleAccordion").CalvinAccordion();
+            $("#sampleAccordion").CalvinAccordion({fitParent:true});
         });
     </script>
 </body>

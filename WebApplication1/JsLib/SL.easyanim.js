@@ -108,7 +108,7 @@
 
             return 'rgb(' + r + ',' + g + ',' + b + ')';
         } else {
-            return (sv + (tv - sv) * e).toFixed(3) + tu;
+            return (sv + (tv - sv) * e).toFixed(7) + tu;
         }
 
     };
@@ -375,7 +375,7 @@
                             sl.css(elem, 'opacity', 100);
                         }
                         else {
-                            elem.style[p] = (type === 'hide' ? sv : tv) + tu;
+                            elem.style[p] = ""; //(type === 'hide' ? sv : tv) + tu;
                         }
                     }
                     else {
