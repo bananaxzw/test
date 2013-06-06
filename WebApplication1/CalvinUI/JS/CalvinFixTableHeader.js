@@ -51,7 +51,19 @@
 
         var helpers =
        {
-       
+           getHeaderCellWidth: function (table) {
+               var cellWidth = [], i = 0;
+               $("thead>tr", table).children().each(function () {
+                   cellWidth[i] = $(this).width();
+                   ++i;
+               });
+               return cellWidth;
+           },
+           insertDivToHeaders: function (table, cloneHeader) {
+               var html = ' <div style="width:'++'px;" class="fht-cell"></div>';
+
+           }
+
        }
 
 
