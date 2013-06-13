@@ -43,7 +43,7 @@
             $wrapper = $this.wrap("<div class='fht-table-wrapper' style='height:100%;width:100%;display:block;'><div class='fht-tbody'></div></div>").parent().parent();
             $wrapper.prepend($headerTable);
             $headerTable.wrap("<div class='fht-thead'></div>"); //包裹header
-
+            helpers.insertDivToHeaders(table, $headerTable);
 
 
 
@@ -60,11 +60,17 @@
                return cellWidth;
            },
            insertDivToHeaders: function (table, cloneHeader) {
-               var html = ' <div style="width:'++'px;" class="fht-cell"></div>';
+               var cellWidth = helpers.getHeaderCellWidth(table), i = 0;
+               $("thead>tr", cloneHeader).children().each(function () {
+                   $(this).append('<div style="width:' + cellWidth[i] + 'px;" class="fht-cell"></div>')
+                   i++;
 
+               });
+           },
+           fixStyle: function (table, cloneHeader) {
+               var parent = $.data(table, "fixedHeaderTable").parent;
            }
-
-       }
+       };
 
 
         return this.each(function () {
@@ -80,7 +86,7 @@
             }
             else {
                 opts = $.extend(defaults, options);
-                $.data(this, "fixedHeaderTable", { options: opts });
+                $.data(this, "fixedHeaderTable", { options: opts, parent: $this.parent() });
                 init(this);
             }
 
