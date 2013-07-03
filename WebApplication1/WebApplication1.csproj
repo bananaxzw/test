@@ -443,6 +443,7 @@
     <Content Include="CalvinUI\JS\CalvinTableSorter.js" />
     <Content Include="CalvinUI\JS\CalvinTip.js" />
     <Content Include="CalvinUI\JS\CalvinUIBlock.js" />
+    <Content Include="CalvinUI\JS\formValidatorRegex.js" />
     <Content Include="CalvinUI\JS\HTMLPage1.htm" />
     <Content Include="CalvinUI\JS\jquery-1.4.1-vsdoc.js" />
     <Content Include="CalvinUI\JS\jquery.min.js" />
