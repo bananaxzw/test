@@ -18,8 +18,8 @@
         var html = "<div  class='tooltip tooltip-" + options.arrow + "'>" +
         "<div class='tooltip-arrow tooltip-arrow-" + options.arrow.charAt(0) + "'>" +
         "</div>" +
-//        "<div class='tooltip-arrow tooltip-arrow-" + options.arrow.charAt(0) + "-in'>" +
-//        "</div>" +
+         "<div class='tooltip-arrow tooltip-arrow-in-" + options.arrow.charAt(0) + "'>" +
+        "</div>" +
         "<div class='tooltip-inner'>" + options.content +
          "</div>" +
         "</div>";
