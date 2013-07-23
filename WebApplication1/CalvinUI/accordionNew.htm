@@ -7,7 +7,7 @@
     <link href="CSS/default/accordion_.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <div style="width: 400px; float: left; height: 100%;">
+    <div style="width: 600px; float: left; height:600px; overflow:hidden;">
         <div class="Accordion" id="sampleAccordion" tabindex="0">
             <div class="AccordionPanel">
                 <div class="AccordionPanelTab">
@@ -59,11 +59,25 @@
                     Content for Panel 4 goes here!
                 </div>
             </div>
+            <div class="AccordionPanel">
+                <div class="AccordionPanelTab">
+                    Panel 5</div>
+                <div class="AccordionPanelContent">
+                    Content for Panel 4 goes here!
+                </div>
+            </div>
+             <div class="AccordionPanel"  style="display:none;">
+                <div class="AccordionPanelTab">
+                    Panel 6</div>
+                <div class="AccordionPanelContent">
+                    Content for Panel 4 goes here!
+                </div>
+            </div>
         </div>
     </div>
     <script language="JavaScript" type="text/javascript">
         $(document).ready(function () {
-            $("#sampleAccordion").CalvinAccordion({fitParent:true});
+            $("#sampleAccordion").CalvinAccordion({ fitParent: true, initOpenIndex: 1 });
         });
     </script>
 </body>
