@@ -11,6 +11,8 @@
 	max-width: 200px;
 	padding: 5px 8px 4px 8px;
 	text-align: center;
+   margin : 0px;
+   border: 0px;
 }
 
 .tooltip-inner {
@@ -25,6 +27,7 @@
 	height: 0;
 	line-height: 0;
 	border: 5px dashed #000;
+	 margin: 0px;
 }
   
 .tooltip-arrow-n {
@@ -42,6 +45,8 @@
 .tooltip-arrow-w {
 	border-right-color: #000;
 }
+
+
 
 .tooltip-n .tooltip-arrow {
 	top: 0px;
@@ -117,4 +122,24 @@
 	border-left: none;
 	border-top-color: transparent;
 	border-bottom-color: transparent;
+}
+
+.tooltip-arrow-n-in{
+	border-bottom-color: #fff;
+	top:1px !important;
+}
+
+.tooltip-arrow-s-in{
+	border-top-color: #fff;
+	bottom:1px !important;
+}
+
+.tooltip-arrow-e-in{
+	border-left-color: #fff;
+    right:1px !important;
+}
+
+tooltip-arrow-w-in{
+	border-right-color: #fff;
+	left: 1px !important;
 }

@@ -11,22 +11,13 @@
 
 
 (function () {
-    var defaults = { fitParent: false };
+    var defaults = { fitParent: false, initOpenIndex: 0 }
     var panelHelper = {
         initPanels: function (elem) {
-            var $panels = panelHelper.getPanels(elem), i = 0;
+            var data = $(elem).data("CalvinAccordion.data"), $panels = panelHelper.getPanels(elem);
             //展开一个
-            $.each($panels, function () {
-                if (i != 0) {
-                    $(this).removeClass("AccordionPanelOpen").addClass("AccordionPanelClosed");
-                    $(".AccordionPanelContent", this).hide();
-                }
-                else {
-                    $(this).removeClass("AccordionPanelClosed").addClass("AccordionPanelOpen");
-                    $(".AccordionPanelContent", this).show();
-                }
-                ++i;
-            });
+            var OpenIndex = data.options.initOpenIndex;
+            panelHelper.openPanel(elem, $panels[OpenIndex]);
             eventHelper.bindEevents(elem);
             panelHelper.fitContentHeight(elem);
 
@@ -36,7 +27,7 @@
             if (data.panels) {
                 return data.panels;
             }
-            var $panels = $(".AccordionPanel", elem);
+            var $panels = $(".AccordionPanel:visible", elem);
             $(elem).data("CalvinAccordion.data").panels = $panels;
             return $panels;
         },

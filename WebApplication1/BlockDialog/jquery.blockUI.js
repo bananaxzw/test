@@ -102,9 +102,8 @@
 
         // styles for the overlay
         overlayCSS: {
-            backgroundColor: '#000',
-            opacity: 0.6,
-            cursor: 'wait'
+            backgroundColor: '#fff',
+            opacity: 0.6
         },
 
         // styles applied when using $.growlUI
@@ -291,7 +290,7 @@
         if (ie6 || expr) {
             // give body 100% height
             if (full && opts.allowBodyStretch && $.boxModel)
-                $('html,body').css('height', '100%');
+                //$('html,body').css('height', '100%');
 
             // fix ie6 issue when blocked element has a border width
             if ((ie6 || !$.boxModel) && !full) {

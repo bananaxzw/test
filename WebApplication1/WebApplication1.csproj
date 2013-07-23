@@ -383,6 +383,7 @@
     <Content Include="CalvinUI\CSS\default\tree.css" />
     <Content Include="CalvinUI\CSS\default\validatebox.css" />
     <Content Include="CalvinUI\CSS\default\window.css" />
+    <Content Include="CalvinUI\CSS\default\dropdown.css" />
     <Content Include="CalvinUI\CSS\icon.css" />
     <Content Include="CalvinUI\CSS\icons\back.png" />
     <Content Include="CalvinUI\CSS\icons\blank.gif" />
@@ -439,10 +440,12 @@
     <Content Include="CalvinUI\JS\CalvinPagination.js" />
     <Content Include="CalvinUI\JS\CalvinPanel.js" />
     <Content Include="CalvinUI\JS\CalvinResizable.js" />
+    <Content Include="CalvinUI\JS\CalvinDropdown.js" />
     <Content Include="CalvinUI\JS\CalvinTab.js" />
     <Content Include="CalvinUI\JS\CalvinTableSorter.js" />
     <Content Include="CalvinUI\JS\CalvinTip.js" />
     <Content Include="CalvinUI\JS\CalvinUIBlock.js" />
+    <Content Include="CalvinUI\JS\formValidatorRegex.js" />
     <Content Include="CalvinUI\JS\HTMLPage1.htm" />
     <Content Include="CalvinUI\JS\jquery-1.4.1-vsdoc.js" />
     <Content Include="CalvinUI\JS\jquery.min.js" />

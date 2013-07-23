@@ -16,7 +16,7 @@
 
 (function () {
     $.fn.CalvinComboBox = function (options, param) {
-        var defaults = { min: 1, url: "", height: 200, source: [], selected: function (event, item) { } };
+        var defaults = { height: 200, minHeight: 200, maxHeight: 200, innerItem: "" };
         var options = $.extend(defaults, options);
         var EventHelper = {
             /**
@@ -58,7 +58,7 @@
                     var $SelectedItem = $(">li.ui-menu-itemHover", $itemContainer[0]);
                     var SelectIndex = $items.index($SelectedItem[0]);
                     switch (event.keyCode) {
-                        //向上                                                                                                                                                                      
+                        //向上                                                                                                                                                                          
                         case 38:
                             MenuItemHelper.RemoveItemHoverStyle($itemContainer);
 
@@ -67,7 +67,7 @@
                             }
                             MenuItemHelper.ScrollToSelectedItem($itemContainer, options);
                             break;
-                        //向下                                                                                                                                                                   
+                        //向下                                                                                                                                                                       
                         case 40:
                             MenuItemHelper.RemoveItemHoverStyle($itemContainer);
                             //没有选中的项
@@ -338,8 +338,8 @@
             $dropdownIcon.data("AllMenusItems", { AllMenusItems: null });
             $textbox.appendTo($ContainerSpan);
             $ContainerSpan.append($dropdownIcon);
-            $textbox.data("CalvinAutoComplete.data").TextBoxContainer = $ContainerSpan;
-            $textbox.data("CalvinAutoComplete.data").dropdownIcon = $dropdownIcon;
+            $textbox.data("CalvinSelect.data").TextBoxContainer = $ContainerSpan;
+            $textbox.data("CalvinSelect.data").dropdownIcon = $dropdownIcon;
             var StyleInfo = GetElementStyle($ContainerSpan[0]);
             var $ItemsContainerAll = MenuItemHelper.GenrateMenuItems(textbox, options.source, StyleInfo.height, StyleInfo.width, StyleInfo.top, StyleInfo.left);
             $dropdownIcon.data("AllMenusItems").AllMenusItems = $ItemsContainerAll;
@@ -356,12 +356,33 @@
                 else {
                     $ItemsContainerAll.hide();
                 }
-                if ($textbox.data("CalvinAutoComplete.data").ItemsContainer) {
-                    $textbox.data("CalvinAutoComplete.data").ItemsContainer.hide();
+                if ($textbox.data("CalvinSelect.data").ItemsContainer) {
+                    $textbox.data("CalvinSelect.data").ItemsContainer.hide();
 
                 }
             });
             return $ContainerSpan;
+        }
+
+        /**
+        * @description 剩下下拉框的容器
+        * @param {textBox} textBox元素
+        */
+        function formItemContainer(textBox, options) {
+
+            var style = 'max-height:' + parseFloat(options.maxHeight) + 'px;min-height:' + parseFloat(options.minHeight) + 'px;_height:expression(this.scrollHeight > ' + parseFloat(options.maxHeight) + ' ? ' + parseFloat(options.maxHeight) + 'px:(this.scrollHeight < ' + parseFloat(options.minHeight) + ' ?  ' + parseFloat(options.minHeight) + 'px:(this.scrollHeight+"px"))); ';
+
+
+            var $ItemsContainer = $("<ul class='ui-autocomplete ui-menu' style='"+style+"'></ul>");
+            $ItemsContainer.appendTo("body");
+            if ($ItemsContainer.height() <= options.height) {
+                //设置只能提示选项的位置
+                $ItemsContainer.css({ "left": left + "px", "width": width - 4 + "px", "top": (top + height) + "px" });
+            }
+            else {
+                $ItemsContainer.css({ "height": options.height + "px", "left": left + "px", "width": width - 4 + "px", "top": (top + height) + "px" });
+            }
+            return $ItemsContainer
         }
 
         /**
@@ -380,6 +401,7 @@
             if (data = $this.data("CalvinAutoComplete.data")) {
                 MenuItemHelper.clearAll(this);
                 data.ItemsContainer = null, data.TextBoxContainer = null, data.dropdownIcon = null;
+
             }
             else {
                 $this.data("CalvinAutoComplete.data", {});

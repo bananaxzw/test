@@ -35,47 +35,52 @@
         }
 
         function init(table) {
-
             var $this = $(table), $theader, $tbody, $headerTable, $wrapper;
             $theader = $("thead", table);
             $headerTable = $this.clone(); //克隆头部
             $("tbody", $headerTable).remove(); //移除标头的tbody内容
             $wrapper = $this.wrap("<div class='fht-table-wrapper' style='height:100%;width:100%;display:block;'><div class='fht-tbody'></div></div>").parent().parent();
             $wrapper.prepend($headerTable);
+            $.data(table, "fixedHeaderTable").wrapper = $wrapper;
             $headerTable.wrap("<div class='fht-thead'></div>"); //包裹header
             helpers.insertDivToHeaders(table, $headerTable);
-
-
-
+            helpers.fixStyle(table, $headerTable);
         }
 
         var helpers =
        {
            getHeaderCellWidth: function (table) {
-               var cellWidth = [], i = 0;
-               $("thead>tr", table).children().each(function () {
-                   cellWidth[i] = $(this).width();
-                   ++i;
+               var cellWidth = [];
+               $("thead>tr", table).children().each(function (index) {
+                   var bwidth = ($(this).outerWidth() - $(this).innerWidth()) / 2;
+                   cellWidth[index] = parseInt($(this).width() + bwidth);
                });
                return cellWidth;
            },
            insertDivToHeaders: function (table, cloneHeader) {
-               var cellWidth = helpers.getHeaderCellWidth(table), i = 0;
-               $("thead>tr", cloneHeader).children().each(function () {
-                   $(this).append('<div style="width:' + cellWidth[i] + 'px;" class="fht-cell"></div>')
-                   i++;
-
+               var cellWidth = helpers.getHeaderCellWidth(table);
+               $("thead>tr", cloneHeader).children().each(function (index) {
+                   $(this).append('<div style="width:' + cellWidth[index] + 'px;" class="fht-cell"></div>')
+               });
+               $("thead>tr", table).children().each(function (index) {
+                   $(this).append('<div style="width:' + cellWidth[index] + 'px;" class="fht-cell"></div>')
                });
            },
            fixStyle: function (table, cloneHeader) {
-               var parent = $.data(table, "fixedHeaderTable").parent;
+               var data = $.data(table, "fixedHeaderTable");
+               var parent = data.parent, pHeight = parent.innerHeight(), warper = data.warpper, headerHieght = cloneHeader.parent().outerHeight();
+               //设置div包裹table的高度
+               var divdtbody = $("div.fht-tbody", warper).height(pHeight - headerHieght);
+               //设置table表头maegin以便隐藏
+               var table = $("div.fht-tbody>table", warper).css("margin-top", -headerHieght);
+
            }
        };
 
 
         return this.each(function () {
             var _this = this,
-            $this = $(this),
+            $this = $(this).addClass("fht-table"),
             state = $.data(this, 'fixedHeaderTable'),
             opts;
 
@@ -86,7 +91,7 @@
             }
             else {
                 opts = $.extend(defaults, options);
-                $.data(this, "fixedHeaderTable", { options: opts, parent: $this.parent() });
+                $.data(this, "fixedHeaderTable", { options: opts, parent: $this.parent(), warpper: null });
                 init(this);
             }
 
