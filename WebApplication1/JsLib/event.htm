@@ -15,9 +15,13 @@
 </form>
     
 <div id="sff" style=" background:red; width:200px; height:100px" onclick="console.log('me')">sfsa</div>
-<div  style=" background:red; width:200px; height:100px" id="hoverdiv">safsa</div>
+<div  style=" background:red; width:200px; height:1000px" id="hoverdiv">safsa</div>
 <script type="text/javascript">
     $(window).scroll(function () { alert(1) });
+    sl.Event.addEvent(window, "scroll", function () {
+
+        alert(2);
+    });
     var tt = document.getElementById("sff");
 //    SL().Event.hover(hoverdiv, function () {
 //        console.log("in");
