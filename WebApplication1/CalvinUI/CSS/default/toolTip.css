@@ -6,13 +6,12 @@
 }
 
 .tooltip-inner {
-	background-color: #000;
-	color: #FFF;
+	background-color: #fff;
+	color: #000;
 	max-width: 200px;
 	padding: 5px 8px 4px 8px;
 	text-align: center;
-   margin : 0px;
-   border: 0px;
+    border:1px solid #000;
 }
 
 .tooltip-inner {
@@ -27,7 +26,6 @@
 	height: 0;
 	line-height: 0;
 	border: 5px dashed #000;
-	 margin: 0px;
 }
   
 .tooltip-arrow-n {
@@ -45,8 +43,6 @@
 .tooltip-arrow-w {
 	border-right-color: #000;
 }
-
-
 
 .tooltip-n .tooltip-arrow {
 	top: 0px;
@@ -124,22 +120,23 @@
 	border-bottom-color: transparent;
 }
 
-.tooltip-arrow-n-in{
+    .tooltip-arrow-in-n {
 	border-bottom-color: #fff;
-	top:1px !important;
+    top:1px !important;
 }
 
-.tooltip-arrow-s-in{
+.tooltip-arrow-in-s {
 	border-top-color: #fff;
-	bottom:1px !important;
+    bottom:1px !important;
 }
 
-.tooltip-arrow-e-in{
+.tooltip-arrow-in-e {
 	border-left-color: #fff;
     right:1px !important;
 }
 
-tooltip-arrow-w-in{
+.tooltip-arrow-in-w {
 	border-right-color: #fff;
-	left: 1px !important;
+    left:1px !important;
 }
+    
