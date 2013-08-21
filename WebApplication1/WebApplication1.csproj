@@ -277,6 +277,7 @@
     <Content Include="CalvinUI\button.htm" />
     <Content Include="CalvinUI\CalvinAutoComplete.htm" />
     <Content Include="CalvinUI\CalvinComboBox.htm" />
+    <Content Include="CalvinUI\CalvinDropDown.htm" />
     <Content Include="CalvinUI\CalvinInput_.htm" />
     <Content Include="CalvinUI\CalvintableHeader.htm" />
     <Content Include="CalvinUI\Calvintooltip.htm" />
@@ -443,6 +444,7 @@
     <Content Include="CalvinUI\JS\CalvinDropdown.js" />
     <Content Include="CalvinUI\JS\CalvinTab.js" />
     <Content Include="CalvinUI\JS\CalvinTableSorter.js" />
+    <Content Include="CalvinUI\JS\CalvinTimeDelayMaker.js" />
     <Content Include="CalvinUI\JS\CalvinTip.js" />
     <Content Include="CalvinUI\JS\CalvinUIBlock.js" />
     <Content Include="CalvinUI\JS\formValidatorRegex.js" />
@@ -2730,6 +2732,8 @@
     <Content Include="select.htm" />
     <Content Include="setinterval.htm" />
     <Content Include="Sleep.htm" />
+    <Content Include="styleTest\iframaPage.htm" />
+    <Content Include="styleTest\Iframe.htm" />
     <Content Include="tablecss.htm" />
     <Content Include="tab\ciba_tab.html" />
     <Content Include="tab\ciba_tab_files\cita.css" />
