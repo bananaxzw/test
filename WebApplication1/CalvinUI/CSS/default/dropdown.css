@@ -8,7 +8,6 @@
 	 border: 1px solid #aaaaaa;
 	 font-family: Verdana,Arial,sans-serif/*{ffDefault}*/;
 	 font-size: 12px/*{fsDefault}*/;
-	 background: #ffffff/*{bgColorContent}*/ url(images/ui-bg_flat_75_ffffff_40x100.png)/*{bgImgUrlContent}*/ 50%/*{bgContentXPos}*/ 50%/*{bgContentYPos}*/ repeat-x/*{bgContentRepeat}*/;
 }
 /* workarounds */
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */

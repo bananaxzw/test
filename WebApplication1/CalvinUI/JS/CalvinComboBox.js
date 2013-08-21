@@ -144,6 +144,7 @@
             GenrateMenuItems: function (textBox, SouceArray, height, width, top, left) {
                 if (!SouceArray.length) return;
                 var $ItemsContainer = $("<ul class='ui-autocomplete ui-menu'></ul>");
+                var iframeLayer = $('<iframe style="position:absolute; z-index:-1;border:none;margin:0;padding:0;width:100%;top:0;left:0;" src="about:blank"></iframe>').css("opacity", 0);
                 //遍历产生item源数组
                 $.each(SouceArray, function (i, d) {
                     var $MenuItem = $("<li class='ui-menu-item'></li>");
@@ -170,6 +171,8 @@
                 });
 
                 $ItemsContainer.appendTo("body");
+                iframeLayer.height($ItemsContainer.height());
+                $ItemsContainer.append(iframeLayer);
                 if ($ItemsContainer.height() <= options.height) {
                     //设置只能提示选项的位置
                     $ItemsContainer.css({ "left": left + "px", "width": width - 4 + "px", "top": (top + height) + "px" });
@@ -336,7 +339,6 @@
             $textbox.addClass("combo-text");
             var $dropdownIcon = $("<span><span class='combo-arrow'></span></span>");
             $dropdownIcon.data("AllMenusItems", { AllMenusItems: null });
-            $textbox.appendTo($ContainerSpan);
             $ContainerSpan.append($dropdownIcon);
             $textbox.data("CalvinAutoComplete.data").TextBoxContainer = $ContainerSpan;
             $textbox.data("CalvinAutoComplete.data").dropdownIcon = $dropdownIcon;
