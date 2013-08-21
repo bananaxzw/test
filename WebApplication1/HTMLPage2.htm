@@ -43,37 +43,16 @@
   
 </head>
 <body id="sf">
-1111kkkkkkkkkkkkkkkkkk
-<div id="sfsa">fasfasfsafsafasfaf</div>
+<table width='5000'>
+<tr>
+<td>fsafasf</td>
+</tr>
+</table>
+<script type="text/javascript">
+
+    alert($("body").width());
+    alert(document.body.offsetWidth);
+    alert(document.documentElement.offsetWidth || document.body.offsetWidth);
+</script>
 </body>
-  <script type="text/javascript">
-      $(function () {
-          $("#sfsa").animate({ "left": "200px" }, 400);
-          console.log($("#sfsa").width());
-      });
-
-      var tt = { ami: null }, hh = [];
-      for (var i = 0; i < 10; i++) {
-          tt.ami = i;
-          hh.push(tt);
-
-      }
-      console.log(hh);
-//      var tt = document.getElementById("sf");
-//      var ll = $("#sf");
-//      function hhh() {
-//          tt = null;
-//          ll = null;
-//      }
-//      hhh();
-
-
-//      document.getElementById("sfsa").attachEvent("onclick", function (e) {
-//          alert(e.srcElement.id);
-//      });
-//      document.body.attachEvent("onclick", function (e) {
-//          alert(e.srcElement.id);
-
-//      });
-    </script>
 </html>
